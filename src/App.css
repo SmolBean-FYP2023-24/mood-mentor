@@ -32,7 +32,15 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.myspacer {
+  /* background-color: #61dafb; */
+  height: calc(100vh - 63px);
+  /* height: 100vh; */
+  /* margin-top: 63px; */
 }

@@ -1,15 +1,44 @@
-import { Link, NavLink } from "react-router-dom";
-import "./top_nav.css";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
 
 function TopNav() {
   return (
-    <div className="top_nav">
-      <p><Link to={`/`}>MoodMentor</Link></p>
-      <div className="menu">
-        <NavLink to={`/`} className={({isActive, isPending}) => isActive ? 'linkActive' : ''}>Home</NavLink>
-        <NavLink to={`/login`} className={({isActive, isPending}) => isActive ? 'linkActive' : ''}>Login</NavLink>
-      </div>
-    </div>
+    <Navbar
+      expand="lg"
+      className="bg-body-tertiary"
+      bg="dark"
+      data-bs-theme="dark"
+      sticky="top"
+      //   fixed="top"
+    >
+      <Container className="px-5" fluid>
+        <Navbar.Brand href={"/"}>MoodMentor</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="ms-auto column-gap-5" id="menu">
+            <Nav.Link href={"/"}>Home</Nav.Link>
+            <Nav.Link href={"/login"}>Login</Nav.Link>
+            <NavDropdown
+              title="Dropdown"
+              id="basic-nav-dropdown"
+              className="d-none"
+            >
+              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">
+                Another action
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="#action/3.4">
+                Separated link
+              </NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 }
 
