@@ -11,7 +11,7 @@ export default function LoginForm() {
   }, [loginState]);
 
   function handleLoginState() {
-    if (loginState == 0) {
+    if (loginState === 0) {
       setLoginState(1);
     }
   }
@@ -20,7 +20,7 @@ export default function LoginForm() {
     try {
       // Commented AWS Part
       // const user = await Auth.signIn(username, password);
-      console.log(user);
+      // console.log(user);
       handleLoginState();
     } catch (error) {
       console.log("error signing in", error);
