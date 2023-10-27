@@ -1,7 +1,7 @@
-import { Link, Route, Routes } from "react-router-dom";
-import Home from "./components/home";
-import Login from "./components/login";
-import TopNav from "./components/top_nav";
+import { Route, Routes } from "react-router-dom";
+import Home from "./components/homePage";
+import Login from "./components/loginPage";
+import TopNav from "./components/topNav";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
