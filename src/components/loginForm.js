@@ -2,8 +2,11 @@ import { Link } from "react-router-dom";
 import "./loginForm.css";
 import { Auth } from "aws-amplify";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
+  let navigate = useNavigate();
+
   let [loginState, setLoginState] = useState({ stateID: 0, user: null });
 
   function get_height() {
@@ -59,6 +62,12 @@ export default function LoginForm() {
     }
   }
 
+  async function viewProfile() {
+    if (await isLoggedIn()) {
+      navigate("/profile");
+    }
+  }
+
   async function signOut() {
     try {
       await Auth.signOut({ global: true });
@@ -100,6 +109,12 @@ export default function LoginForm() {
                     onClick={signOut}
                   >
                     Sign Out
+                  </button>
+                  <button
+                    className={`${loginState.stateID === 0 ? "d-none" : ""}`}
+                    onClick={viewProfile}
+                  >
+                    Profile
                   </button>
                 </label>
               </div>

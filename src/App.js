@@ -4,6 +4,7 @@ import Login from "./components/loginPage";
 import TopNav from "./components/topNav";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import Profile from "./components/profilePage";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </div>
     </>
