@@ -5,9 +5,9 @@ import TopNav from "./components/topNav";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Profile from "./components/profilePage";
-import { Amplify } from "aws-amplify";
-import awsconfig from "./aws-exports";
-Amplify.configure(awsconfig);
+// import { Amplify } from "aws-amplify";
+// import awsconfig from "./aws-exports";
+// Amplify.configure(awsconfig);
 
 export default function App() {
   return (
@@ -16,8 +16,8 @@ export default function App() {
       <div className="myspacer">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/login/" element={<Login />} />
+          <Route path="/profile/" element={<Profile />} />
         </Routes>
       </div>
     </>
