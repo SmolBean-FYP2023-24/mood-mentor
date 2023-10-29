@@ -5,6 +5,10 @@ import TopNav from "./components/topNav";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Profile from "./components/profilePage";
+import { Amplify } from "aws-amplify";
+import awsExports from "./aws-exports";
+
+Amplify.configure(awsExports);
 
 export default function App() {
   return (

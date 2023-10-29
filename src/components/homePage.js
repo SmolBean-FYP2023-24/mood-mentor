@@ -1,12 +1,9 @@
-import { Amplify, Auth } from "aws-amplify";
+import { Auth } from "aws-amplify";
 
 import "@aws-amplify/ui-react/styles.css";
 
-import awsExports from "../aws-exports";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-Amplify.configure(awsExports);
 
 function Home() {
   let navigate = useNavigate();
