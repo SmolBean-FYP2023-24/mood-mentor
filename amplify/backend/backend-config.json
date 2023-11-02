@@ -19,8 +19,11 @@
         },
         "signupAttributes": [
           "GIVEN_NAME",
+          "FAMILY_NAME",
+          "PREFERRED_USERNAME",
+          "EMAIL",
           "BIRTHDATE",
-          "PREFERRED_USERNAME"
+          "GENDER"
         ],
         "socialProviders": [],
         "usernameAttributes": [

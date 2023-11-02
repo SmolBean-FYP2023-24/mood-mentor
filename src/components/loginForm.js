@@ -35,6 +35,7 @@ export default function LoginForm() {
     }
     let user = await isLoggedIn();
     if (user) {
+      console.log(user);
       setLoginState({ stateID: 2, user: user }); // Successful Login
     } else {
       setLoginState({ stateID: 3, user: null }); // Error Logging In
