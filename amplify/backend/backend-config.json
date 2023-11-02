@@ -22,8 +22,7 @@
           "FAMILY_NAME",
           "PREFERRED_USERNAME",
           "EMAIL",
-          "BIRTHDATE",
-          "GENDER"
+          "BIRTHDATE"
         ],
         "socialProviders": [],
         "usernameAttributes": [
