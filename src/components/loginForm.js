@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import "./loginForm.css";
 import { Auth } from "aws-amplify";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function LoginForm() {
+export default function LoginForm(props) {
   let navigate = useNavigate();
 
   let [loginState, setLoginState] = useState({ stateID: 0, user: null });
@@ -18,7 +18,6 @@ export default function LoginForm() {
       const user = await Auth.currentAuthenticatedUser();
       return user;
     } catch (e) {
-      console.log(e);
       return false;
     }
   }
@@ -37,6 +36,7 @@ export default function LoginForm() {
     if (user) {
       console.log(user);
       setLoginState({ stateID: 2, user: user }); // Successful Login
+      props.handleUser(1);
     } else {
       setLoginState({ stateID: 3, user: null }); // Error Logging In
     }
@@ -48,11 +48,14 @@ export default function LoginForm() {
         let user = await isLoggedIn();
         if (user) {
           setLoginState({ stateID: 2, user: user });
+          props.handleUser(1);
+        } else {
+          props.handleUser(0);
         }
       };
       checkUser();
     }
-    console.log(loginState.stateID);
+    // console.log(loginState.stateID);
   });
 
   async function signIn(username = "", password = "") {

@@ -2,10 +2,10 @@ import { Auth } from "aws-amplify";
 
 import "@aws-amplify/ui-react/styles.css";
 
-import { useEffect } from "react";
+import { React, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Home() {
+function Home(props) {
   let navigate = useNavigate();
 
   async function isLoggedIn() {
@@ -24,8 +24,10 @@ function Home() {
         let user = await isLoggedIn();
         console.log(user);
         if (user === false) {
-          console.log("You're right");
-          return navigate("/login");
+          props.handleUser(0);
+          return navigate("/auth");
+        } else {
+          props.handleUser(1);
         }
       } catch (error) {
         console.error("An error occurred:", error);

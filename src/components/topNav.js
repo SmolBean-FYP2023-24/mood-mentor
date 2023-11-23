@@ -2,8 +2,10 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import React from "react";
 
-function TopNav() {
+function TopNav(props) {
+  console.log("Received Update", props.showLogin);
   return (
     <Navbar
       expand="lg"
@@ -19,7 +21,12 @@ function TopNav() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto column-gap-5" id="menu">
             <Nav.Link href={"/"}>Home</Nav.Link>
-            <Nav.Link href={"/login"}>Login</Nav.Link>
+            <Nav.Link
+              className={`${props.showLogin === 1 ? "d-none" : ""}`}
+              href={"/auth"}
+            >
+              Login
+            </Nav.Link>
             <NavDropdown
               title="Dropdown"
               id="basic-nav-dropdown"
