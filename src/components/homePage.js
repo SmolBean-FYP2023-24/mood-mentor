@@ -4,6 +4,8 @@ import "@aws-amplify/ui-react/styles.css";
 
 import { React, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+// import Dictaphone from "./dictaphone";
+import AudioRecorder from "./audio";
 
 function Home(props) {
   let navigate = useNavigate();
@@ -46,7 +48,11 @@ function Home(props) {
     //     </main>
     //   )}
     // </Authenticator>
-    <></>
+    <>
+      <div>
+        <AudioRecorder></AudioRecorder>
+      </div>
+    </>
   );
 }
 
