@@ -1,5 +1,4 @@
 import LoginForm from "./loginForm";
-import SignUp from "./signUp";
 import "./login.css";
 import { React, useEffect, useState } from "react";
 
