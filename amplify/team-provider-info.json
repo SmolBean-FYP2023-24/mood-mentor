@@ -20,7 +20,7 @@
         "analyze": {},
         "callGenAI": {
           "deploymentBucketName": "amplify-moodmentor-main-124937-deployment",
-          "s3Key": "amplify-builds/callGenAI-75662f504b4778576750-build.zip"
+          "s3Key": "amplify-builds/callGenAI-45414934707342564541-build.zip"
         }
       },
       "api": {
