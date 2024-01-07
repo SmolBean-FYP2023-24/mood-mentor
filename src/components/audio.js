@@ -1,173 +1,3 @@
-// import React, { useEffect, useRef } from "react";
-// import SpeechRecognition, {
-//   useSpeechRecognition,
-// } from "react-speech-recognition";
-
-// const Dictaphone = () => {
-//   const {
-//     transcript,
-//     listening,
-//     resetTranscript,
-//     browserSupportsSpeechRecognition,
-//   } = useSpeechRecognition();
-//   const mediaRecorderRef = useRef(null);
-
-//   useEffect(() => {
-//     // Request access to the microphone
-//     navigator.mediaDevices.getUserMedia({ audio: true }).then((mediaStream) => {
-//       mediaRecorderRef.current = new MediaRecorder(mediaStream);
-
-//       mediaRecorderRef.current.ondataavailable = function (event) {
-//         // Create a Blob from the audio data
-//         const blob = new Blob([event.data], { type: "audio/mp3" });
-
-//         // Create a URL for the Blob
-//         const url = URL.createObjectURL(blob);
-
-//         // Create a link for downloading the audio file
-//         const link = document.createElement("a");
-//         link.href = url;
-//         link.download = "audio.mp3";
-//         link.click();
-//       };
-//     });
-//   }, []);
-
-//   const startRecording = () => {
-//     SpeechRecognition.startListening();
-//     mediaRecorderRef.current.start();
-//   };
-
-//   const stopRecording = () => {
-//     SpeechRecognition.stopListening();
-//     mediaRecorderRef.current.stop();
-//   };
-
-//   if (!browserSupportsSpeechRecognition) {
-//     return <span>Browser doesn't support speech recognition.</span>;
-//   }
-
-//   return (
-//     <div>
-//       <p>Microphone: {listening ? "on" : "off"}</p>
-//       <button onClick={startRecording}>Start</button>
-//       <button onClick={stopRecording}>Stop</button>
-//       <button onClick={resetTranscript}>Reset</button>
-//       <p>{transcript}</p>
-//     </div>
-//   );
-// };
-
-// export default Dictaphone;
-
-// import React, { useEffect, useRef } from "react";
-// import SpeechRecognition, {
-//   useSpeechRecognition,
-// } from "react-speech-recognition";
-// import RecordRTC from "recordrtc";
-// import * as EBML from "ts-ebml";
-
-// const Dictaphone = () => {
-//   const {
-//     transcript,
-//     listening,
-//     resetTranscript,
-//     browserSupportsSpeechRecognition,
-//   } = useSpeechRecognition();
-//   const recorderRef = useRef(null);
-
-//   useEffect(() => {
-//     // Request access to the microphone
-//     navigator.mediaDevices.getUserMedia({ audio: true }).then((mediaStream) => {
-//       recorderRef.current = RecordRTC(mediaStream, { type: "audio" });
-//     });
-//   }, []);
-
-//   const startRecording = () => {
-//     SpeechRecognition.startListening();
-//     recorderRef.current.startRecording();
-//   };
-
-//   //   const stopRecording = () => {
-//   //     SpeechRecognition.stopListening();
-//   //     recorderRef.current.stopRecording(() => {
-//   //       const blob = recorderRef.current.getBlob();
-
-//   //       // Create a URL for the Blob
-//   //       const url = URL.createObjectURL(blob);
-
-//   //       // Create a link for downloading the audio file
-//   //       const link = document.createElement("a");
-//   //       link.href = url;
-//   //       link.download = "audio.wav";
-//   //       link.click();
-//   //     });
-//   //   };
-
-//   const stopRecording = () => {
-//     SpeechRecognition.stopListening();
-//     recorderRef.current.stopRecording(() => {
-//       const blob = recorderRef.current.getBlob();
-
-//       // Read the Blob as an ArrayBuffer
-//       const reader = new FileReader();
-//       reader.onloadend = () => {
-//         const buffer = reader.result;
-
-//         // Decode the EBML
-//         const decoder = new EBML.Decoder();
-//         const ebmlElms = decoder.decode(buffer);
-
-//         // Read the EBML elements
-//         const reader = new EBML.Reader();
-//         ebmlElms.forEach((elm) => {
-//           reader.read(elm);
-//         });
-//         reader.stop();
-
-//         // Make the metadata seekable
-//         const refinedMetadataBuf = EBML.tools.makeMetadataSeekable(
-//           reader.metadatas,
-//           reader.duration,
-//           reader.cues
-//         );
-
-//         // Create a new Blob with the refined metadata
-//         const body = buffer.slice(reader.metadataSize);
-//         const newBlob = new Blob([refinedMetadataBuf, body], {
-//           type: "audio/webm",
-//         });
-
-//         // Create a URL for the new Blob
-//         const url = URL.createObjectURL(newBlob);
-
-//         // Create a link for downloading the audio file
-//         const link = document.createElement("a");
-//         link.href = url;
-//         link.download = "audio.webm";
-//         link.click();
-//       };
-//       reader.readAsArrayBuffer(blob);
-//     });
-//   };
-
-//   if (!browserSupportsSpeechRecognition) {
-//     return <span>Browser doesn't support speech recognition.</span>;
-//   }
-
-//   return (
-//     <div>
-//       <p>Microphone: {listening ? "on" : "off"}</p>
-//       <button onClick={startRecording}>Start</button>
-//       <button onClick={stopRecording}>Stop</button>
-//       <button onClick={resetTranscript}>Reset</button>
-//       <p>{transcript}</p>
-//     </div>
-//   );
-// };
-
-// export default Dictaphone;
-
 import React, { useEffect, useRef } from "react";
 import "./audio.css";
 import SpeechRecognition, {
@@ -176,10 +6,11 @@ import SpeechRecognition, {
 import RecordRTC from "recordrtc";
 import { Buffer } from "buffer";
 import * as EBML from "ts-ebml";
+import { fetchAuthSession } from "aws-amplify/auth";
 window.Buffer = window.Buffer || Buffer;
 let started = false;
 
-const Dictaphone = () => {
+const AudioRecorder = () => {
   const {
     transcript,
     listening,
@@ -285,6 +116,50 @@ const Dictaphone = () => {
       });
   }
 
+  async function analyze() {
+    const user = await fetchAuthSession();
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", user.tokens.idToken.toString());
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify(
+      "What emotion (sad or happy) is EACH SENTENCE in the following passage: " +
+        document.getElementById("finaltext").innerText
+    );
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    await fetch(
+      "https://1xgrgbwrn5.execute-api.us-west-2.amazonaws.com/main/analyze/",
+      requestOptions
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("HTTP error " + response.status);
+        }
+        return response.json();
+      })
+      .then((result) => {
+        if (result.body) {
+          let parsedResponse = result.body.replace(/\\n/g, "");
+          console.log(parsedResponse.trim());
+        } else {
+          console.log("No 'body' field in the response");
+        }
+      })
+      .catch((error) => console.log("error", error));
+  }
+
+  function resetContent() {
+    resetTranscript();
+    document.getElementById("finaltext").innerText =
+      "Transcription appears here...";
+  }
+
   return (
     <>
       <div className="row w-100 m-0 p-0">
@@ -293,10 +168,6 @@ const Dictaphone = () => {
           style={{ height: "calc(100vh - 63px)" }}
         >
           <div id="holder" className="m-auto">
-            {/* <br></br>
-          <button onClick={startRecording}>Start</button>
-          <button onClick={stopRecording}>Stop</button>
-          <button onClick={resetTranscript}>Reset</button> */}
             <div
               className="p-5 rounded-circle border"
               style={{ aspectRatio: "1", textAlign: "center" }}
@@ -318,9 +189,14 @@ const Dictaphone = () => {
           <div className="container py-3">
             <div className="row">
               <p
+                id="finaltext"
+                suppressContentEditableWarning={true}
                 contentEditable
                 className="bg-light p-3"
-                style={{ textAlign: "justify", minHeight: "60vh" }}
+                style={{
+                  textAlign: "justify",
+                  minHeight: "77vh",
+                }}
               >
                 {transcript === ""
                   ? "Transcription appears here..."
@@ -332,7 +208,7 @@ const Dictaphone = () => {
                 <button
                   className="btn w-100 btn-warning my-2 my-md-0 mx-0 mx-md-0"
                   id="resetBtn"
-                  onClick={resetTranscript}
+                  onClick={resetContent}
                 >
                   Reset Transcript
                 </button>
@@ -341,6 +217,7 @@ const Dictaphone = () => {
                 <button
                   className="btn w-100 btn-success mx-0 "
                   id="analysisBtn"
+                  onClick={analyze}
                 >
                   Perform Analysis
                 </button>
@@ -353,4 +230,4 @@ const Dictaphone = () => {
   );
 };
 
-export default Dictaphone;
+export default AudioRecorder;

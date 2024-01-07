@@ -1,4 +1,20 @@
 {
+  "api": {
+    "genaiapi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "callGenAI"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
   "auth": {
     "moodmentor": {
       "customAuth": false,
@@ -34,6 +50,31 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    }
+  },
+  "function": {
+    "callGenAI": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_callGenAI_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "callGenAI"
+        }
+      ]
+    },
+    "AMPLIFY_function_callGenAI_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "callGenAI"
+        }
+      ]
     }
   }
 }

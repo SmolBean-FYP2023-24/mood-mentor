@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import "./loginForm.css";
-import { Auth } from "aws-amplify";
+import { getCurrentUser, signIn, signOut } from "aws-amplify/auth";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -15,7 +15,7 @@ export default function LoginForm(props) {
 
   async function isLoggedIn() {
     try {
-      const user = await Auth.currentAuthenticatedUser();
+      const user = await getCurrentUser();
       return user;
     } catch (e) {
       return false;
@@ -27,7 +27,7 @@ export default function LoginForm(props) {
       setLoginState({ stateID: 1, user: null }); // show the loading screen
       try {
         // Commented AWS Part
-        await Auth.signIn(username, password);
+        await signIn(username, password);
       } catch (e) {
         console.log("error signing in", e);
       }
@@ -58,7 +58,7 @@ export default function LoginForm(props) {
     // console.log(loginState.stateID);
   });
 
-  async function signIn(username = "", password = "") {
+  async function mysignIn(username = "", password = "") {
     try {
       handleLoginState(username, password);
     } catch (error) {
@@ -72,9 +72,9 @@ export default function LoginForm(props) {
     }
   }
 
-  async function signOut() {
+  async function mysignOut() {
     try {
-      await Auth.signOut({ global: true });
+      await signOut({ global: true });
       setLoginState({ stateID: 0, user: null });
     } catch (error) {
       console.log("error signing out: ", error);
@@ -105,12 +105,12 @@ export default function LoginForm(props) {
                   <h6 className="py-3">
                     Hello, welcome back!{" "}
                     {loginState.stateID === 2
-                      ? "@" + loginState.user.attributes.preferred_username
+                      ? "@" + loginState.user.username
                       : ""}
                   </h6>
                   <button
                     className={`${loginState.stateID === 0 ? "d-none" : ""}`}
-                    onClick={signOut}
+                    onClick={mysignOut}
                   >
                     Sign Out
                   </button>
@@ -146,7 +146,7 @@ export default function LoginForm(props) {
                   type="button"
                   className="btn btn-primary w-100 mb-4"
                   onClick={() =>
-                    signIn(
+                    mysignIn(
                       document.getElementById("inputEmail").value,
                       document.getElementById("inputPassword").value
                     )

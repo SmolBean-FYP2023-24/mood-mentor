@@ -1,10 +1,7 @@
-import { Auth } from "aws-amplify";
-
+import { getCurrentUser } from "aws-amplify/auth";
 import "@aws-amplify/ui-react/styles.css";
-
 import { React, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// import Dictaphone from "./dictaphone";
 import AudioRecorder from "./audio";
 
 function Home(props) {
@@ -12,7 +9,7 @@ function Home(props) {
 
   async function isLoggedIn() {
     try {
-      const user = await Auth.currentAuthenticatedUser();
+      const user = await getCurrentUser();
       return user;
     } catch (e) {
       console.log(e);
@@ -39,20 +36,9 @@ function Home(props) {
   });
 
   return (
-    // Commented AWS Part
-    // <Authenticator>
-    //   {({ signOut, user }) => (
-    //     <main>
-    //       <h1>Hello {user.username}</h1>
-    //       <button onClick={signOut}>Sign out</button>
-    //     </main>
-    //   )}
-    // </Authenticator>
-    <>
-      <div>
-        <AudioRecorder></AudioRecorder>
-      </div>
-    </>
+    <div>
+      <AudioRecorder></AudioRecorder>
+    </div>
   );
 }
 

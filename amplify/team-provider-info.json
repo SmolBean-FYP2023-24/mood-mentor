@@ -9,11 +9,22 @@
       "UnauthRoleName": "amplify-moodmentor-main-124937-unauthRole",
       "StackName": "amplify-moodmentor-main-124937",
       "StackId": "arn:aws:cloudformation:us-west-2:380248605085:stack/amplify-moodmentor-main-124937/3c496f40-9f36-11ee-9453-0a1fdfd352e9",
-      "AmplifyAppId": "d2z2vsyjysr6ig"
+      "AmplifyAppId": "d2z2vsyjysr6ig",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-moodmentor-main-124937-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
         "moodmentor": {}
+      },
+      "function": {
+        "analyze": {},
+        "callGenAI": {
+          "deploymentBucketName": "amplify-moodmentor-main-124937-deployment",
+          "s3Key": "amplify-builds/callGenAI-75662f504b4778576750-build.zip"
+        }
+      },
+      "api": {
+        "genaiapi": {}
       }
     }
   }
