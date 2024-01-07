@@ -26,8 +26,7 @@ export default function LoginForm(props) {
     if (loginState.stateID === 0) {
       setLoginState({ stateID: 1, user: null }); // show the loading screen
       try {
-        // Commented AWS Part
-        await signIn(username, password);
+        await signIn({ username, password });
       } catch (e) {
         console.log("error signing in", e);
       }

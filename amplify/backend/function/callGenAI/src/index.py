@@ -3,7 +3,7 @@ import json
 brt = boto3.client(service_name='bedrock-runtime')
 
 
-def lambda_handler(event, context):
+def handler(event, context):
 
     body = json.dumps({
         "prompt": event["prompt"],
