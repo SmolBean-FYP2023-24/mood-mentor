@@ -121,10 +121,7 @@ const AudioRecorder = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", user.tokens.idToken.toString());
     myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify(
-      "What emotion (sad or happy) is EACH SENTENCE in the following passage: " +
-        document.getElementById("finaltext").innerText
-    );
+    var raw = JSON.stringify(document.getElementById("finaltext").innerText);
 
     var requestOptions = {
       method: "POST",
