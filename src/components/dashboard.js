@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import './profilePage.css';
-import { getProfilePicture } from '/Users/khushichawla/Desktop/College/College Yr 4/FYP/mood-mentor/src/components/profilePageUtils.js';
+import { getProfilePicture } from './profilePageUtils.js';
 
 const emotions={
     1:'neutral', 
