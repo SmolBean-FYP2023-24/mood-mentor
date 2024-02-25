@@ -170,7 +170,7 @@ function ListeningExercise() {
       
 					<div className='answer-section'>
             {emotion_random.map((answerOption,index) =>
-              <button onClick={() => handleAnswerButtonClick(answerOption.isCorrect)}> {emotion_random[index]} </button>
+              <buttonListeningExercise onClick={() => handleAnswerButtonClick(answerOption.isCorrect)}> {emotion_random[index]} </buttonListeningExercise>
               
             )}
 						{/* <button>Answer 1</button>
