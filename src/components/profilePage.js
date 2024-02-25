@@ -5,7 +5,7 @@ import { withAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import './profilePage.css';
 
-function App({ signOut, user }) {
+function ProfilePage({ signOut, user }) {
   const[imagecrop, setimagecrop] = useState(false);
   // const [selectedProfilePicture, setSelectedProfilePicture] = useState(null);
   const [selectedProfilePicture, setSelectedProfilePicture] = useState(localStorage.getItem('profilePicture') || 'default-profile-picture-url');
@@ -118,4 +118,4 @@ function App({ signOut, user }) {
   );
 }
 
-export default withAuthenticator(App);
+export default withAuthenticator(ProfilePage);
