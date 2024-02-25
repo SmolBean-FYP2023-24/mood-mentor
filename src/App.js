@@ -8,6 +8,7 @@ import Home from "./components/homePage";
 import Login from "./components/loginPage";
 import TopNav from "./components/topNav";
 import Profile from "./components/profilePage";
+import ListeningExercise from "./components/ListeningExercise";
 import { Amplify } from "aws-amplify";
 import amplifyconfig from "./amplifyconfiguration.json";
 import { useEffect, useState } from "react";
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="/" element={<Home handleUser={handleUser} />} />
           <Route path="/auth/" element={<Login handleUser={handleUser} />} />
           <Route path="/profile/" element={<Profile />} />
+          <Route path="/listeningexercise/" element={<ListeningExercise />} />
         </Routes>
       </div>
     </>
