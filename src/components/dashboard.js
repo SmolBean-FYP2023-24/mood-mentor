@@ -4,6 +4,7 @@ import "@aws-amplify/ui-react/styles.css";
 import './profilePage.css';
 import { getProfilePicture } from './profilePageUtils.js';
 
+
 const emotions={
     1:'neutral', 
     2:'happy', 
