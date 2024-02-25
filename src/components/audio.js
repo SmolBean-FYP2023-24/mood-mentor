@@ -7,6 +7,8 @@ import RecordRTC from "recordrtc";
 import { Buffer } from "buffer";
 import * as EBML from "ts-ebml";
 import { fetchAuthSession } from "aws-amplify/auth";
+import { uploadData, getUrl } from "aws-amplify/storage";
+
 window.Buffer = window.Buffer || Buffer;
 let started = false;
 
@@ -29,6 +31,7 @@ const AudioRecorder = () => {
   const startRecording = () => {
     started = true;
     SpeechRecognition.startListening({ continuous: true });
+    document.getElementById("analysisBtn").disabled = true;
     recorderRef.current.startRecording();
     startAnimation();
   };
@@ -43,7 +46,7 @@ const AudioRecorder = () => {
 
       // Read the Blob as an ArrayBuffer
       const fileReader = new FileReader();
-      fileReader.onloadend = () => {
+      fileReader.onloadend = async () => {
         const buffer = fileReader.result;
         console.log(buffer);
 
@@ -72,13 +75,33 @@ const AudioRecorder = () => {
         });
 
         // Create a URL for the new Blob
-        const url = URL.createObjectURL(newBlob);
+        // const url = URL.createObjectURL(newBlob);
+
+        try {
+          const result = await uploadData({
+            key: "audio.wav",
+            data: new File([newBlob], "audio.wav"),
+            options: {
+              accessLevel: "private",
+            },
+          }).result;
+          console.log("Succeeded: ", result);
+          await getUrl({
+            key: "audio.wav",
+            options: {
+              accessLevel: "private",
+            },
+          }).then((res) => console.log(res.url.href));
+          document.getElementById("analysisBtn").disabled = false;
+        } catch (error) {
+          console.log("Error : ", error);
+        }
 
         // Create a link for downloading the audio file
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "audio.wav";
-        link.click();
+        // const link = document.createElement("a");
+        // link.href = url;
+        // link.download = "audio.wav";
+        // link.click();
       };
       fileReader.readAsArrayBuffer(blob);
     });
