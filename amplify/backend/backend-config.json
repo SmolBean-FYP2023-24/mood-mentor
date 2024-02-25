@@ -76,5 +76,12 @@
         }
       ]
     }
+  },
+  "storage": {
+    "s3audiofiles": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
+    }
   }
 }

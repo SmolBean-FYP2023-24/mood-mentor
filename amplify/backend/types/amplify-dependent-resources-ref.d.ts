@@ -25,5 +25,11 @@ export type AmplifyDependentResourcesAttributes = {
       "Name": "string",
       "Region": "string"
     }
+  },
+  "storage": {
+    "s3audiofiles": {
+      "BucketName": "string",
+      "Region": "string"
+    }
   }
 }
