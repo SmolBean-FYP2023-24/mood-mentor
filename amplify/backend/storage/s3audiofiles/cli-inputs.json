@@ -2,13 +2,11 @@
   "resourceName": "s3audiofiles",
   "policyUUID": "5c755ab3",
   "bucketName": "s3audiofilebucket",
-  "storageAccess": "authAndGuest",
-  "guestAccess": [
-    "READ"
-  ],
+  "storageAccess": "auth",
+  "guestAccess": [],
   "authAccess": [
-    "READ",
     "CREATE_AND_UPDATE",
+    "READ",
     "DELETE"
   ],
   "triggerFunction": "NONE",

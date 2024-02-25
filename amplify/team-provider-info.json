@@ -24,6 +24,9 @@
       },
       "api": {
         "genaiapi": {}
+      },
+      "storage": {
+        "s3audiofiles": {}
       }
     }
   }
