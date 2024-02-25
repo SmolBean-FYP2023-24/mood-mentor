@@ -21,6 +21,7 @@ function TopNav(props) {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto column-gap-5" id="menu">
             <Nav.Link href={"/"}>Home</Nav.Link>
+            <Nav.Link href={"/profile"}>Profile</Nav.Link>
             <Nav.Link
               className={`${props.showLogin === 1 ? "d-none" : ""}`}
               href={"/auth"}
