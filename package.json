@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "aws-amplify": "^6.0.10",
     "buffer": "^6.0.3",
+    "chart.js": "^4.4.1",
     "eslint-config-react-app": "^7.0.1",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",

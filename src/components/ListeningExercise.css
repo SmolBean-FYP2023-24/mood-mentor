@@ -1,19 +1,58 @@
+  .light-blue-bg {
+    background-color: lightblue;
+    height: 100vh;
+  }
+
   /* QUESTION/TIMER/LEFT SECTION */
   .question-section {
     width: 100%;
     position: relative;
+    margin-top: 30px;
+    
   }
   
   .question-count {
-    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    
   }
-  
+
+  span {
+    margin-right: 20px; /* Add margin-right for spacing */
+  }
+
+  .progress-bar {
+    width: calc(70% - 2px);
+    height: 15px;
+    background: #e0e0e0;
+    padding: 1px;
+    border-radius: 10px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, .2);
+    margin-top: 5px;
+    
+}
+
+.progress-bar-fill {
+    display: block;
+    height: 15px;
+    background: #252d4a;
+    border-radius: 10px;
+    transition: width 250ms ease-in-out;
+}
   .question-count span {
     font-size: 28px;
+    text-align: left;
+    text-indent: 50px;
   }
   
   .question-text {
-    margin-bottom: 12px;
+    font-size: 50px;
+    padding: 50px;
+    margin-bottom: 4px;
+    text-align: center;
+    white-space: pre-wrap;
+    word-break: break-word;
+    /* text-indent: 160px; Adjust the value as per your preference */
   }
   
   .timer-text {
@@ -26,26 +65,54 @@
     text-align: center;
   }
   
-  /* ANSWERS/RIGHT SECTION */
   .answer-section {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    justify-items: center;
   }
   
-  buttonListeningExercise {
-    width: 100%;
-    font-size: 16px;
+  .buttonListeningExercise {
+    width: 90%;
     color: #ffffff;
     background-color: #252d4a;
-    border-radius: 15px;
+    border-radius: 25px;
     display: flex;
-    padding: 5px;
+    padding: 25px;
     justify-content: flex-start;
-    align-items: center;
-    border: 5px solid #234668;
+    align-items: flex-end;
+    border: 2px solid black;
     cursor: pointer;
+    box-sizing: border-box; /* Add this line to include border in the width calculation */
+   
+  }
+
+  .buttonListeningExercsie:hover{
+
+    background-color: white; /* Change the color when hovering over */
+
+  }
+
+
+  .option-label {
+    width: 40px; /* Adjust the size of the label circle */
+    height: 40px;
+    border-radius: 50%;
+    background-color: white;
+    color: #252d4a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin-right: 10px; /* Adjust the spacing between the label and text */
+    font-size: 20px;
+  }
+  
+  .option-text {
+    flex: 1; /* Allow the text to take remaining space */
+    text-align: left;
+    text-indent: 30px;
+    font-size: 30px;
   }
   
   .correct {

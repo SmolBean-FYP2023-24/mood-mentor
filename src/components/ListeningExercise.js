@@ -152,8 +152,12 @@ function ListeningExercise() {
     
   };
 
+    // Inside your component or functional scope
+    const remainingProgress = 100 - ((CurrentQuestion + 1) / questions.length) * 100;
+    const progressBarRemainingStyle = { width: `${remainingProgress}%` };
+
 	return (
-		<div className='app'>
+		<div className='light-blue-bg' style={{ overflow: 'auto' }}>
        
 			{/* HINT: replace "false" with logic to display the 
       score when the user has answered all the questions */}
@@ -162,15 +166,21 @@ function ListeningExercise() {
 			) : (
 				<>
 					<div className='question-section'>
-						<div className='question-count'>
-							<span>Question {CurrentQuestion+1}</span>/{questions.length}
-						</div>
+          <div className='question-count'>
+          <span>Question {CurrentQuestion + 1}/{questions.length}</span>
+          <div className='progress-bar'>
+            <div className='progress-bar-fill' style={{ width: `${((CurrentQuestion + 1) / questions.length) * 100}%` }}></div>
+          </div>
+        </div>
 						<div className='question-text'> {questions[CurrentQuestion].questionText}</div>
 					</div>
       
 					<div className='answer-section'>
             {emotion_random.map((answerOption,index) =>
-              <buttonListeningExercise onClick={() => handleAnswerButtonClick(answerOption.isCorrect)}> {emotion_random[index]} </buttonListeningExercise>
+              <button className='buttonListeningExercise' onClick={() => handleAnswerButtonClick(answerOption.isCorrect)}>
+              <div className='option-label'>{String.fromCharCode(97 + index)}</div>
+              <div className='option-text'>{emotion_random[index]}</div>
+            </button>
               
             )}
 						{/* <button>Answer 1</button>
