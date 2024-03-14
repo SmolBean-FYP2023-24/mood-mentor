@@ -2,10 +2,14 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { fetchAuthSession } from "aws-amplify/auth";
 
 function TopNav(props) {
-  console.log("Received Update", props.showLogin);
+  useEffect(() => {
+    console.log("This is rerendered");
+  });
+
   return (
     <Navbar
       expand="lg"
@@ -21,9 +25,10 @@ function TopNav(props) {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto column-gap-5" id="menu">
             <Nav.Link href={"/"}>Home</Nav.Link>
+            <Nav.Link href={"/lex"}>Listening Exercise</Nav.Link>
             <Nav.Link href={"/profile"}>Profile</Nav.Link>
             <Nav.Link
-              className={`${props.showLogin === 1 ? "d-none" : ""}`}
+              className={`${props.showLogin !== 0 ? "d-none" : ""}`}
               href={"/auth"}
             >
               Login

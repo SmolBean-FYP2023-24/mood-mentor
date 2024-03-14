@@ -9,7 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "aws-amplify": "^6.0.10",
     "buffer": "^6.0.3",
-    "chart.js": "^4.4.1",
+    "chart.js": "^4.4.2",
     "eslint-config-react-app": "^7.0.1",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
@@ -52,6 +52,6 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "bootstrap": "^5.3.2"
+    "bootstrap": "^5.3.3"
   }
 }

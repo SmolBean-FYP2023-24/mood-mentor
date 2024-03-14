@@ -7,10 +7,10 @@ from subprocess import call
 
 def query(filename):
     response = requests.get(filename)
-    open("/tmp/"+filename.split("/")[-1], "wb").write(response.content)
+    open("/tmp/audio.wav", "wb").write(response.content)
     API_URL = "https://api-inference.huggingface.co/models/sarthak712/my_awesome_model"
     headers = {"Authorization": os.environ['model_auth']}
-    with open("/tmp/" + filename.split("/")[-1], "rb") as f:
+    with open("/tmp/audio.wav", "rb") as f:
         data = f.read()
     response = requests.post(API_URL, headers=headers, data=data)
     call('rm -rf /tmp/*', shell=True)

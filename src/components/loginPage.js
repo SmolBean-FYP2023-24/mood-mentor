@@ -1,5 +1,5 @@
 import LoginForm from "./loginForm";
-import "./login.css";
+import "./styles/login.css";
 import { React, useEffect, useState } from "react";
 
 export default function Login(props) {

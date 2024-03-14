@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import "./loginForm.css";
+import "./styles/loginForm.css";
 import { getCurrentUser, signIn, signOut } from "aws-amplify/auth";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -54,7 +54,6 @@ export default function LoginForm(props) {
       };
       checkUser();
     }
-    // console.log(loginState.stateID);
   });
 
   async function mysignIn(username = "", password = "") {
@@ -99,7 +98,7 @@ export default function LoginForm(props) {
             </div>
             <div className={`${loginState.stateID === 1 ? "d-none" : ""}`}>
               <div className={`mb-5`}>
-                <label className="text-center w-100">
+                <div className="text-center w-100">
                   <h1>MoodMentor</h1>
                   <h6 className="py-3">
                     Hello, welcome back!{" "}
@@ -108,18 +107,30 @@ export default function LoginForm(props) {
                       : ""}
                   </h6>
                   <button
-                    className={`${loginState.stateID === 0 ? "d-none" : ""}`}
+                    type="button"
+                    className={`${
+                      loginState.stateID === 0
+                        ? "d-none"
+                        : "btn btn-large btn-dark mx-2"
+                    }`}
                     onClick={mysignOut}
+                    id="signOutBtn"
                   >
                     Sign Out
                   </button>
                   <button
-                    className={`${loginState.stateID === 0 ? "d-none" : ""}`}
+                    type="button"
+                    className={`${
+                      loginState.stateID === 0
+                        ? "d-none"
+                        : "btn btn-large btn-dark mx-2"
+                    }`}
                     onClick={viewProfile}
+                    id="profileBtn"
                   >
                     Profile
                   </button>
-                </label>
+                </div>
               </div>
               <div className={`${loginState.stateID === 2 ? "d-none" : ""}`}>
                 <div className="mb-4">

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import "./audio.css";
+import "./styles/audio.css";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
@@ -86,12 +86,12 @@ const AudioRecorder = () => {
             },
           }).result;
           console.log("Succeeded: ", result);
-          await getUrl({
-            key: "audio.wav",
-            options: {
-              accessLevel: "private",
-            },
-          }).then((res) => console.log(res.url.href));
+          // await getUrl({
+          //   key: "audio.wav",
+          //   options: {
+          //     accessLevel: "private",
+          //   },
+          // }).then((res) => console.log(res.url.href));
           document.getElementById("analysisBtn").disabled = false;
         } catch (error) {
           console.log("Error : ", error);
@@ -143,13 +143,25 @@ const AudioRecorder = () => {
     const user = await fetchAuthSession();
     var myHeaders = new Headers();
     myHeaders.append("Authorization", user.tokens.idToken.toString());
-    myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify(document.getElementById("finaltext").innerText);
+    myHeaders.append("Content-Type", "text/plain");
+    console.log(user.tokens.idToken.toString());
+    var urll;
+    await getUrl({
+      key: "audio.wav",
+      options: {
+        accessLevel: "private",
+      },
+    }).then((res) => (urll = res.url.href));
+    var raw = {
+      prompt: document.getElementById("finaltext").innerText,
+      audio_file: urll,
+    };
 
+    console.log(raw);
     var requestOptions = {
       method: "POST",
       headers: myHeaders,
-      body: raw,
+      body: JSON.stringify(raw),
       redirect: "follow",
     };
 
@@ -157,21 +169,18 @@ const AudioRecorder = () => {
       "https://1xgrgbwrn5.execute-api.us-west-2.amazonaws.com/main/analyze/",
       requestOptions
     )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("HTTP error " + response.status);
-        }
-        return response.json();
-      })
+      .then(
+        (response) => {
+          if (!response.ok) {
+            throw new Error("HTTP error " + response.status);
+          }
+          return response.json();
+        },
+        (err) => console.log(err)
+      )
       .then((result) => {
-        if (result.body) {
-          let parsedResponse = result.body.replace(/\\n/g, "");
-          console.log(parsedResponse.trim());
-        } else {
-          console.log("No 'body' field in the response");
-        }
-      })
-      .catch((error) => console.log("error", error));
+        console.log(result);
+      });
   }
 
   function resetContent() {
@@ -185,7 +194,7 @@ const AudioRecorder = () => {
       <div className="row w-100 m-0 p-0">
         <div
           className="col-12 col-md-4 bg-dark text-light"
-          style={{ height: "calc(100vh - 63px)" }}
+          style={{ height: "calc(100vh - 56px)" }}
         >
           <div id="holder" className="m-auto">
             <div
@@ -230,6 +239,7 @@ const AudioRecorder = () => {
                   id="resetBtn"
                   onClick={resetContent}
                 >
+                  <i className="fa fa-refresh" aria-hidden="true"></i> &nbsp;
                   Reset Transcript
                 </button>
               </div>
@@ -239,6 +249,7 @@ const AudioRecorder = () => {
                   id="analysisBtn"
                   onClick={analyze}
                 >
+                  <i className="fa fa-bar-chart" aria-hidden="true"></i> &nbsp;
                   Perform Analysis
                 </button>
               </div>

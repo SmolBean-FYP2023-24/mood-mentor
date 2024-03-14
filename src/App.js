@@ -8,7 +8,7 @@ import Home from "./components/homePage";
 import Login from "./components/loginPage";
 import TopNav from "./components/topNav";
 import Profile from "./components/profilePage";
-import Dashboard from "./components/dashboard"
+import Dashboard from "./components/dashboard";
 import ListeningExercise from "./components/ListeningExercise";
 import { Amplify } from "aws-amplify";
 import amplifyconfig from "./amplifyconfiguration.json";
@@ -33,8 +33,11 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home handleUser={handleUser} />} />
           <Route path="/auth/" element={<Login handleUser={handleUser} />} />
-          <Route path="/profile/" element={<Profile />} />
-          <Route path="/listeningexercise/" element={<ListeningExercise />} />
+          <Route
+            path="/profile/"
+            element={<Profile handleUser={handleUser} />}
+          />
+          <Route path="/lex/" element={<ListeningExercise />} />
           <Route path="/dashboard/" element={<Dashboard />} />
         </Routes>
       </div>
