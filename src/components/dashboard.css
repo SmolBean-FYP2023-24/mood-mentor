@@ -1,0 +1,120 @@
+.profile-box {
+    border: 5px solid black;
+    padding: 20px;
+    margin-top: 30px;
+    margin-left: 10px;
+    border-radius: 20px;
+    width: 60%;
+    height: 40%;
+    position: relative;
+    box-sizing: border-box; /*Include padding within the box*/
+
+  }
+  
+  .profile-header {
+    
+    display: flex;
+    align-items: center;
+    margin: 50px;
+  }
+  
+  .profile-info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px;
+  }
+  
+  .welcome-text {
+    font-weight: bold;
+    font-size: larger;
+  }
+  
+  .username {
+    margin-top: 10px;
+  }
+  
+  .profile-image {
+    position: absolute; /* Position the image absolutely */
+    bottom: -10px; /* Adjust the distance from the bottom as desired */
+    left: -15px; /* Adjust the distance from the left as desired */
+    width: 200px;
+    height: 200px;
+    border-radius: 30%;
+    object-fit: cover;
+    margin-right: 0px;
+  }
+  
+  
+  /* .profile-footer {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-around;
+} */
+
+
+.profile-footer {
+    position: absolute;
+    bottom: 20px; /* Adjust the distance from the bottom as desired */
+    left: 20px; /* Adjust the distance from the left as desired */
+    display: flex;
+    justify-content: space-around;
+    width: calc(100% - 40px); /* Take into account left and right padding */
+  }
+
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px; /* Adjust the gap between buttons as desired */
+    margin-left: auto;
+  }
+  
+  .profile-button {
+    width: 150px; /* Adjust the width as desired */
+    /* padding: 10px; */
+    background-color: #4285f4;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px;
+    text-align: center;
+  }
+  
+  .profile-button:hover {
+    background-color: #3367d6;
+  }
+  
+  .profile-button:last-child {
+    margin-right: 0;
+  }
+
+
+
+
+
+
+
+
+
+
+/* the below css is for the charts */
+.col-md-9.offset-md-3 {
+    /* Add your custom styles for the chart container */
+    width: 100%;
+    max-width: 600px; /* Adjust the width as needed */
+    margin-top: 50px;
+  }
+  
+  .col-md-9.offset-md-3 canvas {
+    /* Add your custom styles for the chart canvas */
+    width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* margin-top: 30px; */
+  }
+

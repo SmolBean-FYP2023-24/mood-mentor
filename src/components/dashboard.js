@@ -1,8 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import "@aws-amplify/ui-react/styles.css";
-import "./styles/profilePage.css";
-import { getProfilePicture } from "./profilePageUtils.js";
-import Chart from "chart.js/auto";
+
+import './profilePage.css';
+import { getProfilePicture } from './profilePageUtils.js';
+import Chart from 'chart.js/auto';
+import './dashboard.css';
+
 
 // const emotions = {
 //   1: "neutral",
@@ -51,39 +54,51 @@ function Dashboard({ user }) {
     };
   }, []);
 
+
   return (
-    <div className="container-fluid">
-      <div className="row">
-        <div className="col-md-3">
-          <img
-            style={{
-              width: "200px",
-              height: "200px",
-              borderRadius: "50%",
-              objectFit: "cover",
-              border: "2px solid black",
-            }}
-            src={selectedProfilePicture}
-            alt=""
-          />
-        </div>
-        <div className="col-md-9">
-          <div>
-            <label
-              htmlFor=""
-              className="mt-3"
-              style={{ fontWeight: "bold", fontSize: "larger" }}
-            >
-              Name: {user}
-            </label>
-            <br />
-            <label htmlFor="" className="mt-3 font-semibold text-5xl">
-              Level:{" "}
-            </label>
-            <br />
+      <div className="container-fluid">
+        <div className="row">
+            <div className="profile-box">
+                <div className="profile-header">
+                  <div className="profile-info">
+                    <h2 className="welcome-text">Hey, CHUNG, Li, welcome back {user}!</h2>
+                    {/* <h3 className="username"> {user}</h3> */}
+                  </div>
+                    <iframe
+                      className="profile-image"
+                      src="https://giphy.com/embed/EhTL8YYF56gZa5qzp0"
+                      width="400"
+                      height="480"
+                      frameBorder="0"
+                      allowFullScreen
+                    ></iframe>
+                    <p>
+                      <a href="https://giphy.com/stickers/disneyanimation-disney-animation-strange-world-EhTL8YYF56gZa5qzp0"></a>
+                    </p>
+                </div>
+                <div className="profile-footer">
+                <div class="button-container">
+                    <button class="profile-button">Listening Exercise</button>
+                    <button class="profile-button">Speaking Exercise</button>
+                    <button class="profile-button">Conversational Exercise</button>
+                </div>
+                </div>
+            </div>
+          <div className="col-md-9">
+            
+                <div className="row">
+              <div className="col-md-9 offset-md-3">
+                <canvas ref={chartRef} id="okCanvas2" width="400" height="100">
+                  <p>Hello Fallback World</p>
+                </canvas>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+    
+        
+
+      {/* </div> */}
 
       <div className="row">
         <div className="col-md-9 offset-md-3">
