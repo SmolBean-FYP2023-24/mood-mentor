@@ -1,15 +1,39 @@
-.profile-box {
-    border: 5px solid black;
-    padding: 20px;
-    margin-top: 30px;
-    margin-left: 10px;
-    border-radius: 20px;
-    width: 60%;
-    height: 40%;
-    position: relative;
-    box-sizing: border-box; /*Include padding within the box*/
+.row {
+  display: flex;
+  height: 100%;
+  margin-bottom: 5vh;
+}
 
-  }
+
+.profile-box {
+  /* border: 2px solid black; */
+  padding: 20px;
+  margin-top: 30px;
+  margin-right: 10px; /* Adjust margin-right instead of margin-left */
+  border-radius: 50px;
+  width: 75%; /* Adjust width to occupy 75% */
+  height: 50vh;
+  position: relative;
+  box-sizing: border-box;
+  flex: 5;
+  margin-left: 20px; /* Add a left margin to create a gap */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Add box-shadow effect */
+}
+
+.normal-box {
+  /* border: 2px solid black; */
+  padding: 20px;
+  margin-top: 30px;
+  margin-left: auto; /* Push the normal-box to the right */
+  border-radius: 50px;
+  width: 25%; /* Adjust width to occupy 25% */
+  height: 50vh;
+  flex:5;
+  margin-left: 20px; /* Add a left margin to create a gap */
+  margin-right: 10px; /* Add a left margin to create a gap */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Add box-shadow effect */
+  margin-bottom: 20px;
+}
   
   .profile-header {
     
@@ -23,6 +47,8 @@
     top: 0;
     left: 0;
     padding: 10px;
+    margin-top: 20px;
+    margin-left: 10px;
   }
   
   .welcome-text {
@@ -30,6 +56,11 @@
     font-size: larger;
   }
   
+  .top-text{
+    margin-top: 5vh;
+    font-weight: bold;
+    
+  }
   .username {
     margin-top: 10px;
   }
@@ -40,9 +71,11 @@
     left: -15px; /* Adjust the distance from the left as desired */
     width: 200px;
     height: 200px;
-    border-radius: 30%;
+    border-radius: 50%;
     object-fit: cover;
-    margin-right: 0px;
+    /* margin-left: 10px;
+    margin-bottom: 5px;
+    margin-bottom: 10px; */
   }
   
   
@@ -65,22 +98,32 @@
   .button-container {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
     gap: 5px; /* Adjust the gap between buttons as desired */
     margin-left: auto;
   }
+
+  .custom-row{
+
+    display: flex;
+    height: 100%;
+    margin-bottom: 5vh;
+  
+    }
   
   .profile-button {
-    width: 150px; /* Adjust the width as desired */
+    /* width: 150px; Adjust the width as desired */
     /* padding: 10px; */
     background-color: #4285f4;
     color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 25px;
     font-size: 16px;
     cursor: pointer;
-    margin-right: 10px;
+    margin-right: 20px;
+    margin-left: 20px;
     text-align: center;
+    flex:3;
+    height: 100px;
   }
   
   .profile-button:hover {
@@ -90,6 +133,42 @@
   .profile-button:last-child {
     margin-right: 0;
   }
+
+  .custom-row-1{
+
+    display: flex;
+    height: 100%;
+    margin-bottom: 5vh;
+    margin-bottom: 10px;
+  
+    }
+
+  .chart-box-normal{
+    flex:5;
+    height: 200px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 50px;
+    height: 300px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }  
+
+  .chart-box-practice-qs{
+    flex:5;
+    height: 200px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 50px;
+    height: 300px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    
+  }
+
+  
 
 
 
@@ -101,20 +180,21 @@
 
 
 /* the below css is for the charts */
-.col-md-9.offset-md-3 {
-    /* Add your custom styles for the chart container */
+/* .col-md-9.offset-md-3 {
+    
     width: 100%;
-    max-width: 600px; /* Adjust the width as needed */
+    max-width: 600px; 
     margin-top: 50px;
   }
   
   .col-md-9.offset-md-3 canvas {
-    /* Add your custom styles for the chart canvas */
+    
     width: 100%;
     height: auto;
     border: 1px solid #ddd;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* margin-top: 30px; */
-  }
+    
+  } */
 
+  
