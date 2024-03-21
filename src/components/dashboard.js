@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef , useState} from "react";  
 import { Line } from 'react-chartjs-2';
 import { Bar } from 'react-chartjs-2';
 import "@aws-amplify/ui-react/styles.css";
@@ -179,6 +179,8 @@ function Dashboard({ user }) {
     },
   };
 
+  
+
 
   return (
     <div className="container-fluid">
@@ -195,14 +197,14 @@ function Dashboard({ user }) {
           </div>
           <iframe
             className="profile-image"
-            src="https://giphy.com/embed/EhTL8YYF56gZa5qzp0"
+            // src="https://giphy.com/embed/EhTL8YYF56gZa5qzp0"
             width="400"
             height="480"
             frameBorder="0"
             allowFullScreen
           ></iframe>
           <p>
-            <a href="https://giphy.com/stickers/disneyanimation-disney-animation-strange-world-EhTL8YYF56gZa5qzp0"></a>
+            {/* <a href="https://giphy.com/stickers/disneyanimation-disney-animation-strange-world-EhTL8YYF56gZa5qzp0"></a> */}
           </p>
         </div>
         
@@ -217,21 +219,17 @@ function Dashboard({ user }) {
 
   <div className="custom-row">
 
-  
-
-
-      <button className="profile-button">Listening Exercise</button>
+    <button className="profile-button">Listening Exercise</button>
       <button className="profile-button">Speaking Exercise</button>
       <button className="profile-button">Conversational Exercise</button>
-         
-
-  </div>
+         </div>
 
   <div className="custom-row-1">
 
     <div className="chart-box-normal">
             <div className="chart-container">
                 <Bar data={chartData} options={chartOptions} />
+                
               </div>
     </div> 
 
@@ -243,6 +241,9 @@ function Dashboard({ user }) {
         </div>    
 
   </div>
+
+
+ 
 
 
   
@@ -258,5 +259,6 @@ function Dashboard({ user }) {
  
   );
 }
+
 
 export default Dashboard;

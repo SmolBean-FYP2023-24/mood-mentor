@@ -1,3 +1,8 @@
+.container-fluid{
+  font-family: cursive;
+}
+
+
 .row {
   display: flex;
   height: 100%;
@@ -107,26 +112,79 @@
     display: flex;
     height: 100%;
     margin-bottom: 5vh;
+    justify-content: center;
   
     }
+
+
+    * {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+  }
   
   .profile-button {
     /* width: 150px; Adjust the width as desired */
     /* padding: 10px; */
-    background-color: #4285f4;
+    /* background-color: #4285f4;
     color: #fff;
     border: none;
     border-radius: 25px;
-    font-size: 16px;
     cursor: pointer;
     margin-right: 20px;
     margin-left: 20px;
     text-align: center;
     flex:3;
-    height: 100px;
+    height: 80px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    font-size: 22px;
+    font-family: cursive;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; */
+    
+    font-size: 23px;
+    font-family: cursive;
+    width: 400px;
+    /* font-size: 16px; */
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    margin: 20px;
+    height: 80px;
+    text-align:center;
+    border: none;
+    background-size: 300% 100%;
+
+    border-radius: 50px;
+    moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+    background-image: linear-gradient(to right, #667eea, #764ba2, #6B8DD6, #8E37D7);
+    box-shadow: 0 4px 15px 0 rgba(116, 79, 168, 0.75);
+    
   }
-  
+
+
+.profile-button:hover {
+    background-position: 100% 0;
+    moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+}
+
+.profile-button:focus {
+    outline: none;
+}
+
+
+/* .btn-hover.color-3 {
+  background-image: linear-gradient(to right, #667eea, #764ba2, #6B8DD6, #8E37D7);
+  box-shadow: 0 4px 15px 0 rgba(116, 79, 168, 0.75);
+} */
+
+
+
   .profile-button:hover {
     background-color: #3367d6;
   }
@@ -197,5 +255,29 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     
   } */
+
+
+  .custom-row-2{
+
+    display: flex;
+    height: 100%;
+    margin-bottom: 5vh;
+    margin-bottom: 10px;
+
+  }
+
+  .chart-per-emotion{
+
+    flex:5;
+    height: 200px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 50px;
+    height: 300px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+  }
 
   
