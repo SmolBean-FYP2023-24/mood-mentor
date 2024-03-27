@@ -143,7 +143,7 @@ const AudioRecorder = () => {
     const user = await fetchAuthSession();
     var myHeaders = new Headers();
     myHeaders.append("Authorization", user.tokens.idToken.toString());
-    myHeaders.append("Content-Type", "text/plain");
+    myHeaders.append("Content-Type", "application/json");
     console.log(user.tokens.idToken.toString());
     var urll;
     await getUrl({
@@ -166,7 +166,7 @@ const AudioRecorder = () => {
     };
 
     await fetch(
-      "https://1xgrgbwrn5.execute-api.us-west-2.amazonaws.com/main/analyze/",
+      "https://0ikothkm27.execute-api.us-west-2.amazonaws.com/default/analyze/",
       requestOptions
     )
       .then(
@@ -214,8 +214,11 @@ const AudioRecorder = () => {
             Listening: {listening ? "On" : "Off"}
           </div>
         </div>
-        <div className="col-12 col-md-8">
-          <div className="container py-3">
+        <div
+          className="col-12 col-md-8"
+          style={{ height: "calc(100vh - 56px)" }}
+        >
+          <div className="container py-3 h-100">
             <div className="row">
               <p
                 id="finaltext"
@@ -232,7 +235,7 @@ const AudioRecorder = () => {
                   : transcript}
               </p>
             </div>
-            <div className="row justify-content-end">
+            <div className="row justify-content-end my-auto">
               <div className="col-12 col-md-3 p-0 mx-md-2">
                 <button
                   className="btn w-100 btn-warning my-2 my-md-0 mx-0 mx-md-0"

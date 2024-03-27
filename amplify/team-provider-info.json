@@ -9,24 +9,20 @@
       "UnauthRoleName": "amplify-moodmentor-main-124937-unauthRole",
       "StackName": "amplify-moodmentor-main-124937",
       "StackId": "arn:aws:cloudformation:us-west-2:380248605085:stack/amplify-moodmentor-main-124937/3c496f40-9f36-11ee-9453-0a1fdfd352e9",
-      "AmplifyAppId": "d2z2vsyjysr6ig",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-moodmentor-main-124937-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+      "AmplifyAppId": "d2z2vsyjysr6ig"
     },
     "categories": {
       "auth": {
         "moodmentor": {}
       },
-      "function": {
-        "callGenAI": {
-          "deploymentBucketName": "amplify-moodmentor-main-124937-deployment",
-          "s3Key": "amplify-builds/callGenAI-465a725a4f6f4d4f6c6b-build.zip"
-        }
-      },
-      "api": {
-        "genaiapi": {}
-      },
       "storage": {
         "s3audiofiles": {}
+      },
+      "function": {
+        "execModelLambda": {
+          "deploymentBucketName": "amplify-moodmentor-main-124937-deployment",
+          "s3Key": "amplify-builds/execModelLambda-7456674b4e5562385453-build.zip"
+        }
       }
     }
   }

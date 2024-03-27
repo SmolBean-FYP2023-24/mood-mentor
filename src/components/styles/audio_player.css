@@ -1,0 +1,16 @@
+#audioHolder {
+    height: 100%;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+#audioHolder button {
+    text-align: center;
+    border-radius: 50% !important;
+}
+
+#audioHolder button i {
+    margin: auto;
+}
