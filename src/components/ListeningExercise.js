@@ -4,7 +4,9 @@ import "./styles/audio_player.css";
 // eslint-disable-next-line
 import { getUrl } from "aws-amplify/storage";
 import { pathLabels } from "./data/pathset";
-import { Chart } from "chart.js/auto";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Doughnut } from "react-chartjs-2";
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 function shuffle(array) {
   let currentIndex = array.length,
@@ -38,8 +40,8 @@ function getRandomAudio(emotionChoice) {
     pathLabels[chosenEmotion][
       Math.floor(Math.random() * pathLabels[chosenEmotion].length)
     ];
-  chosenAudio =
-    "https://cdn.pixabay.com/download/audio/2022/12/19/audio_2043858e7a.mp3?filename=typical-trap-loop-140bpm-129880.mp3";
+  // chosenAudio =
+  // "https://cdn.pixabay.com/download/audio/2021/09/08/audio_30fd70d538.mp3?filename=censor-beep-1sec-8112.mp3";
   return [chosenAudio, chosenEmotion];
 }
 
@@ -51,29 +53,29 @@ async function playAudio(setPlayingState, setCorrectAnswer) {
     var chosenAudio = results[0];
     setCorrectAnswer(results[1]);
     // IMPORTANT: Commented to reduce costs, do not remove
-    // await getUrl({
-    //   key: chosenAudio,
-    //   options: { accessLevel: "guest" },
-    // }).then((res) => {
-    //   x.setAttribute("src", res.url.href);
-    //   x.play();
-    //   x.addEventListener("ended", function () {
-    //     setPlayingState(0);
-    //     document.getElementById("audioStatus").innerText = "Stopped";
-    //   });
-    //   setPlayingState(1);
-    //   document.getElementById("audioStatus").innerText = "Playing...";
-    // });
-    await new Promise((resolve) => setTimeout(resolve, 1000)).then((res) => {
-      x.setAttribute("src", chosenAudio);
-      setPlayingState(1);
+    await getUrl({
+      key: chosenAudio,
+      options: { accessLevel: "guest" },
+    }).then((res) => {
+      x.setAttribute("src", res.url.href);
       x.play();
       x.addEventListener("ended", function () {
         setPlayingState(0);
         document.getElementById("audioStatus").innerText = "Stopped";
       });
+      setPlayingState(1);
       document.getElementById("audioStatus").innerText = "Playing...";
     });
+    // await new Promise((resolve) => setTimeout(resolve, 1000)).then((res) => {
+    //   x.setAttribute("src", chosenAudio);
+    //   setPlayingState(1);
+    //   x.play();
+    //   x.addEventListener("ended", function () {
+    //     setPlayingState(0);
+    //     document.getElementById("audioStatus").innerText = "Stopped";
+    //   });
+    //   document.getElementById("audioStatus").innerText = "Playing...";
+    // });
   } else {
     setPlayingState(1);
     x.play();
@@ -123,11 +125,13 @@ function ListeningExercise() {
               handleAnswerButtonClick(answerOption);
             }}
           >
-            <div className="bg-dark w-md-75 w-xs-100 mx-auto p-md-3 p-2 rounded justify-content-evenly">
+            <div className="optionButton bg-dark w-md-75 w-xs-100 mx-auto p-md-3 p-2 rounded justify-content-evenly">
               <span className="badge text-bg-light text-dark flex-fill">
                 {String.fromCharCode(97 + index)}
               </span>
-              <span className="p-3 flex-fill">{answerOption}</span>
+              <span className="p-3 flex-fill optionButtonText">
+                {answerOption}
+              </span>
             </div>
           </div>
         );
@@ -149,14 +153,34 @@ function ListeningExercise() {
 
   let q = [
     "What emotion can you identify in this audio?",
-    // "What emotion can you identify in this audio?",
-    // "What emotion can you identify in this audio?",
-    // "What emotion can you identify in this audio?",
-    // "What emotion can you identify in this audio?",
+    "What emotion can you identify in this audio?",
+    "What emotion can you identify in this audio?",
+    "What emotion can you identify in this audio?",
+    "What emotion can you identify in this audio?",
   ];
 
-  const handleAnswerButtonClick = (answerOption) => {
+  async function handleAnswerButtonClick(answerOption) {
     console.log(answerOption);
+    var optionButtons = document.getElementsByClassName("optionButton");
+    for (var i = 0; i < optionButtons.length; i++) {
+      // Get the 'optionButtonText' of the current optionButton
+      var optionButtonText =
+        optionButtons[i].getElementsByClassName("optionButtonText")[0]
+          .innerText;
+
+      // Check if the 'optionButtonText' equals 'aaaa'
+      if (optionButtonText === updateAnswers) {
+        // If it does, remove the 'bg-dark' class and add the 'correct' class
+        optionButtons[i].classList.remove("bg-dark");
+        optionButtons[i].classList.add("correct");
+      } else {
+        optionButtons[i].classList.remove("bg-dark");
+        optionButtons[i].classList.add("incorrect");
+      }
+    }
+
+    await new Promise((r) => setTimeout(r, 1000));
+
     if (answerOption === updateAnswers) {
       setScore(score + 1);
     }
@@ -167,14 +191,54 @@ function ListeningExercise() {
       setShowScore(true);
     }
     setUpdateAnswers(false);
+  }
+
+  var initData = {
+    labels: ["Correct", "Incorrect"],
+    datasets: [
+      {
+        label: "Result Breakdown",
+        data: [0, 0],
+        backgroundColor: ["#4CAF50", "#E53935"],
+      },
+    ],
   };
+  const [graphData, setGraphData] = useState(initData);
+
+  useEffect(() => {
+    initData.datasets[0].data = [score, q.length - score];
+    setGraphData(initData);
+    // eslint-disable-next-line
+  }, [score]);
 
   return (
     <div className="w-100 p-0 m-0">
-      <div className="container h-100">
+      <div className="container h-100 p-0 p-sm-auto">
         {showScore ? (
-          <div className="score-section">
-            You scored {score} out of {q.length}
+          <div className="score-section p-0 m-0">
+            <div
+              style={{ height: "calc(100vh - 56px)" }}
+              className="text-center"
+            >
+              <div
+                className="p-2 m-0 text-center"
+                style={{
+                  minHeight: "50vh",
+                  display: "flex",
+                  justifyContent: "center",
+                  maxHeight: "75vh",
+                  maxWidth: "100vw",
+                }}
+              >
+                <Doughnut data={graphData} />
+              </div>
+              <br></br>
+              <div className="p-2">
+                <h5 className="text-body-secondary text-center">
+                  You scored {score} out of {q.length}
+                </h5>
+              </div>
+            </div>
           </div>
         ) : (
           <>
