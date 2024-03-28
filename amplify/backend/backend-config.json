@@ -38,6 +38,11 @@
     }
   },
   "function": {
+    "callHuggingFace": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "execModelLambda": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -45,6 +50,22 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_callHuggingFace_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "callHuggingFace"
+        }
+      ]
+    },
+    "AMPLIFY_function_callHuggingFace_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "callHuggingFace"
+        }
+      ]
+    },
     "AMPLIFY_function_execModelLambda_deploymentBucketName": {
       "usedBy": [
         {

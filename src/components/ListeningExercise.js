@@ -45,10 +45,14 @@ function getRandomAudio(emotionChoice) {
   return [chosenAudio, chosenEmotion];
 }
 
-async function playAudio(setPlayingState, setCorrectAnswer) {
+export const playAudio = async (
+  setPlayingState,
+  setCorrectAnswer,
+  targetEmotion = ""
+) => {
   var x = document.getElementById("audioPlayer");
   if (x.getAttribute("src") === null) {
-    var results = getRandomAudio("");
+    var results = getRandomAudio(targetEmotion);
     console.log(results);
     var chosenAudio = results[0];
     setCorrectAnswer(results[1]);
@@ -85,7 +89,7 @@ async function playAudio(setPlayingState, setCorrectAnswer) {
     });
     document.getElementById("audioStatus").innerText = "Playing...";
   }
-}
+};
 
 function ListeningExercise() {
   const [updateAnswers, setUpdateAnswers] = useState(false);

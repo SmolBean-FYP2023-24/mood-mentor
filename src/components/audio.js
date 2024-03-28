@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./styles/audio.css";
 import SpeechRecognition, {
   useSpeechRecognition,
@@ -8,11 +8,27 @@ import { Buffer } from "buffer";
 import * as EBML from "ts-ebml";
 import { fetchAuthSession } from "aws-amplify/auth";
 import { uploadData, getUrl } from "aws-amplify/storage";
+import { sentences } from "./data/sentences";
 
 window.Buffer = window.Buffer || Buffer;
 let started = false;
-
+function getRandomSentence(emotionChoice = "") {
+  var emotions = ["angry", "disgust", "fear", "happy", "neutral", "sad"];
+  var chosenEmotion =
+    emotionChoice !== ""
+      ? emotionChoice
+      : emotions[Math.floor(Math.random() * emotions.length)];
+  var chosenSentence =
+    sentences[chosenEmotion][
+      Math.floor(Math.random() * sentences[chosenEmotion].length)
+    ];
+  console.log("hello");
+  return [chosenSentence, chosenEmotion];
+}
 const AudioRecorder = () => {
+  const [CurrentQuestion, setCurrentQuestion] = useState(0);
+  const [x, setX] = useState("");
+
   const {
     transcript,
     listening,
@@ -38,6 +54,7 @@ const AudioRecorder = () => {
 
   // eslint-disable-next-line
   const stopRecording = () => {
+    setCurrentQuestion(CurrentQuestion + 1);
     stopAnimation();
     started = false;
     SpeechRecognition.stopListening();
@@ -112,6 +129,10 @@ const AudioRecorder = () => {
       stopRecording();
     }
   }, [listening, stopRecording]);
+
+  useEffect(() => {
+    setX(getRandomSentence());
+  }, [CurrentQuestion]);
 
   if (!browserSupportsSpeechRecognition) {
     return <span>Browser doesn't support speech recognition.</span>;
@@ -196,6 +217,7 @@ const AudioRecorder = () => {
           className="col-12 col-md-4 bg-dark text-light"
           style={{ height: "calc(100vh - 56px)" }}
         >
+          <span>Question {x[0]}</span>
           <div id="holder" className="m-auto">
             <div
               className="p-5 rounded-circle border"

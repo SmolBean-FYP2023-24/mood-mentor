@@ -2,8 +2,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import React, { useEffect, useState } from "react";
-import { fetchAuthSession } from "aws-amplify/auth";
+import React, { useEffect } from "react";
 
 function TopNav(props) {
   useEffect(() => {
@@ -26,6 +25,7 @@ function TopNav(props) {
           <Nav className="ms-auto column-gap-5" id="menu">
             <Nav.Link href={"/"}>Home</Nav.Link>
             <Nav.Link href={"/lex"}>Listening Exercise</Nav.Link>
+            <Nav.Link href={"/eex"}>Expression Exercise</Nav.Link>
             <Nav.Link href={"/profile"}>Profile</Nav.Link>
             <Nav.Link
               className={`${props.showLogin !== 0 ? "d-none" : ""}`}

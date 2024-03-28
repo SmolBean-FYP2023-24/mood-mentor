@@ -22,6 +22,10 @@
         "execModelLambda": {
           "deploymentBucketName": "amplify-moodmentor-main-124937-deployment",
           "s3Key": "amplify-builds/execModelLambda-7456674b4e5562385453-build.zip"
+        },
+        "callHuggingFace": {
+          "deploymentBucketName": "amplify-moodmentor-main-124937-deployment",
+          "s3Key": "amplify-builds/callHuggingFace-70645639485a4a6d5864-build.zip"
         }
       }
     }
