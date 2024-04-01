@@ -2,14 +2,24 @@ import React, { useEffect, useRef , useState} from "react";
 import { Line } from 'react-chartjs-2';
 import { Bar } from 'react-chartjs-2';
 import "@aws-amplify/ui-react/styles.css";
+import chroma from 'chroma-js';
 
 // import './profilePage.css';
 import { getProfilePicture } from './profilePageUtils.js';
 import Chart from 'chart.js/auto';
 import './dashboard.css';
+import "./styles/profilePage.css";
+import MenuChart from './MenuChart.js';
+import ProfilePictureSection from "./ProfilePictureSection.js";
 
 
 import { evaluate, parse, sqrt, exp, pi } from 'mathjs';
+
+
+
+
+
+
 
 function generateNormalDistributionData(mean, standardDeviation, minX, maxX, step) {
   const data = [];
@@ -60,6 +70,134 @@ function NormalDistributionChart({ mean, standardDeviation, minX, maxX, step }) 
 }
 
 
+function MyChart() {
+  const chartRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = chartRef.current;
+    const ctx = canvas.getContext('2d');
+    let myBarChart = null;
+
+    // Base colors
+    const baseColors = ["#50C4ED", "#387ADF", "#333A73"];
+
+    // Generate shades of colors based on the base colors
+    const colorScale = chroma.scale(baseColors).mode('lch').colors(10);
+    function createGlossyColor(color) {
+      const glossyColor = chroma(color).alpha(0.6).css();
+      return glossyColor;
+    }
+
+    const userIndex = 4; // Index of the user's percentile (e.g., 4 for 60%)
+    const backgroundColor = colorScale.map((color, index) =>
+    index === userIndex ? createGlossyColor(color) : baseColors[1]
+    );
+
+    
+
+
+
+    const data = {
+      labels: [
+        "20%",
+        "30%",
+        "40%",
+        "50%",
+        "60%",
+        "70%",
+        "80%",
+        "90%",
+        "100%"
+      ],
+      datasets: [
+        {
+          data: [
+            4,
+            8,
+            15,
+            30,
+            40,
+            30,
+            15,
+            8,
+            4
+          ],
+          backgroundColor,
+        }
+      ]
+    };
+
+    const options = {
+      tooltips: {
+        enabled: false
+      },
+      legend: {
+        display: false
+      },
+      annotation: {
+        annotations: [
+          {
+            type: "line",
+            mode: "vertical",
+            scaleID: "x-axis-0",
+            value: "70%",
+            borderColor: "black",
+            label: {
+              content: "Your Score",
+              enabled: true,
+              position: "center"
+            }
+          }
+        ]
+      },
+      scales: {
+        yAxes: [
+          {
+            display: false
+          }
+        ],
+        xAxes: [
+          {
+            barPercentage: 1.0,
+            categoryPercentage: 1.0,
+            gridLines: {
+              display: false
+            },
+            scaleLabel: {
+              display: true,
+              labelString: "Average Score"
+            }
+          }
+        ]
+      }
+    };
+
+    if (canvas && canvas.id === 'myChart') {
+      // Destroy existing chart instance if it exists
+      if (Chart.instances[0]) {
+        Chart.instances[0].destroy();
+      }
+
+      // Create new chart instance
+      myBarChart = new Chart(ctx, {
+        type: 'bar',
+        data,
+        options,
+      });
+    }
+
+    return () => {
+      // Cleanup code to destroy the chart instance
+      if (myBarChart) {
+        myBarChart.destroy();
+      }
+    };
+  }, []);
+
+  return <canvas ref={chartRef} id="myChart" />;
+}
+
+
 // const emotions = {
 //   1: "neutral",
 //   2: "happy",
@@ -91,7 +229,7 @@ function Dashboard({ user }) {
     labels: labels,
     datasets: [
       {
-        label: 'Normal Distribution',
+        label: '',
         data: data,
         backgroundColor: 'rgba(75, 192, 192, 0.8)',
         borderColor: 'rgba(75, 192, 192, 1)',
@@ -113,7 +251,7 @@ function Dashboard({ user }) {
       y: {
         title: {
           display: true,
-          text: 'Probability Density',
+          text: 'User Rank',
         },
       },
     },
@@ -134,12 +272,15 @@ function Dashboard({ user }) {
   // CHART2: LINE CHART FOR QUESTIONS PER WEEK
 
   const data_qs_per_week = {
-    labels: [1, 2, 3, 4, 5, 6, 7], // Week numbers
+    labels: [1, 2, 3, 4,5,6,7], // Week numbers
+    legend: {
+      display: false, // Hide the legend
+    },
     datasets: [
       {
-        label: 'Number of Questions Practiced',
+        label:'Number of Questions Practiced',
         data: [10, 15, 8, 12, 20, 16, 25], // Number of questions practiced per week
-        fill: false,
+        fill: true,
         backgroundColor: 'rgba(75, 192, 192, 0.4)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 2,
@@ -154,13 +295,13 @@ function Dashboard({ user }) {
       x: {
         title: {
           display: true,
-          text: 'Number of Questions Practiced',
+          text: 'Week Number',
         },
       },
       y: {
         title: {
           display: true,
-          text: 'Week Number',
+          text: 'Number of Questions Practiced',
         },
       },
     },
@@ -179,6 +320,8 @@ function Dashboard({ user }) {
     },
   };
 
+  // PROFILE PICTURE CODE 
+
   
 
 
@@ -191,27 +334,42 @@ function Dashboard({ user }) {
 
       <div className="profile-box">
         <div className="profile-header">
+
           <div className="profile-info">
-            <h2 className="welcome-text">Hey, CHUNG, Li, welcome back {user}!</h2>
+               <ProfilePictureSection/>
+            <h2 className="welcome-text"> WELCOME BACK {user}!</h2>
+            
             {/* <h3 className="username"> {user}</h3> */}
           </div>
-          <iframe
-            className="profile-image"
-            // src="https://giphy.com/embed/EhTL8YYF56gZa5qzp0"
-            width="400"
-            height="480"
-            frameBorder="0"
-            allowFullScreen
-          ></iframe>
-          <p>
-            {/* <a href="https://giphy.com/stickers/disneyanimation-disney-animation-strange-world-EhTL8YYF56gZa5qzp0"></a> */}
-          </p>
+         
         </div>
         
       </div>
 
       <div className="normal-box">
-            <p>We put the badges here </p>
+            {/* <p>We put the badges here </p> */}
+        <div className='badge-text-row'>
+               <h2 className="welcome-text"> ACHIEVEMENTS </h2>
+        </div>
+
+        <div className="badges">
+
+        <div className="badge1">
+            <img src="https://imgur.com/sPI6W5u.png" alt="Embedded Image"/>
+          </div>
+
+          <div className="badge2">
+            <img src="https://imgur.com/sPI6W5u.png" alt="Embedded Image"/>
+          </div>
+        </div>
+         
+
+        
+
+
+            
+
+
         </div> 
   </div>
   {/* end of the row tag */}
@@ -219,27 +377,38 @@ function Dashboard({ user }) {
 
   <div className="custom-row">
 
+  <a href="/lex">
     <button className="profile-button">Listening Exercise</button>
-      <button className="profile-button">Speaking Exercise</button>
-      <button className="profile-button">Conversational Exercise</button>
+  </a>
+  <a href="/">
+    <button className="profile-button">Speaking Exercise</button>
+  </a>
+  <a href="/conversational-exercise">
+    <button className="profile-button">Conversational Exercise</button>
+  </a>
          </div>
 
   <div className="custom-row-1">
 
     <div className="chart-box-normal">
             <div className="chart-container">
-                <Bar data={chartData} options={chartOptions} />
+                {/* <Bar data={chartData} options={chartOptions} /> */}
+                <MyChart />
                 
               </div>
     </div> 
 
         <div className="chart-box-practice-qs">
             
-                  <div className="chart-container">
+                  
                   <Line data={data_qs_per_week} options={options} />
-                </div>
+                
         </div>    
 
+  </div>
+
+  <div className="custom-row-2">     
+      <MenuChart />
   </div>
 
 

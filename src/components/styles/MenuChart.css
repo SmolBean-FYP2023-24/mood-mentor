@@ -1,0 +1,53 @@
+.menu-chart-container {
+  
+  display: flex;
+  align-items: flex-start;
+  /* height: 150%; */
+  border-radius: 50px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+  margin-bottom: 10vh ;
+  width: 150%;
+  /* height: 300%; */
+}
+
+.menu {
+  flex: 3;
+  margin-right: 20px;
+  margin-top: 50px;
+  margin-left: 40px;
+  margin-bottom: 100px;
+  /* box-shadow: 0px 0px 20px red; */
+}
+
+.chart {
+  /* margin-top: 5px; */
+  flex: 7;
+  height: 100%;
+  width: 100%;
+  border-radius: 50px;
+  border: black;
+  border-width: 100px;
+  /* box-shadow: 0px 0px 20px lightgreen; */
+}
+
+.chart-box {
+  /* width: 100%;
+  height: 100%; */
+  /* max-width: 600px; */
+  /* margin-top: 5px; */
+  border-radius: 20px;
+  height: 100%;
+  /* box-shadow: 0px 0px 20px black; */
+}
+
+select {
+  width: 80%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 40px;
+}
+
+h3 {
+  margin-bottom: 10px;
+}
