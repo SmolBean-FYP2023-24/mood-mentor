@@ -9,6 +9,7 @@ import Login from "./components/loginPage";
 import TopNav from "./components/topNav";
 import Profile from "./components/profilePage";
 import Dashboard from "./components/dashboard";
+import Onboarding from "./components/onboarding";
 import ListeningExercise from "./components/ListeningExercise";
 import ExpressingExercise from "./components/expressingExercise";
 import { Amplify } from "aws-amplify";
@@ -41,6 +42,7 @@ export default function App() {
           <Route path="/lex/" element={<ListeningExercise />} />
           <Route path="/eex/" element={<ExpressingExercise />} />
           <Route path="/dashboard/" element={<Dashboard />} />
+          <Route path="/onboarding/" element={<Onboarding />} />
         </Routes>
       </div>
     </>
