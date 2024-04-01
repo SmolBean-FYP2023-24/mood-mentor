@@ -10,6 +10,7 @@ import TopNav from "./components/topNav";
 import Profile from "./components/profilePage";
 import Dashboard from "./components/dashboard";
 import ListeningExercise from "./components/ListeningExercise";
+import ExpressingExercise from "./components/expressingExercise";
 import { Amplify } from "aws-amplify";
 import amplifyconfig from "./amplifyconfiguration.json";
 import { useEffect, useState } from "react";
@@ -38,6 +39,7 @@ export default function App() {
             element={<Profile handleUser={handleUser} />}
           />
           <Route path="/lex/" element={<ListeningExercise />} />
+          <Route path="/eex/" element={<ExpressingExercise />} />
           <Route path="/dashboard/" element={<Dashboard />} />
         </Routes>
       </div>

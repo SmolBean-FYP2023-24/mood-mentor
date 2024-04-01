@@ -9,13 +9,13 @@
       "UnauthRoleName": "amplify-moodmentor-main-124937-unauthRole",
       "StackName": "amplify-moodmentor-main-124937",
       "StackId": "arn:aws:cloudformation:us-west-2:380248605085:stack/amplify-moodmentor-main-124937/3c496f40-9f36-11ee-9453-0a1fdfd352e9",
-      "AmplifyAppId": "d2z2vsyjysr6ig",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-moodmentor-main-124937-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+      "AmplifyAppId": "d2z2vsyjysr6ig"
     },
     "categories": {
       "auth": {
         "moodmentor": {}
       },
+<<<<<<< HEAD
       "function": {
         "callGenAI": {
           "deploymentBucketName": "amplify-moodmentor-main-124937-deployment",
@@ -25,8 +25,20 @@
       "api": {
         "genaiapi": {}
       },
+=======
+>>>>>>> 1e1023fa574abac27b07e535484083d9fbad98cd
       "storage": {
         "s3audiofiles": {}
+      },
+      "function": {
+        "execModelLambda": {
+          "deploymentBucketName": "amplify-moodmentor-main-124937-deployment",
+          "s3Key": "amplify-builds/execModelLambda-7456674b4e5562385453-build.zip"
+        },
+        "callHuggingFace": {
+          "deploymentBucketName": "amplify-moodmentor-main-124937-deployment",
+          "s3Key": "amplify-builds/callHuggingFace-70645639485a4a6d5864-build.zip"
+        }
       }
     }
   }

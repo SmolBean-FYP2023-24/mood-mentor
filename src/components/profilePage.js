@@ -14,7 +14,7 @@ function ProfilePage(props) {
       props.handleUser(user);
     };
     getUserData();
-  }, []);
+  }, [props]);
   const [imagecrop, setimagecrop] = useState(false);
   const [selectedProfilePicture, setSelectedProfilePicture] = useState(
     localStorage.getItem("profilePicture") || "default-profile-picture-url"

@@ -1,20 +1,5 @@
 {
-  "api": {
-    "genaiapi": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "function",
-          "resourceName": "callGenAI"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "API Gateway"
-    }
-  },
+  "api": {},
   "auth": {
     "moodmentor": {
       "customAuth": false,
@@ -53,26 +38,47 @@
     }
   },
   "function": {
-    "callGenAI": {
+    "callHuggingFace": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "execModelLambda": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
   },
   "parameters": {
-    "AMPLIFY_function_callGenAI_deploymentBucketName": {
+    "AMPLIFY_function_callHuggingFace_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "callGenAI"
+          "resourceName": "callHuggingFace"
         }
       ]
     },
-    "AMPLIFY_function_callGenAI_s3Key": {
+    "AMPLIFY_function_callHuggingFace_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "callGenAI"
+          "resourceName": "callHuggingFace"
+        }
+      ]
+    },
+    "AMPLIFY_function_execModelLambda_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "execModelLambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_execModelLambda_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "execModelLambda"
         }
       ]
     }

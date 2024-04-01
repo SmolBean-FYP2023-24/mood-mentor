@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./styles/audio.css";
 import SpeechRecognition, {
   useSpeechRecognition,
@@ -8,11 +8,27 @@ import { Buffer } from "buffer";
 import * as EBML from "ts-ebml";
 import { fetchAuthSession } from "aws-amplify/auth";
 import { uploadData, getUrl } from "aws-amplify/storage";
+import { sentences } from "./data/sentences";
 
 window.Buffer = window.Buffer || Buffer;
 let started = false;
-
+function getRandomSentence(emotionChoice = "") {
+  var emotions = ["angry", "disgust", "fear", "happy", "neutral", "sad"];
+  var chosenEmotion =
+    emotionChoice !== ""
+      ? emotionChoice
+      : emotions[Math.floor(Math.random() * emotions.length)];
+  var chosenSentence =
+    sentences[chosenEmotion][
+      Math.floor(Math.random() * sentences[chosenEmotion].length)
+    ];
+  console.log("hello");
+  return [chosenSentence, chosenEmotion];
+}
 const AudioRecorder = () => {
+  const [CurrentQuestion, setCurrentQuestion] = useState(0);
+  const [x, setX] = useState("");
+
   const {
     transcript,
     listening,
@@ -38,6 +54,7 @@ const AudioRecorder = () => {
 
   // eslint-disable-next-line
   const stopRecording = () => {
+    setCurrentQuestion(CurrentQuestion + 1);
     stopAnimation();
     started = false;
     SpeechRecognition.stopListening();
@@ -113,6 +130,10 @@ const AudioRecorder = () => {
     }
   }, [listening, stopRecording]);
 
+  useEffect(() => {
+    setX(getRandomSentence());
+  }, [CurrentQuestion]);
+
   if (!browserSupportsSpeechRecognition) {
     return <span>Browser doesn't support speech recognition.</span>;
   }
@@ -143,7 +164,7 @@ const AudioRecorder = () => {
     const user = await fetchAuthSession();
     var myHeaders = new Headers();
     myHeaders.append("Authorization", user.tokens.idToken.toString());
-    myHeaders.append("Content-Type", "text/plain");
+    myHeaders.append("Content-Type", "application/json");
     console.log(user.tokens.idToken.toString());
     var urll;
     await getUrl({
@@ -166,7 +187,7 @@ const AudioRecorder = () => {
     };
 
     await fetch(
-      "https://1xgrgbwrn5.execute-api.us-west-2.amazonaws.com/main/analyze/",
+      "https://0ikothkm27.execute-api.us-west-2.amazonaws.com/default/analyze/",
       requestOptions
     )
       .then(
@@ -196,6 +217,7 @@ const AudioRecorder = () => {
           className="col-12 col-md-4 bg-dark text-light"
           style={{ height: "calc(100vh - 56px)" }}
         >
+          <span>Question {x[0]}</span>
           <div id="holder" className="m-auto">
             <div
               className="p-5 rounded-circle border"
@@ -214,8 +236,11 @@ const AudioRecorder = () => {
             Listening: {listening ? "On" : "Off"}
           </div>
         </div>
-        <div className="col-12 col-md-8">
-          <div className="container py-3">
+        <div
+          className="col-12 col-md-8"
+          style={{ height: "calc(100vh - 56px)" }}
+        >
+          <div className="container py-3 h-100">
             <div className="row">
               <p
                 id="finaltext"
@@ -232,7 +257,7 @@ const AudioRecorder = () => {
                   : transcript}
               </p>
             </div>
-            <div className="row justify-content-end">
+            <div className="row justify-content-end my-auto">
               <div className="col-12 col-md-3 p-0 mx-md-2">
                 <button
                   className="btn w-100 btn-warning my-2 my-md-0 mx-0 mx-md-0"
