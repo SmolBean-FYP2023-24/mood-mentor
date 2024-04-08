@@ -327,7 +327,7 @@ function OnboardingEE() {
       <div className="container h-100 p-0 p-sm-auto">
         {showScore ? (
           <span>Show Score</span>
-        ) : CurrentQuestion < 5 ? (
+        ) : CurrentQuestion < q.length ? (
           <>
             <div className="row w-100 pt-5 text-center m-auto">
               <div className="col-12 col-md-2">
@@ -378,15 +378,26 @@ function OnboardingEE() {
             </button>
           </>
         ): (
-            <div className="onboardingSE-heading">
-              <h2>Let's Start My Journey</h2>
-              <button
-                className="btn btn-primary"
-                onClick={() => navigate("/dashboard")}
-              >
-                Let's Go
-              </button>
+          <div>
+            <div>
+              <div className="plane-container">
+              <img
+                src="https://imgur.com/VdtQTCy.png"
+                alt="Paper Plane"
+                className="plane"
+              />
+              </div>
+              <div className="journey-text-onboarding">
+              Let's begin your journey in the world of Mood-Mentor!
+              </div>
             </div>
+            <button
+              className="btn btn-primary"
+              onClick={() => navigate("/dashboard")}
+            >
+              Let's Go
+            </button>
+          </div>
           )}
       </div>
     </div>

@@ -99,10 +99,13 @@ function Onboarding({ user }) {
 				</div>
 		)}
 		{currentPage == 2 && (
-			<div className="onboardingSE-heading">
-				Let's do some practice Exercises!
-			</div>
-		)}
+            <div style={{ textAlign: 'center' }}>
+                <div className="onboardingSE-heading">
+                    Let's do some practice Exercises!
+                </div>
+                <img className="bing-bong" src="https://imgur.com/zfCpp54.png" width="auto" height="300"/>
+            </div>
+        )}
 		{currentPage == 3 && (
 			<OnboardingLE />
 		)}

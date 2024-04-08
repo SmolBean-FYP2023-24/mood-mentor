@@ -116,7 +116,55 @@
   color: #333A73;
   padding-top: 2%;
 }
+
 .bottom-image-onboarding {
   width: 700px;
   height: auto;
+}
+
+.bing-bong {
+  height: 300px;
+  width: auto;
+  align-items: center;
+  padding: 2%;
+}
+
+
+.journey-text-onboarding {
+  font-size: 70px;
+  font-family: 'Crimson Pro', 'Literata', sans-serif;
+  color: #333A73;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10%;
+  margin-bottom: 3%;
+}
+
+@keyframes move-plane {
+  10% {
+    opacity: 1;
+    offset-distance: 0%;
+  }
+  90% {
+    opacity: 1;
+    offset-distance: calc(100vw - 90px);;
+    box-shadow: none;
+  }
+  100% {
+    opacity: 0;
+    offset-distance: calc(100vw - 150px);
+  }
+}
+
+.plane-container {
+  position: absolute;
+  top: 50%;
+}
+
+.plane {
+  offset-path: path('M.4 34.1s127.4 688 567.7 20 647.3 20 647.3 20');
+  animation: move-plane 4000ms infinite alternate;
+  offset-distance: 820;
+  width: 120px;
+  height: 90px;
 }
