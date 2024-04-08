@@ -5,6 +5,7 @@ import { withAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import "./styles/onboarding.css";
 import Nav from "react-bootstrap/Nav";
+import OnboardingLE from "./onboardingLE";
 
 function Onboarding({ user }) {
   const [userState, setUserState] = useState(0);
@@ -42,99 +43,10 @@ function Onboarding({ user }) {
 		title: "Happy - Listening Q1",
 		description: "Basic description of the app",
 	},
-	{
-		title: "Happy - Listening Q2",
-		description: "More information in text form",
-	},
-	{
-		title: "Sad - Listening Q1",
-		description: "Basic description of the app",
-	},
-	{
-		title: "Sad - Listening Q2",
-		description: "More information in text form",
-	},
-	{
-		title: "Angry - Listening Q1",
-		description: "More information in text form",
-	},
-	{
-		title: "Angry - Listening Q2",
-		description: "Basic description of the app",
-	},
     {
-		title: "Surprise - Listening Q1",
-		description: "Basic description of the app",
-	},
-	{
-		title: "Surprise - Listening Q2",
-		description: "More information in text form",
-	},
-	{
-		title: "Neutral - Listening Q1",
-		description: "More information in text form",
-	},
-	{
-		title: "Disgust - Listening Q1",
-		description: "Basic description of the app",
-	},
-	{
-		title: "Disgust - Listening Q2",
-		description: "More information in text form",
-	},
-	{
-		title: "Neutral - Listening Q2",
-		description: "Basic description of the app",
-	},
-	{
-		title: "Happy - Speaking Q1",
-		description: "Basic description of the app",
-	},
-	{
-		title: "Happy - Speaking Q1",
-		description: "More information in text form",
-	},
-	{
-		title: "Sad - Speaking Q1",
-		description: "More information in text form",
-    },
-    {
-		title: "Sad - Speaking Q2",
-		description: "Basic description of the app",
-	},
-	{
-		title: "Angry - Speaking Q1",
-		description: "More information in text form",
-	},
-	{
-		title: "Angry - Speaking Q2",
-		description: "Basic description of the app",
-	},
-	{
-		title: "Surprise - Speaking Q1",
-		description: "Basic description of the app",
-	},
-	{
-		title: "Surprise - Speaking Q1",
-		description: "More information in text form",
-	},
-	{
-		title: "Disgust - Speaking Q1",
-		description: "More information in text form",
-    },
-    {
-		title: "Disgust - Speaking Q2",
-		description: "Basic description of the app",
-	},
-	{
-		title: "Neutral - Speaking Q1",
-		description: "More information in text form",
-	},
-	{
-		title: "Neutral - Speaking Q2",
-		description: "Basic description of the app",
-	},
-	
+		title: "Thank you for your time",
+		description: "Let's begin your journey with MoodMentor",
+	}
   ];
   
   const navigate = useNavigate();
@@ -153,7 +65,7 @@ function Onboarding({ user }) {
 
   return (
     <>
-      <div className="container-fluid-onboarding p-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center">
+      <div className="container-fluid-onboarding d-flex flex-column justify-content-center align-items-center">
         {currentPage === 0 && (
           <div className="flip-card-onboarding">
             <div className="flip-card-inner-onboarding">
@@ -186,8 +98,15 @@ function Onboarding({ user }) {
 					</div>
 				</div>
 		)}
-
-		{currentPage > 1 && (
+		{currentPage == 2 && (
+			<div className="onboardingSE-heading">
+				Let's do some practice Exercises!
+			</div>
+		)}
+		{currentPage == 3 && (
+			<OnboardingLE />
+		)}
+		{currentPage > 4 && (
 		<div className="page-container-onboarding">
 			<h2 className="text-center font-weight-bold pt-4">{pages[currentPage].title}</h2>
 			<p
@@ -199,14 +118,14 @@ function Onboarding({ user }) {
 
 		<div className="row align-items-center justify-content-center">
 			<div className="col text-center">
-			{currentPage > 0 && (
+			{(currentPage == 1 || currentPage == 2) && (
 				<button className="btn-onboarding" onClick={goToPreviousPage}>
 				Previous
 				</button>
 			)}
 			</div>
 			<div className="col text-center">
-			{currentPage < pages.length - 1 && (
+			{(currentPage == 0 || currentPage == 1 || currentPage == 2) && (
 				<button className="btn-onboarding" onClick={goToNextPage}>
 				Next
 				</button>
