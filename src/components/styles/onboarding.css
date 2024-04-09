@@ -136,7 +136,7 @@
   color: #333A73;
   justify-content: center;
   align-items: center;
-  margin-top: 10%;
+  margin-top: 6%;
   margin-bottom: 3%;
 }
 
@@ -167,4 +167,9 @@
   offset-distance: 820;
   width: 120px;
   height: 90px;
+}
+
+.joySad-Onboarding {
+  width: 1100px;
+  margin-top: 2%;
 }
