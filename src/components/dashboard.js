@@ -7,7 +7,7 @@ import chroma from 'chroma-js';
 // import './profilePage.css';
 import { getProfilePicture } from './profilePageUtils.js';
 import Chart from 'chart.js/auto';
-import './dashboard.css';
+import './styles/dashboard.css';
 import "./styles/profilePage.css";
 import MenuChart from './MenuChart.js';
 import ProfilePictureSection from "./ProfilePictureSection.js";
@@ -326,13 +326,13 @@ function Dashboard({ user }) {
 
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid-dashboard">
       {/* <h1 className="top-text">Dashboard</h1> */}
-  <div className="row">
+  <div className="row-dashboard">
     
 
 
-      <div className="profile-box">
+      <div className="profile-box-dashboard">
         <div className="profile-header">
 
           <div className="profile-info">
@@ -346,7 +346,7 @@ function Dashboard({ user }) {
         
       </div>
 
-      <div className="normal-box">
+      <div className="normal-box-dashboard">
             {/* <p>We put the badges here </p> */}
         <div className='badge-text-row'>
                <h2 className="welcome-text"> ACHIEVEMENTS </h2>
