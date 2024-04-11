@@ -72,11 +72,7 @@ function Onboarding({ user }) {
               <div className="flip-card-front-onboarding">
                 <div>
                   Welcome to <br />
-                  <img
-                    src="https://imgur.com/4yxwDdR.png"
-                    alt="logo"
-                    className="logo-image"
-                  />
+                  <img src="https://imgur.com/4yxwDdR.png" alt="logo" className="logo-image" />
                 </div>
               </div>
               <div className="flip-card-back-onboarding">
@@ -148,13 +144,7 @@ function Onboarding({ user }) {
 
 		{currentPage === 0 && (
 			<div className="row align-items-center justify-content-center">
-			<div className="col">
-				<img
-				src="https://imgur.com/EA0uGXs.png"
-				alt="intro"
-				className="bottom-image-onboarding"
-				/>
-			</div>
+				<img src="https://imgur.com/EA0uGXs.png" alt="intro" className="bottom-image-onboarding" />
 			</div>
 		)}
 

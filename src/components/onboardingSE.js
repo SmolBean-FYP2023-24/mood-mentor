@@ -398,7 +398,7 @@ function OnboardingEE() {
               Let's Go
             </button>
             <div>
-            <img src="https://imgur.com/eAMqj2N.png" alt="Joy and Sadness" className="joySad-Onboarding"/>
+            <img src="https://imgur.com/eAMqj2N.png" alt="Joy and Sadness" className="grpPic-Onboarding"/>
             </div>
           </div>
           )}
