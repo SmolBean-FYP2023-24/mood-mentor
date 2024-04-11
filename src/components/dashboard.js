@@ -328,11 +328,11 @@ function Dashboard({ user }) {
   return (
     <div className="container-fluid">
       {/* <h1 className="top-text">Dashboard</h1> */}
-  <div className="row-dashboard">
+  <div className="row">
     
 
 
-      <div className="profile-box-dashboard">
+      <div className="profile-box">
         <div className="profile-header">
 
           <div className="profile-info">
@@ -346,9 +346,9 @@ function Dashboard({ user }) {
         
       </div>
 
-      <div className="normal-box-dashboard">
+      <div className="normal-box">
             {/* <p>We put the badges here </p> */}
-        <div className='badge-text'>
+        <div className='badge-text-row'>
                <h2 className="welcome-text"> ACHIEVEMENTS </h2>
         </div>
 
