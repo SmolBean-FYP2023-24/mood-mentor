@@ -198,77 +198,11 @@ function MyChart() {
 }
 
 
-// const emotions = {
-//   1: "neutral",
-//   2: "happy",
-//   3: "sad",
-//   4: "angry",
-//   5: "fear",
-//   6: "disgust",
-// };
-// const selectedProfilePicture = getProfilePicture();
+// Dashboard function starts here
 
 function Dashboard({ user }) {
 
-  // CHART1: FOR NORMAL DISTRIBUTION
-
-  const mean = 0; // Define the mean value
-  const standardDeviation = 1; // Define the standard deviation value
-  const minX = -5; // Define the minimum x value
-  const maxX = 5; // Define the maximum x value
-  const step = 0.1; // Define the step value
-
-  const data = generateNormalDistributionData(mean, standardDeviation, minX, maxX, step);
-
-  const labels = [];
-  for (let x = minX; x <= maxX; x += step) {
-    labels.push(x.toFixed(1));
-  }
-
-  const chartData = {
-    labels: labels,
-    datasets: [
-      {
-        label: '',
-        data: data,
-        backgroundColor: 'rgba(75, 192, 192, 0.8)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1,
-        
-      },
-    ],
-  };
-
-  const chartOptions = {
-    responsive: true,
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: 'X',
-        },
-      },
-      y: {
-        title: {
-          display: true,
-          text: 'User Rank',
-        },
-      },
-    },
-    plugins: {
-      tooltip: {
-        callbacks: {
-          label: (context) => {
-            const value = context.dataset.data[context.dataIndex];
-            const rank = context.dataIndex + 1;
-            return `Rank: ${rank}, Probability Density: ${value.toFixed(2)}`;
-          },
-        },
-      },
-    },
-  };
-
-
+  
   // CHART2: LINE CHART FOR QUESTIONS PER WEEK
 
   const data_qs_per_week = {
@@ -281,8 +215,9 @@ function Dashboard({ user }) {
         label:'Number of Questions Practiced',
         data: [10, 15, 8, 12, 20, 16, 25], // Number of questions practiced per week
         fill: true,
-        backgroundColor: 'rgba(75, 192, 192, 0.4)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        // const baseColors = ["#50C4ED", "#387ADF", "#333A73"];
+        backgroundColor: 'rgba(56, 122, 223, 0.7)',
+        borderColor: 'rgba(56, 122, 223, 1)',
         borderWidth: 2,
         lineTension: 0.3, // Adjust the line tension to control the curve smoothness
       },
@@ -320,7 +255,7 @@ function Dashboard({ user }) {
     },
   };
 
-  // PROFILE PICTURE CODE 
+
 
   
 
@@ -362,14 +297,6 @@ function Dashboard({ user }) {
             <img src="https://imgur.com/sPI6W5u.png" alt="Embedded Image"/>
           </div>
         </div>
-         
-
-        
-
-
-            
-
-
         </div> 
   </div>
   {/* end of the row tag */}
@@ -377,38 +304,36 @@ function Dashboard({ user }) {
 
   <div className="custom-row">
 
-  <a href="/lex">
-    <button className="profile-button">Listening Exercise</button>
-  </a>
-  <a href="/">
-    <button className="profile-button">Speaking Exercise</button>
-  </a>
-  <a href="/conversational-exercise">
-    <button className="profile-button">Conversational Exercise</button>
-  </a>
-         </div>
+      <a href="/lex">
+        <button className="profile-button">Listening Exercise</button>
+      </a>
+      <a href="/eex">
+        <button className="profile-button">Speaking Exercise</button>
+      </a>
+      <a href="/cex">
+        <button className="profile-button">Conversational Exercise</button>
+      </a>
+  </div>
 
   <div className="custom-row-1">
 
-    <div className="chart-box-normal">
-            <div className="chart-container">
-                {/* <Bar data={chartData} options={chartOptions} /> */}
-                <MyChart />
-                
+      <div className="chart-box-normal">
+              <div className="chart-container">
+                  {/* <Bar data={chartData} options={chartOptions} /> */}
+                  <MyChart />
               </div>
-    </div> 
+      </div> 
 
-        <div className="chart-box-practice-qs">
-            
-                  
-                  <Line data={data_qs_per_week} options={options} />
-                
-        </div>    
+      <div className="chart-box-practice-qs">
+            <Line data={data_qs_per_week} options={options} />
+      </div>    
 
   </div>
 
-  <div className="custom-row-2">     
+  <div className="custom-row-2"> 
+   
       <MenuChart />
+    
   </div>
 
 

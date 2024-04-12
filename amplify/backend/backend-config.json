@@ -1,5 +1,27 @@
 {
-  "api": {},
+  "api": {
+    "moodmentor": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 30,
+              "description": "api key description"
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    }
+  },
   "auth": {
     "moodmentor": {
       "customAuth": false,
@@ -47,6 +69,11 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "fetchQuestion": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
@@ -79,6 +106,22 @@
         {
           "category": "function",
           "resourceName": "execModelLambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_fetchQuestion_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "fetchQuestion"
+        }
+      ]
+    },
+    "AMPLIFY_function_fetchQuestion_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "fetchQuestion"
         }
       ]
     }
