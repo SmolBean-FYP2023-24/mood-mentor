@@ -10,6 +10,10 @@
 }
 
 
+
+
+
+
 .profile-box-dashboard {
   /* border: 2px solid black; */
   padding: 20px;
@@ -331,36 +335,11 @@
   }
 
  
-  
-
-  
-
-
-
-
-
-
-
-
-
-
-/* the below css is for the charts */
-/* .col-md-9.offset-md-3 {
-    
-    width: 100%;
-    max-width: 600px; 
-    margin-top: 50px;
-  }
-  
-  .col-md-9.offset-md-3 canvas {
-    
-    width: 100%;
-    height: auto;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    
-  } */
+.dashboard-user-data{
+  font-size: 2vw;
+  font-family: cursive;
+  margin-top: 4vh;
+}
 
 
 

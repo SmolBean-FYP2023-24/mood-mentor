@@ -264,18 +264,21 @@ function Dashboard({ user }) {
     <div className="container-fluid-dashboard">
       {/* <h1 className="top-text">Dashboard</h1> */}
   <div className="row-dashboard">
-    
-
-
       <div className="profile-box-dashboard">
         <div className="profile-header">
 
           <div className="profile-info">
                <ProfilePictureSection/>
-            <h2 className="welcome-text"> WELCOME BACK {user}!</h2>
-            
-            {/* <h3 className="username"> {user}</h3> */}
+            <h2 className="welcome-text"> 
+                WELCOME BACK !
+                <div class="dashboard-user-data"> 
+                <h2> Jojo Gomez</h2>
+                <h2>Streak: Week1 </h2>
+                </div> {/* extract the value from the DB here */}
+                {/* extract the value from the DB here */}
+            </h2>
           </div>
+          
          
         </div>
         
