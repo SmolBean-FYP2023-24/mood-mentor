@@ -4,12 +4,31 @@ import { fetchAuthSession } from "aws-amplify/auth";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import "./styles/onboarding.css";
+import "./styles/onboardingWelcome.css";
+import "./styles/onboardingTransition.css";
 import Nav from "react-bootstrap/Nav";
 import OnboardingLE from "./onboardingLE";
+import { Engine } from './onboardingWelcome.js';
 
 function Onboarding({ user }) {
   const [userState, setUserState] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [transitionCompleted, setTransitionCompleted] = useState(true);
+  const [showImage, setShowImage] = useState(true);
+  const [filledCircles, setFilledCircles] = useState(0);
+  const [hoveredCircle, setHoveredCircle] = useState(null);
+
+  useEffect(() => {
+    if (currentPage === 1) {
+      const timer = setTimeout(() => {
+        setShowImage(false);
+      }, 6800); // Delay in milliseconds (5 seconds)
+
+      return () => clearTimeout(timer);
+    }
+  }, [currentPage]);
+  
   useEffect(() => {
     const getUserData = async () => {
       const user = await fetchAuthSession();
@@ -18,13 +37,20 @@ function Onboarding({ user }) {
     getUserData();
   }, []);
 
+
   const handleFinish = () => {
     navigate("/dashboard");
   };
 
   const pages = [
     {
-		description: "This is your one step destination to improving expressing and understanding emotions! Mood-Mentor is a personalized emotion learning exercise system, capable of adapting to the individual emotional needs of each user, empowering them with better emotional insight, and encompassing a broader spectrum of emotions to ensure inclusivity.",
+		title: "Welcome Page"
+    },
+	{
+		title: "Info Page",
+		description: "Welcome to Mood-Mentor, your go-to platform for enhancing your emotional expression and understanding! Our personalized emotion learning exercise system is tailored to meet your unique emotional needs. With Mood-Mentor, you'll gain valuable insights into your emotions and explore a wide range of emotional experiences, all while promoting inclusivity every step of the way. Get ready to embark on a transformative journey of self-discovery and emotional growth with Mood-Mentor!<br><br>\
+		\n\
+		By now, you've met our expert emotions:<b> Joy, Sadness, Anger, Disgust, and Fear</b>. However, there's one more member you have yet to meet:<b> Neutral</b>. We categorize emotions into 2 main groups: negative and positive. When you engage more with members like <span style=\"color: red;\"><b>Sadness, Anger, Fear, or Disgust</b></span>, it falls under the <span style=\"color: red;\"><b>negative category</b></span>. Conversely, when you interact with <span style=\"color: green;\"><b>Joy and Neutral</b></span>, these experiences lean towards the <span style=\"color: green;\"><b>positive</b></span> side. Let's dive deeper into our platform and get you better acquainted with all its features.",
     },
     {
 		title: "About Mood-Mentor :",
@@ -35,17 +61,11 @@ function Onboarding({ user }) {
 			3. <u>Conversational Exercises:</u> You can hop on this exercise with your friends, family, or caretaker and start practicing your daily conversation. A feedback report will be sent to you on your registered email once you're done for you to have a look at your performance.<br><br>\
 			You can access all these exercises on your dashboard along with the stats of your current performance!! Each exercise is specially catered for you to work more on your weak points. Let's do a small walk through to undersand where you stand currently. All the best !",
     },
-	{
-		title: "Let's Start Your Journey with Mood-Mentor",
-		description: "Following are gonna be a set a of questions for you to answer.",
+    {
+		title: "Begin Practice Questions"
 	},
     {
-		title: "Happy - Listening Q1",
-		description: "Basic description of the app",
-	},
-    {
-		title: "Thank you for your time",
-		description: "Let's begin your journey with MoodMentor",
+		title: "Begin Journey Page"
 	}
   ];
   
@@ -53,78 +73,156 @@ function Onboarding({ user }) {
 
   const goToNextPage = () => {
     if (currentPage < pages.length - 1) {
-      setCurrentPage(currentPage + 1);
+		setFilledCircles(currentPage + 1);
+		setShowOverlay(true);
+		setTransitionCompleted(false);
+		setTimeout(() => {
+			setCurrentPage(currentPage + 1);
+			setTimeout(() => {
+			  setShowOverlay(false); // Hide the overlay after transitioning
+			  setTransitionCompleted(true);
+			}, 1000); // Delay hiding the overlay to allow the transition to complete
+		  }, 0); // Delay updating the state to allow the overlay to appear
     } else {
 		<Nav.Link href={"/dashboard"}>Listening Exercise</Nav.Link>
     }
   };
 
   const goToPreviousPage = () => {
-    setCurrentPage(currentPage - 1);
+	setFilledCircles(currentPage - 1);
+	setShowOverlay(true);
+	setTransitionCompleted(false);
+    setTimeout(() => {
+		setCurrentPage(currentPage - 1);
+		setTimeout(() => {
+		  setShowOverlay(false); // Hide the overlay after transitioning
+		  setTransitionCompleted(true);
+		}, 1000); // Delay hiding the overlay to allow the transition to complete
+	  }, 0);
+  };
+
+  const handleCircleClick = (index) => {
+	if (index < currentPage) {
+	  goToPreviousPage();
+	} else if (index > currentPage) {
+	  goToNextPage();
+	}
   };
 
   return (
     <>
-      <div className="container-fluid-onboarding d-flex flex-column justify-content-center align-items-center">
+	{transitionCompleted && (
+      <div className="content-container-onboarding">
+		  <div className="progress-bar-container">
+		  {pages.map((page, index) => (
+			<div
+				key={index}
+				className={`progress-bar-circle ${index < filledCircles ? 'filled' : ''} ${index === hoveredCircle ? 'hovered' : ''}`}
+				onMouseEnter={() => setHoveredCircle(index)}
+				onMouseLeave={() => setHoveredCircle(null)}
+				// onClick={() => handleCircleClick(index)}
+			>
+				{index < filledCircles && (
+				<div className="circle-title">
+					{page.title}
+				</div>
+				)}
+			</div>
+			))}
+			</div>
+	  <div className="container-fluid-onboarding d-flex flex-column justify-content-center align-items-center">
         {currentPage === 0 && (
-          <div className="flip-card-onboarding">
-            <div className="flip-card-inner-onboarding">
-              <div className="flip-card-front-onboarding">
-                <div>
-                  Welcome to <br />
-                  <img src="https://imgur.com/4yxwDdR.png" alt="logo" className="logo-image" />
-                </div>
-              </div>
-              <div className="flip-card-back-onboarding">
-                <h2>{pages[currentPage].title}</h2>
-                <p>{pages[currentPage].description}</p>
-              </div>
-            </div>
-          </div>
+			<div className="row align-items-center justify-content-center">
+				<div class="square"></div>
+				<div class="card">
+					<div class="card-title-wrap">
+						<h1 class="title-welcome-onb">
+							<span class="copy-wrap">
+								Mood-Mentor
+							</span>
+						</h1>
+					</div>
+					<div class="card-img"></div>
+				</div>
+				<div className="col text-center push-down">
+					<button className="btn-onboarding" onClick={goToNextPage}>
+						Next
+					</button>
+				</div>
+			</div>
         )}
-
 		{currentPage === 1 && (
+			<div>
+				{showImage ? (
+				<img
+					src="https://media.giphy.com/media/8ExdHaMMOeJUc/giphy.gif"
+					className="intro-clip"
+				/>
+				) : (
+					<div className="row align-items-center justify-content-center">
+						
+							<div className="flip-card-page1-onboarding">
+							<p
+							className="card-body-text-onboarding"
+							dangerouslySetInnerHTML={{ __html: pages[currentPage].description }}
+				></p>
+							</div>
+						
+						<div className="row align-items-center justify-content-center">
+							<div className="col text-center">
+								<button className="btn-onboarding" onClick={goToPreviousPage}>
+									Previous
+								</button>
+							</div>
+							<div className="col text-center">
+								<button className="btn-onboarding" onClick={goToNextPage}>
+									Next
+								</button>
+							</div>
+						</div>
+					</div>
+				)}
+			</div>
+		)}
+		{currentPage === 2 && (
+			<div className="card-onboarding">
+					<div className="page-container-onboarding">
+				<h2 className="card-title-onboarding">{pages[currentPage].title}</h2>
+				<p
+					className="card-body-text-onboarding"
+					dangerouslySetInnerHTML={{ __html: pages[currentPage].description }}
+				></p>
+				</div>
+			</div>
+		)}
+
+		{currentPage == 3 && (
+			<div className="row align-items-center justify-content-center">
 				<div className="card-onboarding">
-						<div className="page-container-onboarding">
-					<h2 className="card-title-onboarding">{pages[currentPage].title}</h2>
-					<p
-						className="card-body-text-onboarding"
-						dangerouslySetInnerHTML={{ __html: pages[currentPage].description }}
-					></p>
+					<div className="journey-text-onboarding">
+						Let's do some practice Exercises!
 					</div>
 				</div>
-		)}
-		{currentPage == 2 && (
-            <div style={{ textAlign: 'center' }}>
-                <div className="onboardingSE-heading">
-                    Let's do some practice Exercises!
-                </div>
-                <img className="bing-bong" src="https://imgur.com/zfCpp54.png" width="auto" height="300"/>
+				<div>
+					<img className="bing-bong" src="https://imgur.com/zfCpp54.png" width="auto" height="300"/>
+				</div>
             </div>
         )}
-		{currentPage == 3 && (
+
+		{currentPage == 4 && (
 			<OnboardingLE />
-		)}
-		{currentPage > 4 && (
-		<div className="page-container-onboarding">
-			<h2 className="text-center font-weight-bold pt-4">{pages[currentPage].title}</h2>
-			<p
-				className="body-text-onboarding"
-				dangerouslySetInnerHTML={{ __html: pages[currentPage].description }}
-			></p>
-		</div>
 		)}
 
 		<div className="row align-items-center justify-content-center">
-			<div className="col text-center">
-			{(currentPage == 1 || currentPage == 2) && (
+			<div className="col text-center align-self-start">
+			{(currentPage == 3 || currentPage == 2) && (
 				<button className="btn-onboarding" onClick={goToPreviousPage}>
 				Previous
 				</button>
 			)}
 			</div>
-			<div className="col text-center">
-			{(currentPage == 0 || currentPage == 1 || currentPage == 2) && (
+			<div className="col text-right">
+			{(currentPage == 3 || currentPage == 2) && (
 				<button className="btn-onboarding" onClick={goToNextPage}>
 				Next
 				</button>
@@ -149,6 +247,24 @@ function Onboarding({ user }) {
 		)}
 
       </div>
+	  </div>
+	  )}
+
+	  {showOverlay && (
+      <div className="overlay show">
+        <div className="bar"></div>
+        <div className="bar"></div>
+        <div className="bar"></div>
+        <div className="bar"></div>
+        <div className="bar"></div>
+        <div className="bar"></div>
+        <div className="bar"></div>
+        <div className="bar"></div>
+        <div className="bar"></div>
+        <div className="bar"></div>
+		<div className="bar"></div>
+      </div>
+    )}
 	</>
   );
 };
