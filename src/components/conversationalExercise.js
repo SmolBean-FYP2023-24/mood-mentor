@@ -496,7 +496,7 @@ const ConversationalExercise = () => {
                 &nbsp;Exit
               </button>
               <button
-                onClick={storeData}
+                onClick={fetchQuestion}
                 className={`my-2 btn btn-large btn-secondary w-100 ${
                   preFetch ? "d-block" : "d-none"
                 }`}
