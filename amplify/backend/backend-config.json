@@ -1,5 +1,30 @@
 {
-  "api": {},
+  "api": {
+    "moodmentor": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "moodmentor"
+        }
+      ],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authmoodmentor"
+            }
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    }
+  },
   "auth": {
     "moodmentor": {
       "customAuth": false,
@@ -47,6 +72,11 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "fetchQuestion": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
@@ -79,6 +109,22 @@
         {
           "category": "function",
           "resourceName": "execModelLambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_fetchQuestion_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "fetchQuestion"
+        }
+      ]
+    },
+    "AMPLIFY_function_fetchQuestion_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "fetchQuestion"
         }
       ]
     }

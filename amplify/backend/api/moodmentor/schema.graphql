@@ -1,0 +1,43 @@
+type EmotionStats {
+  Happy: Float
+  Sad: Float
+  Angry: Float
+  Fear: Float
+  Disgust: Float
+  Surprise: Float
+}
+
+type BadgeList {
+  BadgeQuestion50: Boolean
+  BadgeQuestion100: Boolean
+  BadgeQuestion200: Boolean
+  BadgeDayHalf: Boolean
+  BadgeDayMonth: Boolean
+  BadgeDayThreeMonths: Boolean
+  BadgeHappy40: Boolean
+  BadgeSad40: Boolean
+  BadgeFear40: Boolean
+  BadgeDisgust40: Boolean
+  BadgeSurprise40: Boolean
+  BadgeAngry40: Boolean
+  BadgeHappy60: Boolean
+  BadgeSad60: Boolean
+  BadgeFear60: Boolean
+  BadgeDisgust60: Boolean
+  BadgeSurprise60: Boolean
+  BadgeAngry60: Boolean
+}
+
+type UserDataModel @model @auth(rules: [{ allow: private }]) {
+  username: String! @primaryKey
+  streak: Int
+  level: Int
+  badges: BadgeList
+  SpeakingQuestions: EmotionStats
+  ListeningQuestions: EmotionStats
+  CoversationQuestions: EmotionStats
+  HasOnboarded: Boolean
+  SpeakingAccuracy: EmotionStats
+  ListeningAccuracy: EmotionStats
+  ConversationAccuracy: EmotionStats
+}

@@ -15,30 +15,25 @@
       "auth": {
         "moodmentor": {}
       },
-<<<<<<< HEAD
       "function": {
-        "callGenAI": {
-          "deploymentBucketName": "amplify-moodmentor-main-124937-deployment",
-          "s3Key": "amplify-builds/callGenAI-667a4451782b6d76684c-build.zip"
-        }
-      },
-      "api": {
-        "genaiapi": {}
-      },
-=======
->>>>>>> 1e1023fa574abac27b07e535484083d9fbad98cd
-      "storage": {
-        "s3audiofiles": {}
-      },
-      "function": {
-        "execModelLambda": {
-          "deploymentBucketName": "amplify-moodmentor-main-124937-deployment",
-          "s3Key": "amplify-builds/execModelLambda-7456674b4e5562385453-build.zip"
-        },
         "callHuggingFace": {
           "deploymentBucketName": "amplify-moodmentor-main-124937-deployment",
           "s3Key": "amplify-builds/callHuggingFace-70645639485a4a6d5864-build.zip"
+        },
+        "execModelLambda": {
+          "deploymentBucketName": "amplify-moodmentor-main-124937-deployment",
+          "s3Key": "amplify-builds/execModelLambda-4450776661646c323668-build.zip"
+        },
+        "fetchQuestion": {
+          "deploymentBucketName": "amplify-moodmentor-main-124937-deployment",
+          "s3Key": "amplify-builds/fetchQuestion-417430636f6b6d6c5539-build.zip"
         }
+      },
+      "storage": {
+        "s3audiofiles": {}
+      },
+      "api": {
+        "moodmentor": {}
       }
     }
   }

@@ -7,6 +7,7 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./components/homePage";
 import Login from "./components/loginPage";
 import TopNav from "./components/topNav";
+import ConversationalExercise from "./components/conversationalExercise";
 import Profile from "./components/profilePage";
 import Dashboard from "./components/dashboard";
 import Onboarding from "./components/onboarding";
@@ -41,6 +42,7 @@ export default function App() {
           />
           <Route path="/lex/" element={<ListeningExercise />} />
           <Route path="/eex/" element={<ExpressingExercise />} />
+          <Route path="/cex/" element={<ConversationalExercise />} />
           <Route path="/dashboard/" element={<Dashboard />} />
           <Route path="/onboarding/" element={<Onboarding />} />
         </Routes>
