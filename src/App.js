@@ -13,6 +13,7 @@ import Dashboard from "./components/dashboard";
 import Onboarding from "./components/onboarding";
 import ListeningExercise from "./components/ListeningExercise";
 import ExpressingExercise from "./components/expressingExercise";
+import ConversationalExercise from  "./components/conversationalExercise";
 import { Amplify } from "aws-amplify";
 import amplifyconfig from "./amplifyconfiguration.json";
 import { useEffect, useState } from "react";
@@ -45,6 +46,7 @@ export default function App() {
           <Route path="/cex/" element={<ConversationalExercise />} />
           <Route path="/dashboard/" element={<Dashboard />} />
           <Route path="/onboarding/" element={<Onboarding />} />
+          <Route path="/cex/" element={<ConversationalExercise />} />
         </Routes>
       </div>
     </>
