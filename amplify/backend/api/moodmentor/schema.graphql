@@ -28,11 +28,9 @@ type BadgeList {
   BadgeAngry60: Boolean
 }
 
-type UserDataModel @model @auth(rules: [{allow: public}]) {
-  id: ID!
-  username: Int
-  password: String
-  streak: String
+type UserDataModel @model @auth(rules: [{ allow: private }]) {
+  username: String! @primaryKey
+  streak: Int
   level: Int
   badges: BadgeList
   SpeakingQuestions: EmotionStats
