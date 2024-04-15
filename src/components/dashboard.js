@@ -299,9 +299,9 @@ function Dashboard({ user }) {
 
               </div>
               <div className="acc-stats-dashboard">
-          <h2>Accuracy Statistics</h2>
+          {/* <h2>Accuracy Statistics</h2> */}
           <div className="dropdown-container">
-            <label htmlFor="exercise-select">Select Exercise:</label>
+            {/* <label htmlFor="exercise-select">Select Exercise:</label> */}
             <select
               id="exercise-select"
               value={selectedExercise_acc}
@@ -313,11 +313,13 @@ function Dashboard({ user }) {
             </select>
           </div>
           <div className="emotion-accuracies">
-            <h3>Emotion Accuracies</h3>
+            {/* <h3>Emotion Accuracies</h3> */}
             {accuracies.map((accuracy, index) => (
               <div className="emotion-row" key={index}>
-                <div className="emotion-label">{emotion_labels[index]}:</div>
-                <div className={`emotion-value ${trendIndicators[index]}`}>{(accuracy * 100).toFixed(2)}%</div>
+                <div className="combined-div-acc">
+                        <div className="emotion-label">{emotion_labels[index]}:</div>
+                        <div className="emotion-value">{(accuracy * 100).toFixed(2)}%</div>
+                </div>
               </div>
             ))}
           </div>
