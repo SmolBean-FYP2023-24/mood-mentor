@@ -18,7 +18,7 @@ export const dummyData = {
     angry: 2,
     fear:9,
     disgust: 10,
-    surprise: 8,
+    neutral: 8,
   },
   listeningQuestion: {
     happy: 9,
@@ -26,7 +26,7 @@ export const dummyData = {
     angry: 2,
     fear:9,
     disgust: 10,
-    surprise: 8,
+    neutral: 8,
   },
   conversationQuestion: {
     happy: 9,
@@ -34,7 +34,7 @@ export const dummyData = {
     angry: 2,
     fear:9,
     disgust: 10,
-    surprise: 8,
+    neutral : 8,
   },
 
   hasOnboarded: true,
@@ -45,7 +45,7 @@ export const dummyData = {
     angry: 0.2,
     fear: 0.1,
     disgust: 0.1,
-    surprise: 0.08,
+    neutral: 0.08,
   },
   listeningAccuracy: {
     happy: 0.09,
@@ -53,7 +53,7 @@ export const dummyData = {
     angry: 0.2,
     fear: 0.1,
     disgust: 0.1,
-    surprise: 0.08,
+    neutral: 0.08,
   },
   conversationAccuracy: {
       happy: 0.09,
@@ -61,6 +61,6 @@ export const dummyData = {
       angry: 0.2,
       fear: 0.1,
       disgust: 0.1,
-      surprise: 0.08,
+      neutral: 0.08,
   },
 };

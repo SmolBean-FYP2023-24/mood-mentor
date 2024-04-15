@@ -210,26 +210,56 @@ function Dashboard({ user }) {
   return (
     <div className="container-fluid-dashboard">
       {/* <h1 className="top-text">Dashboard</h1> */}
+
+      <div className="row-1-dashbaord">
+            <div className="col-lg-3 col-md-4">
+              <div className="sidebar-dashboard">
+              <ProfilePictureSection/> 
+
+                  <a href="/lex">
+                  <button className="profile-button">Listening Exercise</button>
+                </a>
+                <a href="/eex">
+                  <button className="profile-button">Speaking Exercise</button>
+                </a>
+                <a href="/cex">
+                  <button className="profile-button">Conversational Exercise</button>
+                </a>
+                              
+                </div>
+
+                  
+            </div>
+
+            <div className="col-lg-9 col-md-8">
+
+            <div className="chart-box-normal">
+              <div className="chart-container">
+                  {/* <Bar data={chartData} options={chartOptions} /> */}
+                  <MyChart />
+             </div>
+             </div>
+
+            </div> 
+        </div>
+  
   <div className="row-dashboard">
     
 
 
-      <div className="profile-box-dashboard">
+      {/* <div className="profile-box-dashboard">
         <div className="profile-header">
 
           <div className="profile-info">
-               <ProfilePictureSection/>
-            <h2 className="welcome-text"> WELCOME BACK {user}!</h2>
             
-            {/* <h3 className="username"> {user}</h3> */}
           </div>
          
         </div>
         
-      </div>
+      </div> */}
 
-      <div className="normal-box-dashboard">
-            {/* <p>We put the badges here </p> */}
+      {/* <div className="normal-box-dashboard">
+            
         <div className='badge-text-row'>
                <h2 className="welcome-text"> ACHIEVEMENTS </h2>
         </div>
@@ -244,23 +274,9 @@ function Dashboard({ user }) {
             <img src="https://imgur.com/sPI6W5u.png" alt="Embedded Image"/>
           </div>
         </div>
-        </div> 
+        </div>  */}
   </div>
   {/* end of the row tag */}
-
-
-  <div className="custom-row">
-
-      <a href="/lex">
-        <button className="profile-button">Listening Exercise</button>
-      </a>
-      <a href="/eex">
-        <button className="profile-button">Speaking Exercise</button>
-      </a>
-      <a href="/cex">
-        <button className="profile-button">Conversational Exercise</button>
-      </a>
-  </div>
 
   <div className="custom-row-1">
 
