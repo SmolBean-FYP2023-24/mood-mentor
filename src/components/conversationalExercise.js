@@ -1,6 +1,6 @@
 // eslint-disable-next-line
 import React, { useEffect, useRef, useState } from "react";
-// import "./styles/conversationalExercise.css";
+import "./styles/conversationalExercise.css";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
