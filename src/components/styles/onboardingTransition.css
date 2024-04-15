@@ -1,0 +1,108 @@
+/* Page Transition on Onboarding */
+
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.overlay.show .bar {
+  animation: barTransition 1s ease-in-out;
+}
+
+.overlay .bar {
+  position: absolute;
+  width: 100%;
+  background: rgb(174, 174, 174);
+  top: 0;
+  bottom: 0;
+  transform: scaleX(0) translate3d(0, 0, 0);
+  transform-origin: 0% 100%;
+}
+
+.overlay .bar:first-of-type {
+  border-right: none;
+}
+
+@keyframes barTransition {
+  0% {
+    transform: scaleX(0) translateX(0); /* Updated transform properties */
+  }
+  100% {
+    transform: scaleX(1) translateX(100%); /* Updated transform properties */
+  }
+}
+
+  /* Progress Bar on Onboarding */
+
+  .progress-bar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .progress-bar-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #ccc;
+    margin-bottom: 20px;
+  }
+  
+  .progress-bar-circle.filled {
+    background-color: #000;
+  }
+  
+
+  /* Progress Bar Onboarding */
+
+  .progress-bar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 10%; /* Adjust the width as a percentage of the screen */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .progress-bar-circle {
+    width: 30px; /* Set a fixed width for the circles */
+    height: 30px; /* Set a fixed height for the circles */
+    border-radius: 50%;
+    background-color: #ccc;
+    margin-bottom: 20px; /* Adjust the margin-bottom as desired */
+    cursor: pointer; /* Add cursor pointer */
+    transition: background-color 0.3s; /* Add transition effect */
+  }
+  
+  .progress-bar-circle.filled {
+    background-color: #000;
+  }
+  
+  .progress-bar-circle.hovered {
+    background-color: #333; /* Change the background color on hover */
+  }
+
+  .circle-title {
+    position: absolute;
+    top: -30px; /* Adjust the positioning as desired */
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    background-color: #000;
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 3px;
+  }
