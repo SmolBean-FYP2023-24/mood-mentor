@@ -12,6 +12,9 @@ import "./styles/profilePage.css";
 import MenuChart from './MenuChart.js';
 import ProfilePictureSection from "./ProfilePictureSection.js";
 import { dummyData } from "./dummyData.js";
+import img from './images/colored/badge200qs.png';
+import img1 from './images/greyed-out/badge200qs.png';
+
 
 
 import { evaluate, parse, sqrt, exp, pi } from 'mathjs';
@@ -145,9 +148,95 @@ function MyChart() {
 }
 
 
+
+function BadgeHolder({ badges }) {
+  const [currentBadgeIndex, setCurrentBadgeIndex] = useState(0);
+
+  const navigateBadge = (direction) => {
+    if (direction === 'prev') {
+      setCurrentBadgeIndex((prevIndex) => prevIndex - 1);
+    } else if (direction === 'next') {
+      setCurrentBadgeIndex((prevIndex) => prevIndex + 1);
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'ArrowLeft') {
+        navigateBadge('prev');
+      } else if (event.key === 'ArrowRight') {
+        navigateBadge('next');
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  const currentBadge = Object.entries(badges)[currentBadgeIndex];
+  const [badgeName, badgeValue] = currentBadge;
+
+  console.log(badgeName)
+  console.log(badgeValue)
+
+  // C:\Users\Lenovo S540 FSIN\Desktop\1_FYP_2023\FYP_Final\mood-mentor\src\components\images\greyed-out\badge200qs.png
+  
+
+  return (
+      <div className="badge">
+        {badgeValue ? (
+          <img src={img} alt={badgeName} style={{ width: '20px', height: '20px' }} />
+        ) : (
+          <img src={img1} alt={badgeName} style={{ width: '20px', height: '20px' }} />
+        )}
+        <span className="arrow left-arrow" onClick={() => navigateBadge('prev')}>&larr;</span>
+        <span className="arrow right-arrow" onClick={() => navigateBadge('next')}>&rarr;</span>
+      </div>
+  );
+
+  // C:\Users\Lenovo S540 FSIN\Desktop\1_FYP_2023\FYP_Final\mood-mentor\src\components\images\greyed-out\badge50qs.png
+
+}
+
+
+
 // Dashboard function starts here
 
+
 function Dashboard({ user }) {
+
+
+  // Access the variables from the dummy data
+  const {
+    id,
+    username,
+    password,
+    streak,
+    level,
+    badges,
+    speakingQuestion,
+    listeningQuestion,
+    conversationQuestion,
+    hasOnboarded,
+    speakingAccuracy,
+    listeningAccuracy,
+    conversationAccuracy,
+  } = dummyData;
+
+
+
+    // Function to create  menus
+    const [selectedExercise, setSelectedExercise] = useState('Speaking');
+
+    const handleExerciseChange = (event) => {
+      setSelectedExercise(event.target.value);
+    };
+  
+
+
 
   
   // CHART2: LINE CHART FOR QUESTIONS PER WEEK
@@ -204,6 +293,108 @@ function Dashboard({ user }) {
 
 
 
+
+
+  // Below is the code for the accuracy charts
+
+  const [selectedExercise_acc, setSelectedExercise_acc] = useState('Speaking');
+  const [accuracies, setAccuracies] = useState([]);
+  const [trendIndicators, setTrendIndicators] = useState([]);
+
+  const emotion_labels=['happy', 'sad', 'angry', 'fear', 'disgust', 'surprise']
+
+  useEffect(() => {
+    updateAccuracies(selectedExercise_acc);
+  }, [selectedExercise_acc]);
+
+  const handleExerciseChange_acc = (event) => {
+    setSelectedExercise_acc(event.target.value);
+  };
+
+  const calculateEmotionAccuracies = (exercise) => {
+    const accuracyData = dummyData[`${exercise.toLowerCase()}Accuracy`];
+
+    const labels = Object.keys(accuracyData);
+    // console.log(labels)
+    const accuracyValues = Object.values(accuracyData);
+
+    // Calculate the trend indicators
+    const trendIndicators = calculateTrendIndicators(accuracyValues);
+
+    return {
+      labels,
+      accuracies: accuracyValues,
+      trendIndicators,
+    };
+  };
+
+  const calculateTrendIndicators = (accuracyValues) => {
+    const trendIndicators = [];
+    for (let i = 0; i < accuracyValues.length; i++) {
+      if (i === 0) {
+        trendIndicators.push(null);
+      } else {
+        if (accuracyValues[i] > accuracyValues[i - 1]) {
+          trendIndicators.push('upward');
+        } else if (accuracyValues[i] < accuracyValues[i - 1]) {
+          trendIndicators.push('downward');
+        } else {
+          trendIndicators.push('equal');
+        }
+      }
+    }
+    return trendIndicators;
+  };
+
+  const updateAccuracies = (exercise) => {
+  const { labels, accuracies, trendIndicators } = calculateEmotionAccuracies(exercise);
+
+    setAccuracies(accuracies);
+    setTrendIndicators(trendIndicators);
+
+    // Destroy the existing chart if it exists
+    const existingChart = Chart.getChart("accuracy-chart");
+    if (existingChart) {
+      existingChart.destroy();
+    }
+
+    // Update the chart
+    const accuracyChart = document.getElementById('accuracy-chart').getContext('2d');
+    new Chart(accuracyChart, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: `${exercise} Accuracy`,
+            data: accuracies,
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1,
+            pointRadius: 3,
+            pointHoverRadius: 5,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function (value) {
+                return (value * 100).toFixed(0) + '%';
+              },
+            },
+          },
+        },
+      },
+    });
+  };
+
+
+
+
+
   
 
 
@@ -227,58 +418,146 @@ function Dashboard({ user }) {
                 </a>
                               
                 </div>
+                {/* end of sidebar-dashboard */}
 
                   
             </div>
+            {/* end of col-lg-3 col-md-4 */}
 
-            <div className="col-lg-9 col-md-8">
+          <div className="col-lg-9 col-md-8">
 
-            <div className="chart-box-normal">
-              <div className="chart-container">
-                  {/* <Bar data={chartData} options={chartOptions} /> */}
-                  <MyChart />
-             </div>
-             </div>
+            <div className="row-2-dashboard">
+                <div className="badge-holder-dashboard">
+                  <BadgeHolder badges={badges}/>
+                </div>
 
-            </div> 
+              <div className="qs-emotion-dashboard">
+
+                    <div className="qs-emotion-dashboard-row1">
+                    <div className="qs-emotion-dashboard-heading">Number of Questions by Emotion</div>
+                          <div className="exercise-dropdown">
+                          
+                            <select
+                              id="exercise-select"
+                              value={selectedExercise}
+                              onChange={handleExerciseChange}
+                            >
+                              <option value="Speaking">Speaking</option>
+                              <option value="Listening">Listening</option>
+                              <option value="Conversation">Conversation</option>
+                            </select>
+                          </div>
+                        {/* end of excercise-dropdown */}
+                        
+                      </div>
+                      {/* end of qs-emotion-dashboard-heading */}
+
+
+
+
+                      <div className="qs-emotion-dashbaord-inner">
+
+                                <Bar
+                                data={{
+                                  labels: ['Happy', 'Sad', 'Angry', 'Disgust', 'Surprise', 'Fear'],
+                                  datasets: [
+                                    {
+                                      label:`${selectedExercise} Questions`,
+                                      data: Object.values(
+                                        dummyData[selectedExercise.toLowerCase() + 'Question']
+                                      ),
+                                      backgroundColor: 'rgba(54, 162, 235, 0.5)', // Color for the selected exercise Questions bars
+                                    },
+                                  ],
+                                }}
+                                options={{
+                                  scales: {
+                                    y: {
+                                      beginAtZero: true,
+                                      ticks: {
+                                        precision: 0, // Display integers for y-axis ticks
+                                      },
+                                    },
+                                  },
+                                  plugins: {
+                                    legend: {
+                                      display: false, // Disable the legend
+                                    },
+                                  },
+                                }}
+                                />
+
+
+                                </div> 
+                                {/* qs-emotion-dashboard-inner */}
+
+
+                  </div>
+                  {/* end of qs-emotion-dashboard-row1 */}
+              
+
+            
+           
+
+          </div>
+            {/* end of row-2-dashboard */}
+
+                          
+      <div className="custom-row-2"> 
+      
+          {/* <MenuChart /> */}
+
+
+          <div className="acc-graph-dashboard">
+            <canvas id="accuracy-chart"></canvas>
+          </div>
+      {/* end of acc-graph-dashboard */}
+            <div className="acc-stats-dashboard">
+                {/* <h2>Accuracy Statistics</h2> */}
+              <div className="dropdown-container">
+                {/* <label htmlFor="exercise-select">Select Exercise:</label> */}
+                    <select
+                    id="exercise-select"
+                    value={selectedExercise_acc}
+                    onChange={handleExerciseChange_acc}
+                    >
+                    <option value="Listening">Listening</option>
+                    <option value="Speaking">Speaking</option>
+                    <option value="Conversation">Conversation</option>
+                    </select>
+            </div>
+            {/* end of dropdown container */}
+            <div className="emotion-accuracies">
+            {/* <h3>Emotion Accuracies</h3> */}
+            {accuracies.map((accuracy, index) => (
+            <div className="emotion-row" key={index}>
+            <div className="combined-div-acc">
+                    <div className="emotion-label">{emotion_labels[index]}:</div>
+                    <div className="emotion-value">{(accuracy * 100).toFixed(2)}%</div>
+            </div>
+            </div>
+            // end of emotion-row
+            ))}
+            </div>
+           {/* end of emotion accuracies */}
+
+
+          </div>
+          {/* end of acct-stats-dashboard */}
+
         </div>
+        {/* custom-row-2 */}
+
+
+
+          </div>
+
+
+        </div> 
+   </div>    
+      
   
-    <div className="row-dashboard">
-  </div>
-  {/* end of the row tag */}
-
-  <div className="custom-row-1">
-
-      <div className="chart-box-normal">
-              <div className="chart-container">
-                  {/* <Bar data={chartData} options={chartOptions} /> */}
-                  <MyChart />
-              </div>
-      </div> 
-
-      <div className="chart-box-practice-qs">
-            <Line data={data_qs_per_week} options={options} />
-      </div>    
-
-  </div>
-
-  <div className="custom-row-2"> 
-   
-      <MenuChart />
-    
-  </div>
-
-
- 
-
-
-  
-
-      
-       
-      
-      
-    </div>
+// </div>
     // end of the container-fluid tag
 
     

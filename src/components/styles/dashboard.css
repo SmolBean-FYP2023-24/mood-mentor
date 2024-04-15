@@ -332,12 +332,7 @@
   }
 
  
-  .custom-row-2 {
-    display: flex;
-    justify-content: center;
-    width: 98%;
-    margin-left: 2vh;
-  }
+  
 
  
   
@@ -379,3 +374,62 @@
 
   
   
+.row-2-dashboard{
+  display: flex;
+}
+
+.badge-holder-dashboard{
+  flex:5;
+  background-color: pink;
+}
+
+
+.arrow {
+  font-size: 2rem; /* Increase or decrease the size as needed */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  width: 2rem;
+  height: 0rem;
+ 
+}
+
+.left-arrow {
+  left: 0rem;
+  background-color: black;
+}
+
+.right-arrow {
+  right: -18rem;
+  /* margin-bottom: 200vh; */
+  transform: translateY(-50%);
+}
+
+
+.qs-emotion-dashboard{
+  flex:5;
+  background-color: purple;
+  width: 100%;
+}
+
+
+.custom-row-2 {
+  display: flex;
+ 
+
+}
+
+.acc-graph-dashboard{
+  flex:5;
+  background-color: skyblue;
+}
+
+.acc-stats-dashboard{
+  flex:5;
+  background-color: lightgreen;
+}
+
