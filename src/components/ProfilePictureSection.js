@@ -54,8 +54,8 @@ function ProfilePictureSection() {
                   src={pictureUrl}
                   alt=""
                   style={{
-                    width: "70px",
-                    height: "70px",
+                    width: "20px",
+                    height: "20px",
                     cursor: "pointer",
                     padding: "5px",
                     borderRadius: "50%",
@@ -69,7 +69,7 @@ function ProfilePictureSection() {
         )}
         onHide={() => setimagecrop(false)}
         style={{
-          width: "500px",
+          width: "200px",
           display: "flex",
           flexDirection: "column",
         }}

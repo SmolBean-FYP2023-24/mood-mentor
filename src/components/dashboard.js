@@ -211,7 +211,7 @@ function Dashboard({ user }) {
     <div className="container-fluid-dashboard">
       {/* <h1 className="top-text">Dashboard</h1> */}
 
-      <div className="row-1-dashbaord">
+      <div className="row-1-dashboard">
             <div className="col-lg-3 col-md-4">
               <div className="sidebar-dashboard">
               <ProfilePictureSection/> 
@@ -243,38 +243,7 @@ function Dashboard({ user }) {
             </div> 
         </div>
   
-  <div className="row-dashboard">
-    
-
-
-      {/* <div className="profile-box-dashboard">
-        <div className="profile-header">
-
-          <div className="profile-info">
-            
-          </div>
-         
-        </div>
-        
-      </div> */}
-
-      {/* <div className="normal-box-dashboard">
-            
-        <div className='badge-text-row'>
-               <h2 className="welcome-text"> ACHIEVEMENTS </h2>
-        </div>
-
-        <div className="badges">
-
-        <div className="badge1">
-            <img src="https://imgur.com/sPI6W5u.png" alt="Embedded Image"/>
-          </div>
-
-          <div className="badge2">
-            <img src="https://imgur.com/sPI6W5u.png" alt="Embedded Image"/>
-          </div>
-        </div>
-        </div>  */}
+    <div className="row-dashboard">
   </div>
   {/* end of the row tag */}
 
