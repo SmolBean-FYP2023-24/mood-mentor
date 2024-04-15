@@ -11,63 +11,10 @@ import './styles/dashboard.css';
 import "./styles/profilePage.css";
 import MenuChart from './MenuChart.js';
 import ProfilePictureSection from "./ProfilePictureSection.js";
+import { dummyData } from "./dummyData.js";
 
 
 import { evaluate, parse, sqrt, exp, pi } from 'mathjs';
-
-
-
-
-
-
-
-function generateNormalDistributionData(mean, standardDeviation, minX, maxX, step) {
-  const data = [];
-  for (let x = minX; x <= maxX; x += step) {
-    const exponent = -((x - mean) ** 2) / (2 * standardDeviation ** 2);
-    const y = (1 / (standardDeviation * sqrt(2 * pi))) * exp(exponent);
-    data.push(y);
-  }
-  return data;
-}
-
-
-function NormalDistributionChart({ mean, standardDeviation, minX, maxX, step }) {
-  const data = generateNormalDistributionData(mean, standardDeviation, minX, maxX, step);
-
-  const chartData = {
-    labels: data.map(point => point.x),
-    datasets: [
-      {
-        label: 'Normal Distribution',
-        data: data.map(point => point.y),
-        fill: false,
-        borderColor: 'rgba(75, 192, 192, 1)',
-        tension: 0.1,
-      },
-    ],
-  };
-
-  const chartOptions = {
-    responsive: true,
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: 'X',
-        },
-      },
-      y: {
-        title: {
-          display: true,
-          text: 'Y',
-        },
-      },
-    },
-  };
-
-  return <Line data={chartData} options={chartOptions} />;
-}
 
 
 function MyChart() {
