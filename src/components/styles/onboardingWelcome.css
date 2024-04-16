@@ -1,0 +1,93 @@
+* {
+	box-sizing: border-box;
+}
+
+.hide {
+	display: none;
+}
+
+.push-down {
+    margin-top: 2%;
+}
+
+.squareOnb {
+	cursor: pointer;
+    position: absolute;
+	border: solid 0px transparent;
+	padding: 120px;
+	width: 90%;
+	height: 42%;
+	transform: translate3d(-50%, -50%, 0);
+	top: 28.5%;
+	left: 50%;
+	background: linear-gradient(230deg, #a24bcf, #4b79cf, #4bc5cf);
+	background-clip: content-box;
+	background-size: 400% 400%;
+	border-color: currentColor;
+	animation: partytime 7s cubic-bezier(0.46, 0.03, 0.52, 0.96) infinite;
+	transition: padding 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+	will-change: transform;
+}
+
+@keyframes partytime {
+	0% {
+		background-position: 83% 0%;
+	}
+	50% {
+		background-position: 18% 100%;
+	}
+	100% {
+		background-position: 83% 0%;
+	}
+}
+
+.cardOnb {
+    width: 180vh;
+    height: 40vh;
+    background-color: transparent;
+    transition: transform 1.25s cubic-bezier(0.215, 0.61, 0.355, 1),
+                box-shadow 1.25s cubic-bezier(0.215, 0.61, 0.355, 1),
+                box-shadow 1.25s cubic-bezier(0.215, 0.61, 0.355, 1),
+                filter 1.25s cubic-bezier(0.215, 0.61, 0.355, 1),
+                opacity 1.25s cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform: perspective(20000px) translate3d(0, 0, 0) scale(0.5);
+    will-change: transform;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 700;
+}
+  
+.cardOnb:hover {
+    box-shadow: 0 0 75px rgba(0, 0, 0, 0.2), 0 5px 20px rgba(0, 0, 0, 0.2);
+    mix-blend-mode: hard-light;
+    filter: grayscale(100%);
+    opacity: 0.8;
+}
+
+.cardOnb-title-wrap {
+	transform: perspective(1600px) translate3d(0, 0, 100px);
+	position: relative;
+	z-index: 200;
+	transition: transform 0.25s linear;
+}
+
+.title-welcome-onb {
+	font-size: 120px;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	margin: 0;
+	font-weight: 900;
+	overflow: hidden;
+	color: black;
+	mix-blend-mode: overlay;
+}
+
+.copy-wrap {
+	display: block;
+	transition: all 0.7s 0s ease-in-out;
+	position: relative;
+}

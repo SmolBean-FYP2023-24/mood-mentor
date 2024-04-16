@@ -4,8 +4,24 @@ import { fetchAuthSession, signOut } from "aws-amplify/auth";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import "./styles/profilePage.css";
+import {dummyData} from './dummyData.js'
 
 function ProfilePage(props) {
+  const {
+    id,
+    username,
+    password,
+    streak,
+    level,
+    badges,
+    speakingQuestion,
+    listeningQuestion,
+    conversationQuestion,
+    hasOnboarded,
+    speakingAccuracy,
+    listeningAccuracy,
+    conversationAccuracy,
+  } = dummyData;
   const [userState, setUserState] = useState(0);
   useEffect(() => {
     const getUserData = async () => {
@@ -79,7 +95,7 @@ function ProfilePage(props) {
                           Streak
                         </span>
                         <br></br>
-                        <span className="display-2">##</span>
+                        <span className="display-2">{streak}</span>
                       </div>
                       <div className="col-6">
                         <span className="fw-italic d-none d-md-block">

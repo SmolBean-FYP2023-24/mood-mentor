@@ -186,7 +186,7 @@ function BadgeHolder({ badges }) {
   
 
   return (
-      <div className="badge">
+      <div className="badgeDash">
                
         <span className="arrow left-arrow" onClick={() => navigateBadge('prev')}>&larr;</span>
         {badgeValue ? (
