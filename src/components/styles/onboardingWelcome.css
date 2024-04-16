@@ -2,17 +2,6 @@
 	box-sizing: border-box;
 }
 
-.sr-only {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	padding: 0;
-	margin: -1px;
-	overflow: hidden;
-	clip: rect(0, 0, 0, 0);
-	border: 0;
-}
-
 .hide {
 	display: none;
 }
@@ -21,54 +10,15 @@
     margin-top: 2%;
 }
 
-
-.is-open {
-	color: white;
-	background-color: #212121;
-}
-
-.is-open.card {
-    transform: scale(1);
-}
-
-.is-open.card:hover {
-    mix-blend-mode: normal;
-    opacity: 1;
-    filter: grayscale(0);
-}
-
-.is-open.copy-wrap {
-    transform: translate3d(0, -100%, 0);
-}
-
-.is-open.title {
-    color: white;
-    mix-blend-mode: normal;
-}
-
-.is-open .btn:hover {
-    background-color: #212121;
-    color: white;
-  }
-  
-.is-open .btn:hover .btn-icon {
-fill: white;
-}
-
-.is-open.square {
-    padding: 0;
-}
-
-
-.square {
+.squareOnb {
 	cursor: pointer;
     position: absolute;
 	border: solid 0px transparent;
 	padding: 120px;
-	width: 100%;
-	height: 40%;
+	width: 90%;
+	height: 42%;
 	transform: translate3d(-50%, -50%, 0);
-	top: 27%;
+	top: 28.5%;
 	left: 50%;
 	background: linear-gradient(230deg, #a24bcf, #4b79cf, #4bc5cf);
 	background-clip: content-box;
@@ -91,7 +41,7 @@ fill: white;
 	}
 }
 
-.card {
+.cardOnb {
     width: 180vh;
     height: 40vh;
     background-color: transparent;
@@ -111,64 +61,18 @@ fill: white;
     z-index: 700;
 }
   
-.card:hover {
+.cardOnb:hover {
     box-shadow: 0 0 75px rgba(0, 0, 0, 0.2), 0 5px 20px rgba(0, 0, 0, 0.2);
     mix-blend-mode: hard-light;
     filter: grayscale(100%);
     opacity: 0.8;
 }
 
-.card-title-wrap {
+.cardOnb-title-wrap {
 	transform: perspective(1600px) translate3d(0, 0, 100px);
 	position: relative;
 	z-index: 200;
 	transition: transform 0.25s linear;
-}
-
-.card-img {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-size: cover;
-	background-position: 50% 50%;
-	background-image: url(https://www.pauldecotiis.com/assets/img/contact/img-1.jpg?ts=1509977393);
-	will-change: transform;
-	transform: perspective(600px);
-	z-index: 100;
-	/* // opacity: 0.4;
-	// display: none; */
-}
-
-.btn-welcome-onb {
-    position: absolute;
-    top: 65%;
-    left: 50%;
-    transform: translate3d(-50%, -50%, 0);
-    transition: all 0.25s ease-in-out;
-    border: 0;
-    background-color: black;
-    padding: 12px 24px;
-    color: white;
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    mix-blend-mode: overlay;
-    box-shadow: 0 0 25px rgba(0, 0, 0, 0.8) 0 4px 12px rgba(0, 0, 0, 0.9);
-    will-change: transform;
-    cursor: pointer;
-    z-index: 900;
-    margin-top: 30px;
-  }
-
-.btn-icon {
-	fill: white;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate3d(-50%, -50%, 0);
-	transition: all 0.25s cubic-bezier(0.46, 0.03, 0.52, 0.96);
 }
 
 .title-welcome-onb {
@@ -187,47 +91,3 @@ fill: white;
 	transition: all 0.7s 0s ease-in-out;
 	position: relative;
 }
-
-.copy-wrap:before {
-    content: "";
-    width: 18px;
-    height: 2px;
-    background-color: currentColor;
-    position: absolute;
-    /* left: 50%; */
-    /* top: 50%; */
-    transform: translate3d(-50%, -50%, 0);
-  }
-  
-.copyright {
-    bottom: 20px;
-    overflow: hidden;
-    height: 72px;
-    line-height: 60px;
-    position: fixed;
-}
-
-.copyright .copy-wrap:before {
-    content: "";
-    width: 15px;
-    height: 2px;
-    background-color: currentColor;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate3d(-50%, -50%, 0);
-}
-
-
-.circle-title {
-    position: absolute;
-    top: -30px; /* Adjust the positioning as desired */
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    background-color: #000;
-    color: #fff;
-    padding: 5px 10px;
-    font-size: 12px;
-    border-radius: 3px;
-  }

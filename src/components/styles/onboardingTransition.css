@@ -1,106 +1,39 @@
 /* Page Transition on Onboarding */
 
 .overlay {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-  
-  .overlay.show .bar {
-    animation: barTransition 0.7s ease-in-out; /* Updated animation duration */
-  }
-  
-  .overlay .bar {
-    position: absolute;
-    width: 10.1vw;
-    background: white;
-    top: 0;
-    bottom: 0;
-    transform: scale(0, 1) translate3d(0, 0, 0);
-    transform-origin: 100% 100%;
-  }
-  
-  .overlay .bar:first-of-type {
-    border-left: none;
-  }
-  
-  @keyframes barTransition {
-    0% {
-      transform: scaleX(0);
-    }
-    100% {
-      transform: scaleX(1);
-    }
-  }
-  
-  .overlay .bar:nth-of-type(1) {
-    left: calc(0% - 10vw);
-    background: linear-gradient(to right, rgb(193, 236, 255) 0%, rgb(193, 236, 255) 100%);
-    animation-delay: 0.2s;
-  }
-  
-  .overlay .bar:nth-of-type(2) {
-    left: calc(10% - 10vw);
-    background: linear-gradient(to right, rgb(193, 236, 255) 0%, rgb(193, 236, 255) 100%);
-    transition-delay: 0.4s;
-  }
-  
-  .overlay .bar:nth-of-type(3) {
-    left: calc(20% - 10vw);
-    background: linear-gradient(to right,   rgb(193, 236, 255) 0%, rgb(193, 236, 255) 100%);
-    transition-delay: 0.6s;
-  }
-  
-  .overlay .bar:nth-of-type(4) {
-    left: calc(30% - 10vw);
-    background: linear-gradient(to right, rgb(193, 236, 255) 0%, rgb(193, 236, 255) 100%);
-    transition-delay: 0.8s;
-  }
-  
-  .overlay .bar:nth-of-type(5) {
-    left: calc(40% - 10vw);
-    background: linear-gradient(to right, rgb(193, 236, 255) 0%, rgb(193, 236, 255) 100%);
-    transition-delay: 1s;
-  }
-  
-  .overlay .bar:nth-of-type(6) {
-    left: calc(50% - 10vw);
-    background: linear-gradient(to right, rgb(193, 236, 255) 0%, rgb(193, 236, 255) 100%);
-    transition-delay: 1.2s;
-  }
-  
-  .overlay .bar:nth-of-type(7) {
-    left: calc(60% - 10vw);
-    background: linear-gradient(to right, rgb(193, 236, 255) 0%, rgb(193, 236, 255) 100%);
-    transition-delay: 1.4s;
-  }
-  
-  .overlay .bar:nth-of-type(8) {
-    left: calc(70% - 10vw);
-    background: linear-gradient(to right, rgb(193, 236, 255) 0%, rgb(193, 236, 255) 100%);
-    transition-delay: 1.6s;
-  }
-  
-  .overlay .bar:nth-of-type(9) {
-    left: calc(80% - 10vw);
-    background: linear-gradient(to right, rgb(193, 236, 255) 0%, rgb(193, 236, 255) 100%);
-    transition-delay: 1.8s;
-  }
-  
-  .overlay .bar:nth-of-type(10) {
-    left: calc(90% - 10vw);
-    background: linear-gradient(to right, rgb(193, 236, 255) 0%, rgb(193, 236, 255) 100%);
-    transition-delay: 2s;
-  }
-  
-  .overlay .bar:nth-of-type(11) {
-    left: calc(100% - 10vw);
-    background: linear-gradient(to right, rgb(193, 236, 255) 0%, rgb(193, 236, 255) 100%);
-    transition-delay: 2.2s;
-  }
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
 
+.overlay.show .bar {
+  animation: barTransition 1s ease-in-out;
+}
+
+.overlay .bar {
+  position: absolute;
+  width: 100%;
+  background: rgb(174, 174, 174);
+  top: 0;
+  bottom: 0;
+  transform: scaleX(0) translate3d(0, 0, 0);
+  transform-origin: 0% 100%;
+}
+
+.overlay .bar:first-of-type {
+  border-right: none;
+}
+
+@keyframes barTransition {
+  0% {
+    transform: scaleX(0) translateX(0); /* Updated transform properties */
+  }
+  100% {
+    transform: scaleX(1) translateX(100%); /* Updated transform properties */
+  }
+}
 
   /* Progress Bar on Onboarding */
 

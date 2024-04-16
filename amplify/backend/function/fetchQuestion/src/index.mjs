@@ -9,12 +9,12 @@ async function fetchQuestion() {
   myHeaders.append("Content-Type", "application/json");
   const raw = JSON.stringify({
     model: "gpt-35-turbo",
-    temperature: 0.5,
+    temperature: 0.7,
     messages: [
       {
         role: "user",
         content:
-          'Suggest a random topic for having a decent conversation on. It should allow individuals to express emotions well. Give five guiding points as well. Only give the topic and guiding points, nothing else in your output. Format your output as a dictionary that looks like {"Topic": "Generated Topic", "Guide": String of guiding points in a numerically ordered list}',
+          'Suggest a random topic for having a conversation on. Give five guiding points as well. Only give the topic and guiding points, nothing else in your output. Format your output as a dictionary that looks like {"Topic": "Generated Topic", "Guide": String of guiding points in a numerically ordered list}',
       },
     ],
   });
