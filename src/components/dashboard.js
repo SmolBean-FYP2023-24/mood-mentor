@@ -187,12 +187,13 @@ function BadgeHolder({ badges }) {
 
   return (
       <div className="badge">
-        {badgeValue ? (
-          <img src={img} alt={badgeName} style={{ width: '20px', height: '20px' }} />
-        ) : (
-          <img src={img1} alt={badgeName} style={{ width: '20px', height: '20px' }} />
-        )}
+               
         <span className="arrow left-arrow" onClick={() => navigateBadge('prev')}>&larr;</span>
+        {badgeValue ? (
+          <img src={img} alt={badgeName}  />
+        ) : (
+          <img src={img1} alt={badgeName} />
+        )}
         <span className="arrow right-arrow" onClick={() => navigateBadge('next')}>&rarr;</span>
       </div>
   );
@@ -403,9 +404,18 @@ function Dashboard({ user }) {
       {/* <h1 className="top-text">Dashboard</h1> */}
 
       <div className="row-1-dashboard">
-            <div className="col-lg-3 col-md-4">
+            <div className="col-lg-2 col-md-4">
               <div className="sidebar-dashboard">
               <ProfilePictureSection/> 
+              
+              <div className="text-user-dashboard">
+                    Name: {username}<br />
+                    Streak: {streak}<br />
+                    User ID: {id}
+                </div>
+             
+
+
 
                   <a href="/lex">
                   <button className="profile-button">Listening Exercise</button>
@@ -424,7 +434,7 @@ function Dashboard({ user }) {
             </div>
             {/* end of col-lg-3 col-md-4 */}
 
-          <div className="col-lg-9 col-md-8">
+          <div className="col-lg-10 col-md-8">
 
             <div className="row-2-dashboard">
                 <div className="badge-holder-dashboard">
@@ -432,10 +442,10 @@ function Dashboard({ user }) {
                 </div>
 
               <div className="qs-emotion-dashboard">
-
+              
                     <div className="qs-emotion-dashboard-row1">
-                    <div className="qs-emotion-dashboard-heading">Number of Questions by Emotion</div>
-                          <div className="exercise-dropdown">
+                    
+                          {/* <div className="exercise-dropdown-emotion-qs"> */}
                           
                             <select
                               id="exercise-select"
@@ -446,16 +456,21 @@ function Dashboard({ user }) {
                               <option value="Listening">Listening</option>
                               <option value="Conversation">Conversation</option>
                             </select>
+                          {/* <div className="qs-emotion-dashboard-heading">
+                            Questions per emotion</div> */}
+
                           </div>
+
+                          
                         {/* end of excercise-dropdown */}
                         
-                      </div>
-                      {/* end of qs-emotion-dashboard-heading */}
+                      {/* </div> */}
+                      {/* end of qs-emotion-dashboard-row1 */}
 
 
 
 
-                      <div className="qs-emotion-dashbaord-inner">
+                      <div className="qs-emotion-dashboard-inner">
 
                                 <Bar
                                 data={{
@@ -514,10 +529,10 @@ function Dashboard({ user }) {
       {/* end of acc-graph-dashboard */}
             <div className="acc-stats-dashboard">
                 {/* <h2>Accuracy Statistics</h2> */}
-              <div className="dropdown-container">
+              <div className="dropdown-container-acc">
                 {/* <label htmlFor="exercise-select">Select Exercise:</label> */}
                     <select
-                    id="exercise-select"
+                    id="exercise-select-acc"
                     value={selectedExercise_acc}
                     onChange={handleExerciseChange_acc}
                     >
@@ -532,8 +547,8 @@ function Dashboard({ user }) {
             {accuracies.map((accuracy, index) => (
             <div className="emotion-row" key={index}>
             <div className="combined-div-acc">
-                    <div className="emotion-label">{emotion_labels[index]}:</div>
-                    <div className="emotion-value">{(accuracy * 100).toFixed(2)}%</div>
+                    <div className="emotion-label">{emotion_labels[index]}: {(accuracy * 100).toFixed(2)}%</div>
+                    {/* <div className="emotion-value">{(accuracy * 100).toFixed(2)}%</div> */}
             </div>
             </div>
             // end of emotion-row

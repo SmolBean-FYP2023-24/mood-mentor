@@ -31,10 +31,12 @@ function ProfilePictureSection() {
       <img
         style={{
           zIndex: "1",
-          width: "200px",
-          height: "200px",
+          width: "25vh",
+          height: "25vh",
           borderRadius: "50%",
           objectFit: "cover",
+          marginLeft: "4vh",
+          marginTop:"2vh",
         }}
         onClick={handleProfilePictureClick}
         src={selectedProfilePicture || "default-profile-picture-url"}
