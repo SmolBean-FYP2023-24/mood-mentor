@@ -505,11 +505,20 @@
 }
 
 .acc-graph-dashboard{
-  flex:5;
+  flex:4;
   background-color: skyblue;
   margin-right: 2vh;
-  margin-left: 1vh;
+  margin-left: 14vh;
   /* height: 10%; */
+  height:45vh;
+  justify-content: center;
+  /* width: 45vh; */
+  border-radius: 4vh;
+  
+}
+
+.acc-graph-dashboard img{
+  height:10%;
 }
 
 .acc-stats-dashboard{

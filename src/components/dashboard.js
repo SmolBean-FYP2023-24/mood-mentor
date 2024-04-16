@@ -360,36 +360,36 @@ function Dashboard({ user }) {
     }
 
     // Update the chart
-    const accuracyChart = document.getElementById('accuracy-chart').getContext('2d');
-    new Chart(accuracyChart, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: `${exercise} Accuracy`,
-            data: accuracies,
-            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1,
-            pointRadius: 3,
-            pointHoverRadius: 5,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: {
-              callback: function (value) {
-                return (value * 100).toFixed(0) + '%';
-              },
-            },
-          },
-        },
-      },
-    });
+    // const accuracyChart = document.getElementById('accuracy-chart').getContext('2d');
+    // new Chart(accuracyChart, {
+    //   type: 'line',
+    //   data: {
+    //     labels: labels,
+    //     datasets: [
+    //       {
+    //         label: `${exercise} Accuracy`,
+    //         data: accuracies,
+    //         backgroundColor: 'rgba(54, 162, 235, 0.5)',
+    //         borderColor: 'rgba(54, 162, 235, 1)',
+    //         borderWidth: 1,
+    //         pointRadius: 3,
+    //         pointHoverRadius: 5,
+    //       },
+    //     ],
+    //   },
+    //   options: {
+    //     scales: {
+    //       y: {
+    //         beginAtZero: true,
+    //         ticks: {
+    //           callback: function (value) {
+    //             return (value * 100).toFixed(0) + '%';
+    //           },
+    //         },
+    //       },
+    //     },
+    //   },
+    // });
   };
 
 
@@ -524,7 +524,8 @@ function Dashboard({ user }) {
 
 
           <div className="acc-graph-dashboard">
-            <canvas id="accuracy-chart"></canvas>
+            {/* <canvas id="accuracy-chart"></canvas> */}
+            <Line data={data_qs_per_week} options={options} />
           </div>
       {/* end of acc-graph-dashboard */}
             <div className="acc-stats-dashboard">
