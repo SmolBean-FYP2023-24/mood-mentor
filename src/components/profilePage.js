@@ -22,7 +22,15 @@ function ProfilePage(props) {
     listeningAccuracy,
     conversationAccuracy,
   } = dummyData;
-  const [userState, setUserState] = useState(0);
+  
+  // Reading data from json
+  const trueBadges = Object.keys(badges).filter(key => badges[key] === true);
+  const speakingQuestions = Object.values(speakingQuestion);
+  const listeningQuestions = Object.values(listeningQuestion);
+  const totalQuestionsPracticed = speakingQuestions.reduce((sum, value) => sum + value, 0) +
+                               listeningQuestions.reduce((sum, value) => sum + value, 0);
+  
+                               const [userState, setUserState] = useState(0);
   useEffect(() => {
     const getUserData = async () => {
       const user = await fetchAuthSession();
@@ -95,14 +103,30 @@ function ProfilePage(props) {
                           Streak
                         </span>
                         <br></br>
-                        <span className="display-2">{streak}</span>
+                        <span className="display-5">{streak}</span>
                       </div>
                       <div className="col-6">
                         <span className="fw-italic d-none d-md-block">
                           Questions Practiced
                         </span>
                         <br></br>
-                        <span className="display-2">##</span>
+                        <span className="display-5">{totalQuestionsPracticed}</span>
+                      </div>
+                      <div className="col-6">
+                        <br></br>
+                        <span className="fw-italic d-none d-md-block">
+                          Level
+                        </span>
+                        <br></br>
+                        <span className="display-5">{level}</span>
+                      </div>
+                      <div className="col-6">
+                        <br></br>
+                        <span className="fw-italic d-none d-md-block">
+                          Number of Badges
+                        </span>
+                        <br></br>
+                        <span className="display-5">{trueBadges.length}</span>
                       </div>
                     </div>
                   </div>
