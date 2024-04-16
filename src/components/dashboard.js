@@ -470,8 +470,7 @@ function Dashboard({ user }) {
 
 
 
-                      <div className="qs-emotion-dashboard-inner">
-
+                      <div className="qs-emotion-dashboard-inner" style={{width: '800px'}}>
                                 <Bar
                                 data={{
                                   labels: ['Happy', 'Sad', 'Angry', 'Disgust', 'Surprise', 'Fear'],
@@ -486,6 +485,8 @@ function Dashboard({ user }) {
                                   ],
                                 }}
                                 options={{
+                                  responsive: true,
+                                  maintainAspectRatio: false,
                                   scales: {
                                     y: {
                                       beginAtZero: true,
@@ -525,12 +526,19 @@ function Dashboard({ user }) {
 
           <div className="acc-graph-dashboard">
             {/* <canvas id="accuracy-chart"></canvas> */}
-            <Line data={data_qs_per_week} options={options} />
+            <Line
+              data={data_qs_per_week}
+              options={{
+                ...options,
+                responsive: true,
+                maintainAspectRatio: false,
+              }}
+            />
           </div>
       {/* end of acc-graph-dashboard */}
             <div className="acc-stats-dashboard">
                 {/* <h2>Accuracy Statistics</h2> */}
-              <div className="dropdown-container-acc">
+              <div className="exercise-dropdown-container-acc">
                 {/* <label htmlFor="exercise-select">Select Exercise:</label> */}
                     <select
                     id="exercise-select-acc"
