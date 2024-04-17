@@ -19,6 +19,16 @@ function Onboarding({ user }) {
   const [filledCircles, setFilledCircles] = useState(0);
   const [hoveredCircle, setHoveredCircle] = useState(null);
 
+  // user authentication
+  useEffect(() => {
+    const getUserData = async () => {
+      const user = await fetchAuthSession();
+      setUserState(user.tokens.idToken.payload);
+      user.handleUser(user);
+    };
+    getUserData();
+  }, [user]);
+
   useEffect(() => {
     if (currentPage === 1) {
       const timer = setTimeout(() => {

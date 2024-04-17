@@ -1,4 +1,6 @@
-import React, { useEffect, useRef , useState} from "react";  
+import React, { useEffect, useRef , useState} from "react";
+import { fetchAuthSession } from "aws-amplify/auth";
+import { withAuthenticator } from "@aws-amplify/ui-react";
 import { Line } from 'react-chartjs-2';
 import { Bar } from 'react-chartjs-2';
 import "@aws-amplify/ui-react/styles.css";
@@ -186,7 +188,7 @@ function BadgeHolder({ badges }) {
   
 
   return (
-      <div className="badge">
+      <div className="badgeDash">
                
         <span className="arrow left-arrow" onClick={() => navigateBadge('prev')}>&larr;</span>
         {badgeValue ? (
@@ -203,11 +205,19 @@ function BadgeHolder({ badges }) {
 }
 
 
-
 // Dashboard function starts here
-
-
 function Dashboard({ user }) {
+  
+  //User authentication
+  const [userState, setUserState] = useState(0);
+  useEffect(() => {
+    const getUserData = async () => {
+      const user = await fetchAuthSession();
+      setUserState(user.tokens.idToken.payload);
+      user.handleUser(user);
+    };
+    getUserData();
+  }, [user]);
 
 
   // Access the variables from the dummy data
@@ -236,9 +246,6 @@ function Dashboard({ user }) {
       setSelectedExercise(event.target.value);
     };
   
-
-
-
   
   // CHART2: LINE CHART FOR QUESTIONS PER WEEK
 
@@ -358,44 +365,7 @@ function Dashboard({ user }) {
     if (existingChart) {
       existingChart.destroy();
     }
-
-    // Update the chart
-    // const accuracyChart = document.getElementById('accuracy-chart').getContext('2d');
-    // new Chart(accuracyChart, {
-    //   type: 'line',
-    //   data: {
-    //     labels: labels,
-    //     datasets: [
-    //       {
-    //         label: `${exercise} Accuracy`,
-    //         data: accuracies,
-    //         backgroundColor: 'rgba(54, 162, 235, 0.5)',
-    //         borderColor: 'rgba(54, 162, 235, 1)',
-    //         borderWidth: 1,
-    //         pointRadius: 3,
-    //         pointHoverRadius: 5,
-    //       },
-    //     ],
-    //   },
-    //   options: {
-    //     scales: {
-    //       y: {
-    //         beginAtZero: true,
-    //         ticks: {
-    //           callback: function (value) {
-    //             return (value * 100).toFixed(0) + '%';
-    //           },
-    //         },
-    //       },
-    //     },
-    //   },
-    // });
   };
-
-
-
-
-
   
 
 
@@ -404,117 +374,98 @@ function Dashboard({ user }) {
       {/* <h1 className="top-text">Dashboard</h1> */}
 
       <div className="row-1-dashboard">
-            <div className="col-lg-2 col-md-4">
-              <div className="sidebar-dashboard">
-              <ProfilePictureSection/> 
-              
-              <div className="text-user-dashboard">
-                    Name: {username}<br />
-                    Streak: {streak}<br />
-                    User ID: {id}
-                </div>
-             
-
-
-
-                  <a href="/lex">
-                  <button className="profile-button">Listening Exercise</button>
-                </a>
-                <a href="/eex">
-                  <button className="profile-button">Speaking Exercise</button>
-                </a>
-                <a href="/cex">
-                  <button className="profile-button">Conversational Exercise</button>
-                </a>
-                              
-                </div>
-                {/* end of sidebar-dashboard */}
-
-                  
-            </div>
+        <div className="col-lg-2 col-md-4">
+          <div className="sidebar-dashboard">
+          <ProfilePictureSection/> 
+            <div className="text-user-dashboard">
+                  Name: {username}<br />
+                  Streak: {streak}<br />
+                  User ID: {id}
+              </div>
+          
+            <a href="/lex">
+              <button className="profile-button">Listening Exercise</button>
+            </a>
+            <a href="/eex">
+              <button className="profile-button">Speaking Exercise</button>
+            </a>
+            <a href="/cex">
+              <button className="profile-button">Conversational Exercise</button>
+            </a>
+                          
+          </div>
+            {/* end of sidebar-dashboard */}                  
+        </div>
             {/* end of col-lg-3 col-md-4 */}
 
           <div className="col-lg-10 col-md-8">
 
             <div className="row-2-dashboard">
-                <div className="badge-holder-dashboard">
-                  <BadgeHolder badges={badges}/>
+              <div className="badge-holder-dashboard">
+              <div className="subheading" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop:'2vh' }}>Badges</div>
+                <BadgeHolder badges={badges}/>
+              </div>
+
+              <div className="qs-emotion-dashboard">  
+                  <div className="qs-emotion-dashboard-row1">
+                  <div className="accuracy-table-heading">
+                    <div className="subheading">Questions Practiced </div>
+                      {/* <div className="exercise-dropdown-emotion-qs"> */}
+                      
+                        <select
+                          id="exercise-select"
+                          value={selectedExercise}
+                          onChange={handleExerciseChange}
+                        >
+                          <option value="Speaking">Speaking</option>
+                          <option value="Listening">Listening</option>
+                          <option value="Conversation">Conversation</option>
+                        </select>
+                      {/* <div className="qs-emotion-dashboard-heading">
+                        Questions per emotion</div> */}
+                      </div>
+                      </div>
+                      {/* end of excercise-dropdown */}
+                      
+                    {/* </div> */}
+                    {/* end of qs-emotion-dashboard-row1 */}
+
+                    <div className="qs-emotion-dashboard-inner" style={{width: '800px'}}>
+                        <Bar
+                        data={{
+                          labels: ['Happy', 'Sad', 'Angry', 'Disgust', 'Surprise', 'Fear'],
+                          datasets: [
+                            {
+                              label:`${selectedExercise} Questions`,
+                              data: Object.values(
+                                dummyData[selectedExercise.toLowerCase() + 'Question']
+                              ),
+                              backgroundColor: 'rgba(54, 162, 235, 0.5)', // Color for the selected exercise Questions bars
+                            },
+                          ],
+                        }}
+                        options={{
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          scales: {
+                            y: {
+                              beginAtZero: true,
+                              ticks: {
+                                precision: 0, // Display integers for y-axis ticks
+                              },
+                            },
+                          },
+                          plugins: {
+                            legend: {
+                              display: false, // Disable the legend
+                            },
+                          },
+                        }}
+                        />
+                    </div> 
+                    {/* qs-emotion-dashboard-inner */}
                 </div>
-
-              <div className="qs-emotion-dashboard">
-              
-                    <div className="qs-emotion-dashboard-row1">
-                    
-                          {/* <div className="exercise-dropdown-emotion-qs"> */}
-                          
-                            <select
-                              id="exercise-select"
-                              value={selectedExercise}
-                              onChange={handleExerciseChange}
-                            >
-                              <option value="Speaking">Speaking</option>
-                              <option value="Listening">Listening</option>
-                              <option value="Conversation">Conversation</option>
-                            </select>
-                          {/* <div className="qs-emotion-dashboard-heading">
-                            Questions per emotion</div> */}
-
-                          </div>
-
-                          
-                        {/* end of excercise-dropdown */}
-                        
-                      {/* </div> */}
-                      {/* end of qs-emotion-dashboard-row1 */}
-
-
-
-
-                      <div className="qs-emotion-dashboard-inner" style={{width: '800px'}}>
-                                <Bar
-                                data={{
-                                  labels: ['Happy', 'Sad', 'Angry', 'Disgust', 'Surprise', 'Fear'],
-                                  datasets: [
-                                    {
-                                      label:`${selectedExercise} Questions`,
-                                      data: Object.values(
-                                        dummyData[selectedExercise.toLowerCase() + 'Question']
-                                      ),
-                                      backgroundColor: 'rgba(54, 162, 235, 0.5)', // Color for the selected exercise Questions bars
-                                    },
-                                  ],
-                                }}
-                                options={{
-                                  responsive: true,
-                                  maintainAspectRatio: false,
-                                  scales: {
-                                    y: {
-                                      beginAtZero: true,
-                                      ticks: {
-                                        precision: 0, // Display integers for y-axis ticks
-                                      },
-                                    },
-                                  },
-                                  plugins: {
-                                    legend: {
-                                      display: false, // Disable the legend
-                                    },
-                                  },
-                                }}
-                                />
-
-
-                                </div> 
-                                {/* qs-emotion-dashboard-inner */}
-
-
-                  </div>
-                  {/* end of qs-emotion-dashboard-row1 */}
-              
-
-            
-           
-
+                {/* end of qs-emotion-dashboard-row1 */}
           </div>
             {/* end of row-2-dashboard */}
 
@@ -522,8 +473,6 @@ function Dashboard({ user }) {
       <div className="custom-row-2"> 
       
           {/* <MenuChart /> */}
-
-
           <div className="acc-graph-dashboard">
             {/* <canvas id="accuracy-chart"></canvas> */}
             <Line
@@ -538,9 +487,11 @@ function Dashboard({ user }) {
       {/* end of acc-graph-dashboard */}
             <div className="acc-stats-dashboard">
                 {/* <h2>Accuracy Statistics</h2> */}
-              <div className="exercise-dropdown-container-acc">
+              <div className="accuracy-table-heading">
+                <div className="subheading">Accuracies </div>
+                <div className="exercise-dropdown-container-acc" style={{marginTop: '2vh'}}>
                 {/* <label htmlFor="exercise-select">Select Exercise:</label> */}
-                    <select
+                  <select
                     id="exercise-select-acc"
                     value={selectedExercise_acc}
                     onChange={handleExerciseChange_acc}
@@ -548,20 +499,20 @@ function Dashboard({ user }) {
                     <option value="Listening">Listening</option>
                     <option value="Speaking">Speaking</option>
                     <option value="Conversation">Conversation</option>
-                    </select>
+                  </select>
             </div>
             {/* end of dropdown container */}
+            </div>
             <div className="emotion-accuracies">
-            {/* <h3>Emotion Accuracies</h3> */}
-            {accuracies.map((accuracy, index) => (
-            <div className="emotion-row" key={index}>
-            <div className="combined-div-acc">
-                    <div className="emotion-label">{emotion_labels[index]}: {(accuracy * 100).toFixed(2)}%</div>
-                    {/* <div className="emotion-value">{(accuracy * 100).toFixed(2)}%</div> */}
-            </div>
-            </div>
-            // end of emotion-row
-            ))}
+              {/* <h3>Emotion Accuracies</h3> */}
+              {accuracies.map((accuracy, index) => (
+                <div className="emotion-row" key={index}>
+                  <div className="combined-div-acc">
+                    <div className="emotion-label">{emotion_labels[index]}:</div>
+                    <div className="emotion-value">{(accuracy * 100).toFixed(2)}%</div>
+                  </div>
+                </div>
+              ))}
             </div>
            {/* end of emotion accuracies */}
 
@@ -572,22 +523,11 @@ function Dashboard({ user }) {
         </div>
         {/* custom-row-2 */}
 
-
-
           </div>
-
-
         </div> 
-   </div>    
-      
-  
-// </div>
-    // end of the container-fluid tag
-
-    
- 
+   </div>
   );
 }
 
 
-export default Dashboard;
+export default withAuthenticator(Dashboard);

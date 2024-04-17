@@ -34,7 +34,7 @@ export default function App() {
       <TopNav showLogin={userAuth} />
       <div className="myspacer">
         <Routes>
-          <Route path="/" element={<Home handleUser={handleUser} />} />
+          <Route path="/" element={<Login handleUser={handleUser} />} />
           <Route path="/auth/" element={<Login handleUser={handleUser} />} />
           <Route
             path="/profile/"
