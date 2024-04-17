@@ -1,12 +1,14 @@
 import { React, useEffect, useState } from "react";
 import "./styles/ListeningExercise.css";
 import "./styles/audio_player.css";
+import { dummyData } from "./dummyData";
 // eslint-disable-next-line
 import { getUrl } from "aws-amplify/storage";
 import { pathLabels } from "./data/pathset";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 ChartJS.register(ArcElement, Tooltip, Legend);
+
 
 function shuffle(array) {
   let currentIndex = array.length,
@@ -31,11 +33,19 @@ function shuffle(array) {
 function getRandomAudio(emotionChoice) {
   console.log(emotionChoice);
   var emotions = ["angry", "disgust", "fear", "happy", "neutral", "sad"];
-  var chosenEmotion =
-    emotionChoice !== ""
-      ? emotionChoice
-      : emotions[Math.floor(Math.random() * emotions.length)];
-  console.log(chosenEmotion);
+  // var chosenEmotion =
+  //   emotionChoice !== ""
+  //     ? emotionChoice
+  //     : emotions[Math.floor(Math.random() * emotions.length)];
+
+      let lowestThreeEmotions = Object.entries(dummyData.listeningAccuracy)
+      .sort((a, b) => a[1] - b[1])
+      .slice(0, 3)
+      .map(entry => entry[0]);
+
+    let chosenEmotion = lowestThreeEmotions[Math.floor(Math.random() * lowestThreeEmotions.length)];
+
+    console.log(chosenEmotion);
   var chosenAudio =
     pathLabels[chosenEmotion][
       Math.floor(Math.random() * pathLabels[chosenEmotion].length)
@@ -102,6 +112,25 @@ function ListeningExercise() {
     console.log("setting correct answer now:", x);
     setUpdateAnswers(x);
   }
+
+
+  // Access the variables from the dummy data
+  const {
+    id,
+    username,
+    password,
+    streak,
+    level,
+    badges,
+    speakingQuestion,
+    listeningQuestion,
+    conversationQuestion,
+    hasOnboarded,
+    speakingAccuracy,
+    listeningAccuracy,
+    conversationAccuracy,
+  } = dummyData;
+
   const emotions = ["happy", "sad", "angry", "disgust", "neutral", "fear"];
   useEffect(() => {
     var emotion_random = [];
