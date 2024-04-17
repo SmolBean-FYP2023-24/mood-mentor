@@ -10,7 +10,7 @@ import Nav from "react-bootstrap/Nav";
 import OnboardingLE from "./onboardingLE";
 import { Engine } from './onboardingWelcome.js';
 
-function Onboarding({ user }) {
+function Onboarding(props) {
   const [userState, setUserState] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
@@ -24,10 +24,10 @@ function Onboarding({ user }) {
     const getUserData = async () => {
       const user = await fetchAuthSession();
       setUserState(user.tokens.idToken.payload);
-      user.handleUser(user);
+      props.handleUser(user);
     };
     getUserData();
-  }, [user]);
+  }, [props]);
 
   useEffect(() => {
     if (currentPage === 1) {
