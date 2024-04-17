@@ -209,15 +209,15 @@ function BadgeHolder({ badges }) {
 function Dashboard( props ) {
   
   //User authentication
-  const [userState, setUserState] = useState(0);
-  useEffect(() => {
-    const getUserData = async () => {
-      const user = await fetchAuthSession();
-      setUserState(user.tokens.idToken.payload);
-      props.handleUser(user);
-    };
-    getUserData();
-  }, [props]);
+  // const [userState, setUserState] = useState(0);
+  // useEffect(() => {
+  //   const getUserData = async () => {
+  //     const user = await fetchAuthSession();
+  //     setUserState(user.tokens.idToken.payload);
+  //     props.handleUser(user);
+  //   };
+  //   getUserData();
+  // }, [props]);
 
 
   // Access the variables from the dummy data

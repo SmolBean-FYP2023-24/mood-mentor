@@ -10,6 +10,7 @@ import { Buffer } from "buffer";
 import * as EBML from "ts-ebml";
 import { fetchAuthSession } from "aws-amplify/auth";
 import { uploadData, getUrl } from "aws-amplify/storage";
+import { getCurrentUser, signIn, signOut } from "aws-amplify/auth";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { dummyData } from "./dummyData";
@@ -18,37 +19,14 @@ import { dummyData } from "./dummyData";
 window.Buffer = window.Buffer || Buffer;
 let started = false;
 function getRandomSentence(emotionChoice = "") {
-  // var emotions = ["angry", "disgust", "fear", "happy", "sad"];
-  // var chosenEmotion =
-  //   emotionChoice !== ""
-  //     ? emotionChoice
-  //     : emotions[Math.floor(Math.random() * emotions.length)];
-  // var chosenSentence =
-  //   sentences[chosenEmotion][
-  //     Math.floor(Math.random() * sentences[chosenEmotion].length)
-  //   ];
-  // var chosenSentiment;
-  // if (["sad", "angry", "fear", "disgust"].includes(chosenEmotion)) {
-  //   chosenSentiment = "negative";
-  // } else {
-  //   chosenSentiment = "positive";
-  // }
-  // console.log(chosenSentence, chosenSentiment, chosenEmotion);
-  // return [chosenSentence, chosenSentiment, chosenEmotion];
-  var emotions = ["angry", "disgust", "fear", "happy", "sad"];
-  // var chosenEmotion =
-  //   emotionChoice !== ""
-  //     ? emotionChoice
-  //     : emotions[Math.floor(Math.random() * emotions.length)];
-
   let lowestThreeEmotions = Object.entries(dummyData.listeningAccuracy)
-    .sort((a, b) => a[1] - b[1])
-    .slice(0, 3)
-    .map((entry) => entry[0]);
+  .sort((a, b) => a[1] - b[1])
+  .slice(0, 3)
+  .map(entry => entry[0]);
 
-  let chosenEmotion =
-    lowestThreeEmotions[Math.floor(Math.random() * lowestThreeEmotions.length)];
+  let chosenEmotion = lowestThreeEmotions[Math.floor(Math.random() * lowestThreeEmotions.length)];
 
+    
   var chosenSentence =
     sentences[chosenEmotion][
       Math.floor(Math.random() * sentences[chosenEmotion].length)
@@ -63,6 +41,15 @@ function getRandomSentence(emotionChoice = "") {
   return [chosenSentence, chosenSentiment, chosenEmotion];
 }
 
+async function isLoggedIn() {
+  try {
+    const user = await getCurrentUser();
+    return user;
+  } catch (e) {
+    return false;
+  }
+}
+
 function OnboardingEE() {
   const [x, setX] = useState("");
   const [CurrentQuestion, setCurrentQuestion] = useState(0);
@@ -75,6 +62,13 @@ function OnboardingEE() {
   const [disallowNext, setDisallowNext] = useState(true);
   const [isAdditionalPage, setIsAdditionalPage] = useState(false);
   const navigate = useNavigate();
+  let [loginState, setLoginState] = useState({ stateID: 1, user: null });
+
+  async function viewDashboard() {
+    if (await isLoggedIn()) {
+      navigate("/dashboard");
+    }
+  }
 
   useEffect(() => {
     console.log(results);
@@ -341,11 +335,11 @@ function OnboardingEE() {
   }
 
   let q = [
-    "Speak the sentence in a",
-    "Speak the sentence in a",
-    "Speak the sentence in a",
-    "Speak the sentence in a",
-    "Speak the sentence in a",
+    "Speak the sentence in a"
+    // "Speak the sentence in a",
+    // "Speak the sentence in a",
+    // "Speak the sentence in a",
+    // "Speak the sentence in a",
   ];
 
   return (
@@ -419,8 +413,13 @@ function OnboardingEE() {
               </div>
             </div>
             <button
-              className="btn btn-primary"
-              onClick={() => navigate("/dashboard")}
+              className={`${
+                loginState.stateID === 0
+                  ? "d-none"
+                  : "btn btn-large btn-dark mx-2"
+              }`}
+              onClick={viewDashboard}
+              id="btn btn-primary"
             >
               Let's Go
             </button>
