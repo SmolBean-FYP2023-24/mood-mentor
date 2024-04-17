@@ -12,16 +12,43 @@ import { fetchAuthSession } from "aws-amplify/auth";
 import { uploadData, getUrl } from "aws-amplify/storage";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { dummyData } from "./dummyData";
 
 
 window.Buffer = window.Buffer || Buffer;
 let started = false;
-function getRandomSentence(emotionChoice = "fear") {
+function getRandomSentence(emotionChoice = "") {
+  // var emotions = ["angry", "disgust", "fear", "happy", "sad"];
+  // var chosenEmotion =
+  //   emotionChoice !== ""
+  //     ? emotionChoice
+  //     : emotions[Math.floor(Math.random() * emotions.length)];
+  // var chosenSentence =
+  //   sentences[chosenEmotion][
+  //     Math.floor(Math.random() * sentences[chosenEmotion].length)
+  //   ];
+  // var chosenSentiment;
+  // if (["sad", "angry", "fear", "disgust"].includes(chosenEmotion)) {
+  //   chosenSentiment = "negative";
+  // } else {
+  //   chosenSentiment = "positive";
+  // }
+  // console.log(chosenSentence, chosenSentiment, chosenEmotion);
+  // return [chosenSentence, chosenSentiment, chosenEmotion];
   var emotions = ["angry", "disgust", "fear", "happy", "sad"];
-  var chosenEmotion =
-    emotionChoice !== ""
-      ? emotionChoice
-      : emotions[Math.floor(Math.random() * emotions.length)];
+  // var chosenEmotion =
+  //   emotionChoice !== ""
+  //     ? emotionChoice
+  //     : emotions[Math.floor(Math.random() * emotions.length)];
+
+  let lowestThreeEmotions = Object.entries(dummyData.listeningAccuracy)
+    .sort((a, b) => a[1] - b[1])
+    .slice(0, 3)
+    .map((entry) => entry[0]);
+
+  let chosenEmotion =
+    lowestThreeEmotions[Math.floor(Math.random() * lowestThreeEmotions.length)];
+
   var chosenSentence =
     sentences[chosenEmotion][
       Math.floor(Math.random() * sentences[chosenEmotion].length)

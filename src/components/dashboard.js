@@ -206,7 +206,7 @@ function BadgeHolder({ badges }) {
 
 
 // Dashboard function starts here
-function Dashboard({ user }) {
+function Dashboard( props ) {
   
   //User authentication
   const [userState, setUserState] = useState(0);
@@ -214,10 +214,10 @@ function Dashboard({ user }) {
     const getUserData = async () => {
       const user = await fetchAuthSession();
       setUserState(user.tokens.idToken.payload);
-      user.handleUser(user);
+      props.handleUser(user);
     };
     getUserData();
-  }, [user]);
+  }, [props]);
 
 
   // Access the variables from the dummy data
