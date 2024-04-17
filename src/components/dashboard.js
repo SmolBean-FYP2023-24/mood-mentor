@@ -1,4 +1,6 @@
-import React, { useEffect, useRef , useState} from "react";  
+import React, { useEffect, useRef , useState} from "react";
+import { fetchAuthSession } from "aws-amplify/auth";
+import { withAuthenticator } from "@aws-amplify/ui-react";
 import { Line } from 'react-chartjs-2';
 import { Bar } from 'react-chartjs-2';
 import "@aws-amplify/ui-react/styles.css";
@@ -205,6 +207,17 @@ function BadgeHolder({ badges }) {
 
 // Dashboard function starts here
 function Dashboard({ user }) {
+  
+  //User authentication
+  const [userState, setUserState] = useState(0);
+  useEffect(() => {
+    const getUserData = async () => {
+      const user = await fetchAuthSession();
+      setUserState(user.tokens.idToken.payload);
+      user.handleUser(user);
+    };
+    getUserData();
+  }, [user]);
 
 
   // Access the variables from the dummy data
@@ -517,4 +530,4 @@ function Dashboard({ user }) {
 }
 
 
-export default Dashboard;
+export default withAuthenticator(Dashboard);

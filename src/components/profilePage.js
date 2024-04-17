@@ -30,7 +30,7 @@ function ProfilePage(props) {
   const totalQuestionsPracticed = speakingQuestions.reduce((sum, value) => sum + value, 0) +
                                listeningQuestions.reduce((sum, value) => sum + value, 0);
   
-                               const [userState, setUserState] = useState(0);
+  const [userState, setUserState] = useState(0);
   useEffect(() => {
     const getUserData = async () => {
       const user = await fetchAuthSession();
