@@ -1,0 +1,99 @@
+/* .speakerPersonA {
+    height: calc(50vh - 56px);
+    background-color: #eeeeee;
+    position: relative;
+}
+
+.speaker-toolbar {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+#containerCEX {
+    background-color: antiquewhite;
+    position: absolute;
+    top: 56px;
+    bottom: 0px;
+    padding: 0 !important;
+} */
+
+.gradient-custom {
+    /* fallback for old browsers */
+    background: #fccb90;
+
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to bottom right, rgba(252, 203, 144, 1), rgba(213, 126, 235, 1));
+
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to bottom right, rgba(252, 203, 144, 1), rgba(213, 126, 235, 1))
+}
+
+.mask-custom {
+    background: rgba(24, 24, 16, .2);
+    border-radius: 2em;
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 255, 255, 0.05);
+    background-clip: padding-box;
+    box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
+}
+
+#transcriptArea {
+    background-color: #eee;
+    min-height: 38vh;
+    text-align: left;
+}
+
+#overlay {
+    position: fixed;
+    /* Sit on top of the page content */
+    display: none;
+    /* Hidden by default */
+    width: 100%;
+    /* Full width (cover the whole page) */
+    height: 100%;
+    /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    /* Black background with opacity */
+    z-index: 2;
+    /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer;
+    /* Add a pointer on hover */
+}
+
+#overlay_text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 50px;
+    color: white;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
+
+.userChat {
+    border-radius: 10px;
+    text-align: left;
+    color: black !important;
+}
+
+.userChatBg {
+    background-color: #eee;
+    border-radius: 25px;
+    padding: 1rem;
+    text-align: left;
+}
+
+#historyArea {
+    max-height: 31vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+}

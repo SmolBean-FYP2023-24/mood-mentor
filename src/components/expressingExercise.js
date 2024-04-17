@@ -18,7 +18,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 window.Buffer = window.Buffer || Buffer;
 let started = false;
-function getRandomSentence(emotionChoice = "fear") {
+function getRandomSentence(emotionChoice = "") {
   var emotions = ["angry", "disgust", "fear", "happy", "sad"];
   var chosenEmotion =
     emotionChoice !== ""
@@ -56,7 +56,7 @@ function ExpressingExercise() {
     console.log(results);
   }, [results]);
   const {
-    transcript,
+    // transcript,
     listening,
     resetTranscript,
     browserSupportsSpeechRecognition,
@@ -178,6 +178,7 @@ function ExpressingExercise() {
         },
       ],
     });
+    // eslint-disable-next-line
   }, [results, showGraph]);
 
   const startRecording = () => {
