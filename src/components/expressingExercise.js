@@ -13,6 +13,7 @@ import { uploadData, getUrl } from "aws-amplify/storage";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import toast, { Toaster } from "react-hot-toast";
+import { dummyData } from "./dummyData";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -20,10 +21,19 @@ window.Buffer = window.Buffer || Buffer;
 let started = false;
 function getRandomSentence(emotionChoice = "") {
   var emotions = ["angry", "disgust", "fear", "happy", "sad"];
-  var chosenEmotion =
-    emotionChoice !== ""
-      ? emotionChoice
-      : emotions[Math.floor(Math.random() * emotions.length)];
+  // var chosenEmotion =
+  //   emotionChoice !== ""
+  //     ? emotionChoice
+  //     : emotions[Math.floor(Math.random() * emotions.length)];
+
+  let lowestThreeEmotions = Object.entries(dummyData.listeningAccuracy)
+  .sort((a, b) => a[1] - b[1])
+  .slice(0, 3)
+  .map(entry => entry[0]);
+
+  let chosenEmotion = lowestThreeEmotions[Math.floor(Math.random() * lowestThreeEmotions.length)];
+
+    
   var chosenSentence =
     sentences[chosenEmotion][
       Math.floor(Math.random() * sentences[chosenEmotion].length)

@@ -115,21 +115,21 @@ function ListeningExercise() {
 
 
   // Access the variables from the dummy data
-  const {
-    id,
-    username,
-    password,
-    streak,
-    level,
-    badges,
-    speakingQuestion,
-    listeningQuestion,
-    conversationQuestion,
-    hasOnboarded,
-    speakingAccuracy,
-    listeningAccuracy,
-    conversationAccuracy,
-  } = dummyData;
+  // const {
+  //   id,
+  //   username,
+  //   password,
+  //   streak,
+  //   level,
+  //   badges,
+  //   speakingQuestion,
+  //   listeningQuestion,
+  //   conversationQuestion,
+  //   hasOnboarded,
+  //   speakingAccuracy,
+  //   listeningAccuracy,
+  //   conversationAccuracy,
+  // } = dummyData;
 
   const emotions = ["happy", "sad", "angry", "disgust", "neutral", "fear"];
   useEffect(() => {
