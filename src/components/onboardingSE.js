@@ -335,11 +335,11 @@ function OnboardingEE() {
   }
 
   let q = [
-    "Speak the sentence in a"
-    // "Speak the sentence in a",
-    // "Speak the sentence in a",
-    // "Speak the sentence in a",
-    // "Speak the sentence in a",
+    "Speak the sentence in a",
+    "Speak the sentence in a",
+    "Speak the sentence in a",
+    "Speak the sentence in a",
+    "Speak the sentence in a",
   ];
 
   return (

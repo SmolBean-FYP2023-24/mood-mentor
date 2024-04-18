@@ -66,7 +66,7 @@ export default function LoginForm(props) {
 
   async function viewProfile() {
     if (await isLoggedIn()) {
-      navigate("/profile");
+      navigate("/onboarding"); // changed from profile to onboarding
     }
   }
 
@@ -103,15 +103,16 @@ export default function LoginForm(props) {
                   <h6 className="py-3">
                     Hello, welcome back!{" "}
                     {loginState.stateID === 2
-                      ? "@" + loginState.user.username
+                      ? "@khushichawla"
                       : ""}
+                      {/* removed this part after @: + loginState.user.username */}
                   </h6>
                   <button
                     type="button"
                     className={`${
                       loginState.stateID === 0
                         ? "d-none"
-                        : "btn btn-large btn-dark mx-2"
+                        : "d-none btn btn-large btn-dark mx-2"
                     }`}
                     onClick={mysignOut}
                     id="signOutBtn"
@@ -128,7 +129,7 @@ export default function LoginForm(props) {
                     onClick={viewProfile}
                     id="profileBtn"
                   >
-                    Profile
+                    Let's start Onboarding!
                   </button>
                 </div>
               </div>

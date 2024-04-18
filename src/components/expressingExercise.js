@@ -370,7 +370,7 @@ function ExpressingExercise() {
     labels: ["Correct", "Partial", "Incorrect"],
     datasets: [
       {
-        data: [score, partial, 5-score+partial],
+        data: [score, partial, 5-(score+partial)],
         backgroundColor: ["green", "blue", "red"],
       },
     ],
@@ -444,10 +444,10 @@ function ExpressingExercise() {
             </div>
           </>
         ) : (
-          <div style={{ height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", paddingTop: "20px" }}>
-            <div className="score-section p-0 m-0">
-              <div className="text-center">
-                <div className="p-3 m-0 text-center" style={{ maxWidth: "100%", fontSize: "24px" }}>
+          <div style={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+            <div className=" p-0 m-0">
+              <div className="text-center" style={{justifyContent: "center" }}>
+                <div className="p-3 m-0 text-center" style={{ maxWidth: "100%", fontSize: "24px"}}>
                   <Doughnut data={graphData} options={{ cutoutPercentage: 80 }} />
                 </div>
                 <br />
