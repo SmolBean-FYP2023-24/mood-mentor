@@ -24,7 +24,6 @@ function Onboarding(props) {
     const getUserData = async () => {
       const user = await fetchAuthSession();
       setUserState(user.tokens.idToken.payload);
-	//   console.log(handleUser(user));
       props.handleUser(user);
     };
     getUserData();

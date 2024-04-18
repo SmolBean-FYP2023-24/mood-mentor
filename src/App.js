@@ -43,8 +43,8 @@ export default function App() {
           <Route path="/lex/" element={<ListeningExercise />} />
           <Route path="/eex/" element={<ExpressingExercise />} />
           <Route path="/cex/" element={<ConversationalExercise />} />
-          <Route path="/dashboard/" element={<Dashboard handleUser={handleUser}/>} />
-          <Route path="/onboarding/" element={<Onboarding handleUser={handleUser} />} />
+          <Route path="/dashboard/" element={<Dashboard />} />
+          <Route path="/onboarding/" element={<Onboarding handleUser={handleUser}/>} />
           <Route path="/cex/" element={<ConversationalExercise />} />
         </Routes>
       </div>
