@@ -453,7 +453,7 @@ function ExpressingExercise() {
                 <br />
                 <div className="p-2">
                   <h4 className="text-body-secondary text-center">
-                    You scored {score} correct and {partial} partially correct out of 5!
+                    You scored {score} correct and {partial} partially correct out of {q.length}!
                   </h4>
                 </div>
               </div>
