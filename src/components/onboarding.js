@@ -19,7 +19,7 @@ function Onboarding(props) {
   const [filledCircles, setFilledCircles] = useState(0);
   const [hoveredCircle, setHoveredCircle] = useState(null);
 
-  // user authentication
+  // User Authentication
   useEffect(() => {
     const getUserData = async () => {
       const user = await fetchAuthSession();

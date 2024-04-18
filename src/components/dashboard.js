@@ -206,7 +206,7 @@ function BadgeHolder({ badges }) {
 
 
 // Dashboard function starts here
-function Dashboard(props) {
+function Dashboard( props ) {
   
   //User authentication
   // const [userState, setUserState] = useState(0);
