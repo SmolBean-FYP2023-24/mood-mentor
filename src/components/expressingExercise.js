@@ -12,7 +12,10 @@ import { fetchAuthSession } from "aws-amplify/auth";
 import { uploadData, getUrl } from "aws-amplify/storage";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { Doughnut } from "react-chartjs-2";
 import toast, { Toaster } from "react-hot-toast";
+import { dummyData } from "./dummyData";
+import { useNavigate } from "react-router-dom";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -20,10 +23,26 @@ window.Buffer = window.Buffer || Buffer;
 let started = false;
 function getRandomSentence(emotionChoice = "") {
   var emotions = ["angry", "disgust", "fear", "happy", "sad"];
-  var chosenEmotion =
-    emotionChoice !== ""
-      ? emotionChoice
-      : emotions[Math.floor(Math.random() * emotions.length)];
+  // var chosenEmotion =
+  //   emotionChoice !== ""
+  //     ? emotionChoice
+  //     : emotions[Math.floor(Math.random() * emotions.length)];
+
+  let lowestThreeEmotions = Object.entries(dummyData.speakingAccuracy)
+  .sort((a, b) => a[1] - b[1])
+  .slice(0, 3)
+  .map(entry => entry[0]);
+
+  if (lowestThreeEmotions.includes("neutral")) {
+    const fourthLowestAccuracy = Object.entries(dummyData.speakingAccuracy)
+      .sort((a, b) => a[1] - b[1])
+      .slice(3, 4)
+      .map(entry => entry[0])[0];
+    lowestThreeEmotions[lowestThreeEmotions.indexOf("neutral")] = fourthLowestAccuracy;
+  }
+
+  let chosenEmotion = lowestThreeEmotions[Math.floor(Math.random() * lowestThreeEmotions.length)];
+    
   var chosenSentence =
     sentences[chosenEmotion][
       Math.floor(Math.random() * sentences[chosenEmotion].length)
@@ -47,10 +66,12 @@ function ExpressingExercise() {
   const [showScore, setShowScore] = useState(false);
   // eslint-disable-next-line
   const [score, setScore] = useState(0);
+  const [partial, setPartial] = useState(0);
   const [results, setResults] = useState([]);
   const [showGraph, setShowGraph] = useState(false);
   const [chartData, setChartData] = useState([]);
   const [disallowNext, setDisallowNext] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log(results);
@@ -112,6 +133,7 @@ function ExpressingExercise() {
           });
           setAttempt(1); // Next attempt will be attempt 1 for next question
           setDisallowNext(false);
+          setScore(score+1);
         } else {
           // if the sentiment is not what's asked
           toast("Try Again", {
@@ -138,6 +160,7 @@ function ExpressingExercise() {
               icon: "👏",
             });
             setDisallowNext(false);
+            setPartial(score+1);
           } else if (accuracy === null) {
             // The sentiment did not match the last time but did this time
             toast("You get partials", {
@@ -145,6 +168,7 @@ function ExpressingExercise() {
             });
             setAttempt(1);
             setCurrentQuestion(CurrentQuestion + 1);
+            setPartial(score+1);
             resetTranscript();
           } else {
             // Couldn't improve accuracy
@@ -342,6 +366,16 @@ function ExpressingExercise() {
       });
   }
 
+  const graphData = {
+    labels: ["Correct", "Partial", "Incorrect"],
+    datasets: [
+      {
+        data: [score, partial, 5-score+partial],
+        backgroundColor: ["green", "blue", "red"],
+      },
+    ],
+  };
+
   let q = [
     "Speak the sentence in a",
     "Speak the sentence in a",
@@ -356,7 +390,7 @@ function ExpressingExercise() {
       <div className="container h-100 p-0 p-sm-auto">
         {showScore ? (
           <span>Show Score</span>
-        ) : (
+        ) : CurrentQuestion < q.length ? (
           <>
             <div className="row w-100 pt-5 text-center m-auto">
               <div className="col-12 col-md-2">
@@ -409,6 +443,25 @@ function ExpressingExercise() {
               Comparing against accuracy {accuracy !== null ? accuracy : "null"}
             </div>
           </>
+        ) : (
+          <div style={{ height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", paddingTop: "20px" }}>
+            <div className="score-section p-0 m-0">
+              <div className="text-center">
+                <div className="p-3 m-0 text-center" style={{ maxWidth: "100%", fontSize: "24px" }}>
+                  <Doughnut data={graphData} options={{ cutoutPercentage: 80 }} />
+                </div>
+                <br />
+                <div className="p-2">
+                  <h4 className="text-body-secondary text-center">
+                    You scored {score} correct and {partial} partially correct out of {q.length}!
+                  </h4>
+                </div>
+              </div>
+            </div>
+            <button className="btn btn-primary mt-5" onClick={() => navigate("/dashboard")}>
+              Go to dashboard
+            </button>
+          </div>
         )}
       </div>
     </div>

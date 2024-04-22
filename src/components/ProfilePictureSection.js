@@ -31,10 +31,12 @@ function ProfilePictureSection() {
       <img
         style={{
           zIndex: "1",
-          width: "200px",
-          height: "200px",
+          width: "25vh",
+          height: "25vh",
           borderRadius: "50%",
           objectFit: "cover",
+          marginLeft: "4vh",
+          marginTop:"2vh",
         }}
         onClick={handleProfilePictureClick}
         src={selectedProfilePicture || "default-profile-picture-url"}
@@ -54,8 +56,8 @@ function ProfilePictureSection() {
                   src={pictureUrl}
                   alt=""
                   style={{
-                    width: "70px",
-                    height: "70px",
+                    width: "20px",
+                    height: "20px",
                     cursor: "pointer",
                     padding: "5px",
                     borderRadius: "50%",
@@ -69,7 +71,7 @@ function ProfilePictureSection() {
         )}
         onHide={() => setimagecrop(false)}
         style={{
-          width: "500px",
+          width: "200px",
           display: "flex",
           flexDirection: "column",
         }}

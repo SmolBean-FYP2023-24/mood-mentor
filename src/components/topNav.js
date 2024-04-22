@@ -23,17 +23,17 @@ function TopNav(props) {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto column-gap-5" id="menu">
-            <Nav.Link href={"/"}>Home</Nav.Link>
-            <Nav.Link href={"/lex"}>Listening Exercise</Nav.Link>
+            <Nav.Link href={"/dashboard"}>Dashboard</Nav.Link>
+            {/* <Nav.Link href={"/lex"}>Listening Exercise</Nav.Link>
             <Nav.Link href={"/eex"}>Expression Exercise</Nav.Link>
-            <Nav.Link href={"/cex"}>Conversational Exercise</Nav.Link>
+            <Nav.Link href={"/cex"}>Conversational Exercise</Nav.Link> */}
             <Nav.Link href={"/profile"}>Profile</Nav.Link>
-            <Nav.Link
+            {/* <Nav.Link
               className={`${props.showLogin !== 0 ? "d-none" : ""}`}
               href={"/auth"}
             >
               Login
-            </Nav.Link>
+            </Nav.Link> */}
             <NavDropdown
               title="Dropdown"
               id="basic-nav-dropdown"
