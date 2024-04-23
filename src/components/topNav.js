@@ -28,12 +28,12 @@ function TopNav(props) {
             <Nav.Link href={"/eex"}>Expression Exercise</Nav.Link>
             <Nav.Link href={"/cex"}>Conversational Exercise</Nav.Link> */}
             <Nav.Link href={"/profile"}>Profile</Nav.Link>
-            <Nav.Link
+            {/* <Nav.Link
               className={`${props.showLogin !== 0 ? "d-none" : ""}`}
               href={"/auth"}
             >
               Login
-            </Nav.Link>
+            </Nav.Link> */}
             <NavDropdown
               title="Dropdown"
               id="basic-nav-dropdown"

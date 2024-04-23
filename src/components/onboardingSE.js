@@ -61,6 +61,8 @@ function OnboardingEE() {
   const [chartData, setChartData] = useState([]);
   const [disallowNext, setDisallowNext] = useState(true);
   const [isAdditionalPage, setIsAdditionalPage] = useState(false);
+  const [filledCircles, setFilledCircles] = useState(0);
+  const [hoveredCircle, setHoveredCircle] = useState(null);
   const navigate = useNavigate();
   let [loginState, setLoginState] = useState({ stateID: 1, user: null });
 
@@ -333,6 +335,7 @@ function OnboardingEE() {
         console.log(result);
       });
   }
+  const pages =  [...Array(5)];
 
   let q = [
     "Speak the sentence in a",
@@ -341,6 +344,7 @@ function OnboardingEE() {
     "Speak the sentence in a",
     "Speak the sentence in a",
   ];
+  // setFilledCircles(4);
 
   return (
     <div className="w-100 p-0 m-0">
@@ -400,6 +404,14 @@ function OnboardingEE() {
           </>
         ): (
           <div>
+            <div className="progress-bar-container">
+              {pages.map((page, index) => (
+                <div
+                  key={index}
+                  className={`progress-bar-circle ${index < filledCircles ? 'filled' : 'filled'} ${index === hoveredCircle ? 'hovered' : ''}`}
+                ></div>
+              ))}
+            </div>
             <div>
               <div className="plane-container">
               <img
