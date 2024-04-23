@@ -260,8 +260,8 @@ function Dashboard( props ) {
         data: [10, 15, 8, 12, 20, 16, 25], // Number of questions practiced per week
         fill: true,
         // const baseColors = ["#50C4ED", "#387ADF", "#333A73"];
-        backgroundColor: 'rgba(56, 122, 223, 0.7)',
-        borderColor: 'rgba(56, 122, 223, 1)',
+        backgroundColor: '#A7D5F2',
+        borderColor: '#2D4B73',
         borderWidth: 2,
         lineTension: 0.3, // Adjust the line tension to control the curve smoothness
       },
@@ -440,7 +440,7 @@ function Dashboard( props ) {
                               data: Object.values(
                                 dummyData[selectedExercise.toLowerCase() + 'Question']
                               ),
-                              backgroundColor: 'rgba(54, 162, 235, 0.5)', // Color for the selected exercise Questions bars
+                              backgroundColor: '#416CA6', // Color for the selected exercise Questions bars
                             },
                           ],
                         }}

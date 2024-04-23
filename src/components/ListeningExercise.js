@@ -7,6 +7,7 @@ import { getUrl } from "aws-amplify/storage";
 import { pathLabels } from "./data/pathset";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
+import { useNavigate } from "react-router-dom";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 
@@ -108,6 +109,7 @@ function ListeningExercise() {
   const [showScore, setShowScore] = useState(false);
   const [score, setScore] = useState(0);
   const [playingState, setPlayingState] = useState(0);
+  const navigate = useNavigate();
   function setCorrectAnswer(x) {
     console.log("setting correct answer now:", x);
     setUpdateAnswers(x);
@@ -158,7 +160,7 @@ function ListeningExercise() {
               handleAnswerButtonClick(answerOption);
             }}
           >
-            <div className="optionButton bg-dark w-md-75 w-xs-100 mx-auto p-md-3 p-2 rounded justify-content-evenly">
+            <div className="optionButton btn-clr-lex w-md-75 w-xs-100 mx-auto p-md-3 p-2 rounded justify-content-evenly">
               <span className="badge text-bg-light text-dark flex-fill">
                 {String.fromCharCode(97 + index)}
               </span>
@@ -204,10 +206,10 @@ function ListeningExercise() {
       // Check if the 'optionButtonText' equals 'aaaa'
       if (optionButtonText === updateAnswers) {
         // If it does, remove the 'bg-dark' class and add the 'correct' class
-        optionButtons[i].classList.remove("bg-dark");
+        optionButtons[i].classList.remove("btn-clr-lex");
         optionButtons[i].classList.add("correct");
       } else {
-        optionButtons[i].classList.remove("bg-dark");
+        optionButtons[i].classList.remove("btn-clr-lex");
         optionButtons[i].classList.add("incorrect");
       }
     }
@@ -271,6 +273,9 @@ function ListeningExercise() {
                   You scored {score} out of {q.length}
                 </h5>
               </div>
+              <button className="btn btn-clr-lex-dash btn-primary mt-5" onClick={() => navigate("/dashboard")}>
+              Go to dashboard
+            </button>
             </div>
           </div>
         ) : (

@@ -37,3 +37,11 @@
     align-content: center;
     height: 100%;
 }
+
+.btn-clr {
+    background-color: #416CA6;
+}
+
+.bg-clr-profile {
+    background: linear-gradient(to top, #416CA6, #292d30);
+}

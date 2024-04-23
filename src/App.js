@@ -26,9 +26,9 @@ export default function App() {
   function handleUser(auth) {
     setUserAuth(auth);
   }
-  useEffect(() => {
-    console.log("UserAuth: ", userAuth);
-  });
+  // useEffect(() => {
+  //   console.log("UserAuth: ", userAuth);
+  // });
   return (
     <>
       <TopNav showLogin={userAuth} />

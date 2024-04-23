@@ -34,7 +34,7 @@ function ProfilePage(props) {
   useEffect(() => {
     const getUserData = async () => {
       const user = await fetchAuthSession();
-      // setUserState(user.tokens.idToken.payload);
+      // setUserState(user.tokens.accessTokens.payload); // check
       props.handleUser(user);
     };
     getUserData();
@@ -68,7 +68,7 @@ function ProfilePage(props) {
         <div className="row w-100 h-100 m-0">
           <div className="px-0 col-12 bg-light mt-3" id="profileDesc">
             <div
-              className="w-100 h-25 bg-dark"
+              className="w-100 h-25 bg-clr-profile"
               style={{ position: "absolute", zIndex: 0, top: "56px" }}
             ></div>
             <div id="picHolder">
@@ -133,7 +133,7 @@ function ProfilePage(props) {
                   <br></br>
                   <button
                     type="button"
-                    className="btn btn-dark btn-large w-md-25 mt-md-5"
+                    className="btn btn-clr btn-dark btn-large w-md-25 mt-md-5"
                     onClick={signOut}
                   >
                     <i className="fa fa-sign-out" aria-hidden="true"></i>

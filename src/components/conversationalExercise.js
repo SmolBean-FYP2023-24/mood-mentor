@@ -491,10 +491,12 @@ const ConversationalExercise = () => {
           </div>
           <div className="row d-flex justify-content-end align-items-endnp">
             <div className="p-0 my-1">
+              <a href="/dashboard">
               <button className="btn btn-danger w-100">
                 <i className="fa fa-ban" aria-hidden="true"></i>
                 &nbsp;Exit
               </button>
+              </a>
               <button
                 onClick={fetchQuestion}
                 className={`my-2 btn btn-large btn-secondary w-100 ${

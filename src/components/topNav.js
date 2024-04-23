@@ -6,7 +6,7 @@ import React, { useEffect } from "react";
 
 function TopNav(props) {
   useEffect(() => {
-    console.log("This is rerendered");
+    // console.log("This is rerendered");
   });
 
   return (

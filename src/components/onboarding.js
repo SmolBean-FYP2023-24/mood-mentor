@@ -30,6 +30,7 @@ function Onboarding(props) {
     getUserData();
   }, [props]);
 
+  // Delaying page transition while displaying video of emotions
   useEffect(() => {
     if (currentPage === 1) {
       const timer = setTimeout(() => {
@@ -53,6 +54,7 @@ function Onboarding(props) {
     navigate("/dashboard");
   };
 
+  // array of pages
   const pages = [
     {
 		title: "Welcome Page"
@@ -92,6 +94,7 @@ function Onboarding(props) {
   
   const navigate = useNavigate();
 
+  // Go to next page
   const goToNextPage = () => {
     if (currentPage < pages.length - 1) {
 		setFilledCircles(currentPage + 1);
@@ -109,6 +112,7 @@ function Onboarding(props) {
     }
   };
 
+  // Go to previous page
   const goToPreviousPage = () => {
 	setFilledCircles(currentPage - 1);
 	setShowOverlay(true);
@@ -122,6 +126,7 @@ function Onboarding(props) {
 	  }, 0);
   };
 
+  // Progress bar circle click to change pages
   const handleCircleClick = (index) => {
 	if (index < currentPage) {
 	  goToPreviousPage();
@@ -151,6 +156,7 @@ function Onboarding(props) {
     <>
 	{transitionCompleted && (
       <div className="content-container-onboarding">
+		  {/* Progress bar on left side */}
 		  <div className="progress-bar-container">
 		  {pages.map((page, index) => (
 			<div
@@ -160,15 +166,11 @@ function Onboarding(props) {
 				onMouseLeave={() => setHoveredCircle(null)}
 				onClick={() => handleCircleClick(index)}
 			>
-				{/* {index < filledCircles && (
-				<div className="circle-title">
-					{page.title}
-				</div>
-				)} */}
 			</div>
 			))}
 			</div>
 	  <div className="container-fluid-onboarding d-flex flex-column justify-content-center align-items-center">
+		  {/* Page 0 */}
         {currentPage === 0 && (
 			<div className="align-items-center justify-content-center">
 				<div class="squareOnb"></div>
@@ -188,6 +190,7 @@ function Onboarding(props) {
 				</div>
 			</div>
         )}
+		{/* Page 1 */}
 		{currentPage === 1 && (
 			<div>
 				{showImage ? (
@@ -221,6 +224,7 @@ function Onboarding(props) {
 				)}
 			</div>
 		)}
+		{/* Page 2 */}
 		{currentPage === 2 && (
 			<div className="row align-items-center justify-content-center">
 				<div className="card-onboarding">
@@ -247,6 +251,7 @@ function Onboarding(props) {
 			</div>
 		)}
 
+		{/* Page 3 */}
 		{currentPage == 3 && (
 			<div className="row align-items-center justify-content-center text-center">
 				<div className="card-onboarding">
@@ -274,10 +279,12 @@ function Onboarding(props) {
 			</div>
         )}
 
+		{/* Page 4 - incorporates direct code of listening and speaking exercises */}
 		{currentPage == 4 && (
 			<OnboardingLE />
 		)}
 
+		{/* Group image at bottom of page 0 */}
 		{currentPage === 0 && (
 			<div className="row align-items-center justify-content-center">
 				<img src="https://imgur.com/EA0uGXs.png" alt="intro" className="bottom-image-onboarding" />
@@ -288,6 +295,7 @@ function Onboarding(props) {
 	  </div>
 	  )}
 
+	{/* Transition between pages */}
 	  {showOverlay && (
       <div className="overlay show">
         <div className="bar"></div>

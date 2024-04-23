@@ -1,3 +1,3 @@
-export function getProfilePicture() {
-    return localStorage.getItem('profilePicture') || 'default-profile-picture-url';
-}
+// export function getProfilePicture() {
+//     return localStorage.getItem('profilePicture') || 'default-profile-picture-url';
+// }
