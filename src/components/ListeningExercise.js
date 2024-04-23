@@ -9,7 +9,6 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-
 function shuffle(array) {
   let currentIndex = array.length,
     randomIndex;
@@ -32,23 +31,30 @@ function shuffle(array) {
 
 function getRandomAudio(emotionChoice) {
   console.log(emotionChoice);
-  var emotions = ["angry", "disgust", "fear", "happy", "neutral", "sad"];
+  var emotions = ["happy", "sad", "angry", "disgust", "neutral", "fear"];
   // var chosenEmotion =
   //   emotionChoice !== ""
   //     ? emotionChoice
   //     : emotions[Math.floor(Math.random() * emotions.length)];
+  var entries = dummyData.ListeningAccuracy;
+  var convertedEntries = {};
+  for (var key in entries) {
+    var lowercaseKey = key.toLowerCase();
+    var value = entries[key];
+    convertedEntries[lowercaseKey] = value;
+  }
+  let lowestThreeEmotions = Object.entries(convertedEntries)
+    .sort((a, b) => a[1] - b[1])
+    .slice(0, 3)
+    .map((entry) => entry[0]);
 
-      let lowestThreeEmotions = Object.entries(dummyData.listeningAccuracy)
-      .sort((a, b) => a[1] - b[1])
-      .slice(0, 3)
-      .map(entry => entry[0]);
+  let chosenEmotion =
+    lowestThreeEmotions[Math.floor(Math.random() * lowestThreeEmotions.length)];
 
-    let chosenEmotion = lowestThreeEmotions[Math.floor(Math.random() * lowestThreeEmotions.length)];
-
-    console.log(chosenEmotion);
+  console.log(chosenEmotion);
   var chosenAudio =
-    pathLabels[chosenEmotion][
-      Math.floor(Math.random() * pathLabels[chosenEmotion].length)
+    pathLabels[chosenEmotion.toLowerCase()][
+      Math.floor(Math.random() * pathLabels[chosenEmotion.toLowerCase()].length)
     ];
   // chosenAudio =
   // "https://cdn.pixabay.com/download/audio/2021/09/08/audio_30fd70d538.mp3?filename=censor-beep-1sec-8112.mp3";
@@ -112,7 +118,6 @@ function ListeningExercise() {
     console.log("setting correct answer now:", x);
     setUpdateAnswers(x);
   }
-
 
   // Access the variables from the dummy data
   // const {

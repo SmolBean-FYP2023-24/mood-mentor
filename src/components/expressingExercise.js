@@ -22,27 +22,35 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 window.Buffer = window.Buffer || Buffer;
 let started = false;
 function getRandomSentence(emotionChoice = "") {
-  var emotions = ["angry", "disgust", "fear", "happy", "sad"];
+  var emotions = ["happy", "sad", "angry", "disgust", "fear"];
   // var chosenEmotion =
   //   emotionChoice !== ""
   //     ? emotionChoice
   //     : emotions[Math.floor(Math.random() * emotions.length)];
-
-  let lowestThreeEmotions = Object.entries(dummyData.speakingAccuracy)
-  .sort((a, b) => a[1] - b[1])
-  .slice(0, 3)
-  .map(entry => entry[0]);
+  var entries = dummyData.SpeakingAccuracy;
+  var convertedEntries = {};
+  for (var key in entries) {
+    var lowercaseKey = key.toLowerCase();
+    var value = entries[key];
+    convertedEntries[lowercaseKey] = value;
+  }
+  let lowestThreeEmotions = Object.entries(convertedEntries)
+    .sort((a, b) => a[1] - b[1])
+    .slice(0, 3)
+    .map((entry) => entry[0]);
 
   if (lowestThreeEmotions.includes("neutral")) {
-    const fourthLowestAccuracy = Object.entries(dummyData.speakingAccuracy)
+    const fourthLowestAccuracy = Object.entries(convertedEntries)
       .sort((a, b) => a[1] - b[1])
       .slice(3, 4)
-      .map(entry => entry[0])[0];
-    lowestThreeEmotions[lowestThreeEmotions.indexOf("neutral")] = fourthLowestAccuracy;
+      .map((entry) => entry[0])[0];
+    lowestThreeEmotions[lowestThreeEmotions.indexOf("neutral")] =
+      fourthLowestAccuracy;
   }
 
-  let chosenEmotion = lowestThreeEmotions[Math.floor(Math.random() * lowestThreeEmotions.length)];
-    
+  let chosenEmotion =
+    lowestThreeEmotions[Math.floor(Math.random() * lowestThreeEmotions.length)];
+
   var chosenSentence =
     sentences[chosenEmotion][
       Math.floor(Math.random() * sentences[chosenEmotion].length)
@@ -133,7 +141,7 @@ function ExpressingExercise() {
           });
           setAttempt(1); // Next attempt will be attempt 1 for next question
           setDisallowNext(false);
-          setScore(score+1);
+          setScore(score + 1);
         } else {
           // if the sentiment is not what's asked
           toast("Try Again", {
@@ -160,7 +168,7 @@ function ExpressingExercise() {
               icon: "👏",
             });
             setDisallowNext(false);
-            setPartial(score+1);
+            setPartial(score + 1);
           } else if (accuracy === null) {
             // The sentiment did not match the last time but did this time
             toast("You get partials", {
@@ -168,7 +176,7 @@ function ExpressingExercise() {
             });
             setAttempt(1);
             setCurrentQuestion(CurrentQuestion + 1);
-            setPartial(score+1);
+            setPartial(score + 1);
             resetTranscript();
           } else {
             // Couldn't improve accuracy
@@ -370,7 +378,7 @@ function ExpressingExercise() {
     labels: ["Correct", "Partial", "Incorrect"],
     datasets: [
       {
-        data: [score, partial, 5-score+partial],
+        data: [score, partial, 5 - score + partial],
         backgroundColor: ["green", "blue", "red"],
       },
     ],
@@ -444,21 +452,40 @@ function ExpressingExercise() {
             </div>
           </>
         ) : (
-          <div style={{ height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", paddingTop: "20px" }}>
+          <div
+            style={{
+              height: "100vh",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              paddingTop: "20px",
+            }}
+          >
             <div className="score-section p-0 m-0">
               <div className="text-center">
-                <div className="p-3 m-0 text-center" style={{ maxWidth: "100%", fontSize: "24px" }}>
-                  <Doughnut data={graphData} options={{ cutoutPercentage: 80 }} />
+                <div
+                  className="p-3 m-0 text-center"
+                  style={{ maxWidth: "100%", fontSize: "24px" }}
+                >
+                  <Doughnut
+                    data={graphData}
+                    options={{ cutoutPercentage: 80 }}
+                  />
                 </div>
                 <br />
                 <div className="p-2">
                   <h4 className="text-body-secondary text-center">
-                    You scored {score} correct and {partial} partially correct out of {q.length}!
+                    You scored {score} correct and {partial} partially correct
+                    out of {q.length}!
                   </h4>
                 </div>
               </div>
             </div>
-            <button className="btn btn-primary mt-5" onClick={() => navigate("/dashboard")}>
+            <button
+              className="btn btn-primary mt-5"
+              onClick={() => navigate("/dashboard")}
+            >
               Go to dashboard
             </button>
           </div>
