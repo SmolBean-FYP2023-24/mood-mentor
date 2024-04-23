@@ -18,6 +18,7 @@ function Onboarding(props) {
   const [showImage, setShowImage] = useState(true);
   const [filledCircles, setFilledCircles] = useState(0);
   const [hoveredCircle, setHoveredCircle] = useState(null);
+  const [tru, setTru] = useState(false);
 
   // User Authentication
   useEffect(() => {
@@ -39,13 +40,13 @@ function Onboarding(props) {
     }
   }, [currentPage]);
   
-  useEffect(() => {
-    const getUserData = async () => {
-      const user = await fetchAuthSession();
-      setUserState(user.tokens.idToken.payload);
-    };
-    getUserData();
-  }, []);
+//   useEffect(() => {
+//     const getUserData = async () => {
+//       const user = await fetchAuthSession();
+//       setUserState(user.tokens.idToken.payload);
+//     };
+//     getUserData();
+//   }, []);
 
 
   const handleFinish = () => {
@@ -67,15 +68,22 @@ function Onboarding(props) {
     },
     {
 		title: "About Mood-Mentor :",
-		description: "Mood-Mentor has 3 set of exercises for you to practice your emotions:<br><br>\
-			\n\
-			1. <b>Listening Exercises:</b> Here you can listen to a set of audios from different speakers and practice your emotion understanding skills.<br>\
-			2. <b>Speaking Exercises:</b> Here you can practice your delivery of certain emotions.<br>\
-			3. <b>Conversational Exercises:</b> You can hop on this exercise with your friends, family, or caretaker and start practicing your daily conversation. A feedback report will be sent to you on your registered email once you're done for you to have a look at your performance.<br><br>\
-			You can access all these exercises on your dashboard along with the stats of your current performance!! Each exercise is specially catered for you to work more on your weak points. Let's do a small walk through to undersand where you stand currently. All the best !",
+		description: "Hey there! Mood-Mentor has got some awesome exercises to help you with your emotions. Check them out:<br><br>\
+		\n\
+		1. <b>Listening Exercises:</b> Listen to audio clips and choose the option that feels most accurate to you. You'll get instant feedback on your choice. It's a cool way to practice understanding emotions!<br><br>\
+		2. <b>Speaking Exercises:</b> You'll be given a statement and a specific emotion to speak it with. Give it a shot, and if you want, try speaking it with even more specific emotions. It's a great way to work on expressing different feelings.<br><br>\
+		3. <b>Conversational Exercises:</b> Grab your friends, family, or caretaker and dive into these exercises together. Practice your everyday conversation skills with prompts and suggested questions. You'll get real-time feedback on each sentence you say.<br><br>\
+		So, get ready to level up your emotional skills with Mood-Mentor! Have fun!",
     },
     {
-		title: "Begin Practice Questions"
+		title: "Let's Begin Your Journey!",
+		description: "Hey, guess what? You can access all these cool exercises on your dashboard! And the best part? You'll also get detailed stats of how you're doing. It's like having your own personal progress report!<br><br>\
+		\
+		Oh, and there's more! On your profile page, you can even choose a super cool icon for your profile picture. Gotta make it represent you, right?<br><br>\
+		\
+		Each exercise is designed to help you improve on your weak points. So, let's take a quick walk-through to see where you're at right now. You've got this!<br><br>\
+		\
+		Good luck and have a blast!"
 	},
     {
 		title: "Begin Journey Page"
@@ -122,6 +130,23 @@ function Onboarding(props) {
 	}
   };
 
+  //replacement for  hasOnboarded, instead storing in local for now
+//   useEffect(() => {
+//     const visitedPage = localStorage.getItem("visitedPage");
+//     if (visitedPage) {
+//       // Page has been visited before
+//       // Update the variable `tru` to true
+//       // Replace `tru` with your actual variable name
+// 	  navigate("/dashboard");
+//       setTru(true);
+//     } else {
+//       // Page is being visited for the first time
+//       // Set the `visitedPage` item in localStorage to mark the page as visited
+//       localStorage.setItem("visitedPage", true);
+//     }
+//   }, []);
+
+
   return (
     <>
 	{transitionCompleted && (
@@ -133,13 +158,13 @@ function Onboarding(props) {
 				className={`progress-bar-circle ${index < filledCircles ? 'filled' : ''} ${index === hoveredCircle ? 'hovered' : ''}`}
 				onMouseEnter={() => setHoveredCircle(index)}
 				onMouseLeave={() => setHoveredCircle(null)}
-				// onClick={() => handleCircleClick(index)}
+				onClick={() => handleCircleClick(index)}
 			>
-				{index < filledCircles && (
+				{/* {index < filledCircles && (
 				<div className="circle-title">
 					{page.title}
 				</div>
-				)}
+				)} */}
 			</div>
 			))}
 			</div>
@@ -225,12 +250,13 @@ function Onboarding(props) {
 		{currentPage == 3 && (
 			<div className="row align-items-center justify-content-center text-center">
 				<div className="card-onboarding">
-					<div className="journey-text-onboarding">
-						Let's do some practice Exercises!
+					<div className="page-container-onboarding">
+						<h2 className="card-title-onboarding">{pages[currentPage].title}</h2>
+						<p className="card-body-text-onboarding" dangerouslySetInnerHTML={{ __html: pages[currentPage].description }}></p>
 					</div>
-				</div>
-				<div>
-					<img className="bing-bong" src="https://imgur.com/zfCpp54.png" width="auto" height="300"/>
+					<div className="image-container">
+						<img className="bing-bong" src="https://imgur.com/zfCpp54.png" width="150" height="auto" />
+					</div>
 				</div>
 			
 				<div className="row align-items-center justify-content-center">

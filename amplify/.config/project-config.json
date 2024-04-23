@@ -8,10 +8,10 @@
   "javascript": {
     "framework": "react",
     "config": {
-      "SourceDir": "src",
+      "SourceDir": "/Users/khushichawla/Desktop/College/College Yr 4/MoodMentor",
       "DistributionDir": "build",
-      "BuildCommand": "npm.cmd run-script build",
-      "StartCommand": "npm.cmd run-script start"
+      "BuildCommand": "npm run-script build",
+      "StartCommand": "npm run-script start"
     }
   }
 }
