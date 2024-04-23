@@ -26,9 +26,9 @@ export default function App() {
   function handleUser(auth) {
     setUserAuth(auth);
   }
-  useEffect(() => {
-    console.log("UserAuth: ", userAuth);
-  });
+  // useEffect(() => {
+  //   console.log("UserAuth: ", userAuth);
+  // });
   return (
     <>
       <TopNav showLogin={userAuth} />
@@ -44,7 +44,10 @@ export default function App() {
           <Route path="/eex/" element={<ExpressingExercise />} />
           <Route path="/cex/" element={<ConversationalExercise />} />
           <Route path="/dashboard/" element={<Dashboard />} />
-          <Route path="/onboarding/" element={<Onboarding handleUser={handleUser}/>} />
+          <Route
+            path="/onboarding/"
+            element={<Onboarding handleUser={handleUser} />}
+          />
           <Route path="/cex/" element={<ConversationalExercise />} />
         </Routes>
       </div>

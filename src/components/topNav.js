@@ -5,9 +5,9 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import React, { useEffect } from "react";
 
 function TopNav(props) {
-  useEffect(() => {
-    console.log("This is rerendered");
-  });
+  // useEffect(() => {
+  //   console.log("This is rerendered");
+  // });
 
   return (
     <Navbar
