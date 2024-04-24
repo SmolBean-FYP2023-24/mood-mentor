@@ -15,7 +15,7 @@
 .overlay .bar {
   position: absolute;
   width: 100%;
-  background: rgb(174, 174, 174);
+  background: #416CA6;
   top: 0;
   bottom: 0;
   transform: scaleX(0) translate3d(0, 0, 0);

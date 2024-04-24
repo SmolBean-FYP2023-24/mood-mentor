@@ -338,11 +338,11 @@ function OnboardingEE() {
   const pages =  [...Array(5)];
 
   let q = [
-    "Speak the sentence in a",
-    "Speak the sentence in a",
-    "Speak the sentence in a",
-    "Speak the sentence in a",
-    "Speak the sentence in a",
+    // "Speak the sentence in a",
+    // "Speak the sentence in a",
+    // "Speak the sentence in a",
+    // "Speak the sentence in a",
+    // "Speak the sentence in a",
   ];
   // setFilledCircles(4);
 
@@ -428,7 +428,7 @@ function OnboardingEE() {
               className={`${
                 loginState.stateID === 0
                   ? "d-none"
-                  : "btn btn-large btn-dark mx-2"
+                  : "btn-onboarding"
               }`}
               onClick={viewDashboard}
               id="btn btn-primary"

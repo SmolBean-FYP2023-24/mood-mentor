@@ -15,7 +15,8 @@
 
 .progress-bar-fill {
   height: 15px;
-  background: #252d4a;
+  /* background: #252d4a;*/
+  background: #3C5973;
   border-radius: 10px;
   transition: width 250ms ease-in-out;
   position: relative;
@@ -97,3 +98,10 @@
 /* button svg {
   margin-right: 5px;
 } */
+
+.btn-clr-lex {
+  background-color: #3C5973;
+}
+.btn-clr-lex-dash {
+  background-color: #416CA6;
+}

@@ -166,7 +166,7 @@ export default function LoginForm(props) {
                 </button>
                 <label className="text-center w-100">
                   Don't have an account yet?{" "}
-                  <Link to={"#"}>Create account</Link>
+                  <Link to={"/profile"}>Create account</Link>
                 </label>
               </div>
             </div>

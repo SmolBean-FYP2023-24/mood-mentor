@@ -206,7 +206,8 @@ function ExpressingExercise() {
         {
           label: "Predictions",
           data: y_scores,
-          backgroundColor: [`rgb(134, 77, 240)`],
+          // backgroundColor: [`rgb(134, 77, 240)`],
+          backgroundColor: "#3C5973",
         },
       ],
     });

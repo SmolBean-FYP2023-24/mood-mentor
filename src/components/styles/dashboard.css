@@ -60,8 +60,8 @@
     height: 200px;
     border-radius: 50%;
     object-fit: cover;
-    /* margin-left: 10px;
-    margin-bottom: 5px;
+    margin-left: 20px;
+    /*margin-bottom: 5px;
     margin-bottom: 10px; */
   }
 
@@ -99,23 +99,6 @@
   }
   
   .profile-button {
-    /* width: 150px; Adjust the width as desired */
-    /* padding: 10px; */
-    /* background-color: #4285f4;
-    color: #fff;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    margin-right: 20px;
-    margin-left: 20px;
-    text-align: center;
-    flex:3;
-    height: 80px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-    font-size: 22px;
-    font-family: cursive;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease; */
-    
     font-size: 3vh;
     font-family: cursive;
     width: 30vh;
@@ -128,14 +111,15 @@
     text-align:center;
     border: none;
     background-size: 300% 100%;
-
+    margin-left: 20pxa;
     border-radius: 50px;
     moz-transition: all .4s ease-in-out;
     -o-transition: all .4s ease-in-out;
     -webkit-transition: all .4s ease-in-out;
     transition: all .4s ease-in-out;
-    background-image: linear-gradient(to right, #667eea, #764ba2, #6B8DD6, #8E37D7);
-    box-shadow: 0 4px 15px 0 rgba(116, 79, 168, 0.75);
+    background-image: linear-gradient(to right, #355D8C, #5384B2, #3B5F87, #7BA4C9);
+    /* background-image: linear-gradient(to right, #667eea, #764ba2, #6B8DD6, #8E37D7); */
+    box-shadow: 0 4px 15px 0 rgba(79, 119, 168, 0.75);
     
   }
 
@@ -159,9 +143,9 @@
 } */
 
 
-
+/* We should not have this here */
   .profile-button:hover {
-    background-color: #3367d6;
+    background-color: #464646;
   }
   
   .profile-button:last-child {
@@ -211,23 +195,6 @@
     margin-top: 2vh;
   }
 
- 
-  
-
- 
-  
-
-  
-
-
-
-
-
-
-
-
-
-
 /* the below css is for the charts */
 /* .col-md-9.offset-md-3 {
     
@@ -251,13 +218,17 @@
   .sidebar-dashboard{
     height: 105%;
     width: 100%;
-    background-color: skyblue;
+    background-color: #A7D5F2;
+    /* background-color:#99B4BF; */
     justify-content: center;
     align-items: center;
   }
  
   .container-fluid-dashboard{
     font-family: cursive;
+    background-color: #A7D5F2;
+    height: 105%;
+    /* background: #99B4BF; */
     /* width: 100%; */
   }
 
@@ -276,14 +247,15 @@
   background-color: white;
   margin-right: 2vh;
   margin-left: 2vh;
-  border-radius: 3vh;
+  border-radius: 1vh;
   border-color: black;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Add box-shadow effect */
   /* width: 10%; */
 }
 
 .badgeDash {
-  height: 90%;
+  height: 200px;
+  margin-top: 10%;
   /* width: 100%; */
   display: flex;
   align-items: center;
@@ -291,8 +263,8 @@
 }
 
 .badgeDash img {
-  width: 60%; /* Increase the width as needed */
-  height: 60%; /* Increase the height as needed */
+  width: auto; /* Increase the width as needed */
+  height: 100%; /* Increase the height as needed */
 }
 
 
@@ -323,7 +295,7 @@
   flex: 5;
   background-color: white;
   border-color: black;
-  border-radius: 3vh;
+  border-radius: 1vh;
   justify-content: center;
   /* margin-left: 2vh; */
   border-color: black;
@@ -361,14 +333,15 @@
 }
 
 .text-user-dashboard{
-  font-family: cursive;
+  font-family: 'Crimson Pro', 'Literata', sans-serif;
   margin-top: 2vh;
   margin-left: 5vh;
   margin-bottom: 3%;
   justify-content: center;
-  font-size: 4vh;
+  font-size: 3vh;
   width: 100%;
   font-weight: 640;
+  color: #2D4B73;
 }
 
 
@@ -395,12 +368,12 @@
   margin-right: 2vh;
   margin-left: 2vh;
   /* height: 10%; */
-  height:43vh;
+  height:44.5vh;
   justify-content: center;
   align-items: center;
   width: 100%;
   /* width: 45vh; */
-  border-radius: 3vh;
+  border-radius: 1vh;
   border-color: black;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Add box-shadow effect */
   
@@ -413,7 +386,7 @@
 .acc-stats-dashboard{
   flex:2;
   background-color: white;
-  border-radius: 5%;
+  border-radius: 1vh;
   margin-right: 2vh;
   font-family: cursive;
   border-color: black;
@@ -442,12 +415,13 @@
 
 .combined-div-acc{
   margin-left: 2vh;
+  justify-content: center;
 }
 
 .subheading {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 5vh;
-  color: #3367d6;
+  color: #2D4B73;
   margin-left: 4%; 
   font-weight: 640;
 }
@@ -473,7 +447,7 @@
 .emotion-label {
   font-weight: bold;
   text-transform: uppercase;
-  font-size: larger;
+  font-size: 3vh;
   flex-grow: 1;
   /* align-items: center; */
 }
