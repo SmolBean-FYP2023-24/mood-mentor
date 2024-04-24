@@ -1,44 +1,199 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Dialog } from "primereact/dialog";
 import { fetchAuthSession, signOut } from "aws-amplify/auth";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import "./styles/profilePage.css";
-import {dummyData} from './dummyData.js'
+import { dummyData } from "./dummyData.js";
+import { generateClient } from "aws-amplify/api";
+import * as subscriptions from "../graphql/subscriptions";
+import * as mutations from "../graphql/mutations.js";
+import * as queries from "../graphql/queries.js";
 
 function ProfilePage(props) {
-  const {
-    id,
-    username,
-    password,
-    streak,
-    level,
-    badges,
-    speakingQuestion,
-    listeningQuestion,
-    conversationQuestion,
-    hasOnboarded,
-    speakingAccuracy,
-    listeningAccuracy,
-    conversationAccuracy,
-  } = dummyData;
-  
-  // Reading data from json
-  const trueBadges = Object.keys(badges).filter(key => badges[key] === true);
-  const speakingQuestions = Object.values(speakingQuestion);
-  const listeningQuestions = Object.values(listeningQuestion);
-  const totalQuestionsPracticed = speakingQuestions.reduce((sum, value) => sum + value, 0) +
-                               listeningQuestions.reduce((sum, value) => sum + value, 0);
-  
+  // ---------------------------------------------------------------
+
+  // Handle User Login State
+
+  // ---------------------------------------------------------------
   const [userState, setUserState] = useState(0);
   useEffect(() => {
     const getUserData = async () => {
       const user = await fetchAuthSession();
-      // setUserState(user.tokens.accessTokens.payload); // check
+      setUserState(user.tokens.idToken.payload);
       props.handleUser(user);
     };
     getUserData();
   }, [props]);
+
+  // ---------------------------------------------------------------
+
+  // Add Real Time Database Abilities
+
+  // ---------------------------------------------------------------
+
+  const [userDetails, setUserDetails] = useState(dummyData);
+  const [trueBadges, setTrueBadges] = useState([]);
+  const [totalQuestionsPracticed, setTotalQuestionsPracticed] = useState([]);
+  const effectRan = useRef(false);
+  const client = generateClient();
+
+  useEffect(() => {
+    const updateIt = async () => {
+      if (effectRan.current === true) {
+        return;
+      }
+      effectRan.current = true;
+      let user1 = await client.graphql({
+        query: queries.getUserDataModel,
+        variables: {
+          username: "owner", // replace with User Sub using fetchAuthSession | userState
+        },
+      });
+      setUserDetails(user1["data"]["getUserDataModel"]);
+      const cleanedUser = removeTypenameKey(user1);
+      const badgeList = Object.entries(cleanedUser.data.getUserDataModel.badges)
+        .filter(([_, value]) => value === true)
+        .map(([key]) => key);
+      setTrueBadges(badgeList);
+
+      const speakingQuestions = Object.values(
+        cleanedUser.data.getUserDataModel.SpeakingQuestions
+      );
+      const listeningQuestions = Object.values(
+        cleanedUser.data.getUserDataModel.ListeningQuestions
+      );
+      const totalQuestionsPracticed =
+        sum(speakingQuestions) + sum(listeningQuestions);
+      setTotalQuestionsPracticed(totalQuestionsPracticed);
+      console.log("done");
+    };
+    updateIt();
+  });
+
+  let onCreateSub;
+  function setUpSubscriptions() {
+    const variables = {
+      filter: {
+        username: { eq: "owner" }, // replace with User Sub using fetchAuthSession | userState
+      },
+    };
+    onCreateSub = client
+      .graphql({ query: subscriptions.onUpdateUserDataModel }, variables)
+      .subscribe({
+        next: ({ data }) => {
+          console.log(data);
+          setUserDetails(data["onUpdateUserDataModel"]);
+        },
+        error: (error) => console.warn(error),
+      });
+  }
+
+  useEffect(() => {
+    setUpSubscriptions();
+    return () => {
+      onCreateSub.unsubscribe();
+    };
+  }, []);
+
+  async function updateUser(updateField, updateValue, nestedField = null) {
+    try {
+      const oldUser = await client.graphql({
+        query: queries.getUserDataModel,
+        variables: {
+          username: "owner", // replace with User Sub using fetchAuthSession | userState
+        },
+      });
+
+      const { getUserDataModel } = oldUser.data;
+      const updatedUserData = {
+        ...getUserDataModel,
+      };
+      if (nestedField) {
+        updatedUserData[nestedField][updateField] = updateValue;
+      } else {
+        updatedUserData[updateField] = updateValue;
+      }
+
+      const keysToRemove = [
+        "__typename",
+        "_deleted",
+        "_lastChangedAt",
+        "createdAt",
+        "updatedAt",
+      ];
+      const cleanedUserData = removeKeys(updatedUserData, keysToRemove);
+
+      const cleanedUser = {
+        data: {
+          getUserDataModel: removeTypenameKey(cleanedUserData),
+        },
+      };
+
+      console.log(cleanedUser.data.getUserDataModel);
+
+      const badgeList = Object.entries(cleanedUser.data.getUserDataModel.badges)
+        .filter(([_, value]) => value === true)
+        .map(([key]) => key);
+      setTrueBadges(badgeList);
+
+      const speakingQuestions = Object.values(
+        cleanedUser.data.getUserDataModel.SpeakingQuestions
+      );
+      const listeningQuestions = Object.values(
+        cleanedUser.data.getUserDataModel.ListeningQuestions
+      );
+      const totalQuestionsPracticed =
+        sum(speakingQuestions) + sum(listeningQuestions);
+      setTotalQuestionsPracticed(totalQuestionsPracticed);
+
+      const updatedUser = await client.graphql({
+        query: mutations.updateUserDataModel,
+        variables: { input: cleanedUser.data.getUserDataModel },
+      });
+
+      console.log("User updated successfully:", updatedUser);
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+  }
+
+  function removeTypenameKey(obj) {
+    if (typeof obj !== "object" || obj === null) {
+      return obj;
+    }
+
+    if (Array.isArray(obj)) {
+      return obj.map(removeTypenameKey);
+    }
+
+    const newObj = {};
+    for (const key in obj) {
+      if (key !== "__typename") {
+        newObj[key] = removeTypenameKey(obj[key]);
+      }
+    }
+    return newObj;
+  }
+
+  function removeKeys(obj, keys) {
+    const newObj = { ...obj };
+    keys.forEach((key) => {
+      delete newObj[key];
+    });
+    return newObj;
+  }
+
+  function sum(arr) {
+    return arr.reduce((sum, value) => sum + value, 0);
+  }
+
+  // ---------------------------------------------------------------
+
+  // Profile Picture Utility
+
+  // ---------------------------------------------------------------
+
   const [imagecrop, setimagecrop] = useState(false);
   const [selectedProfilePicture, setSelectedProfilePicture] = useState(
     localStorage.getItem("profilePicture") || "default-profile-picture-url"
@@ -62,6 +217,7 @@ function ProfilePage(props) {
     localStorage.setItem("profilePicture", pictureUrl);
     setimagecrop(false);
   };
+
   return (
     <>
       <div className="container-fluid p-0 w-100 h-100 text-center">
@@ -84,6 +240,18 @@ function ProfilePage(props) {
                 src={selectedProfilePicture || "default-profile-picture-url"}
                 alt=""
               />
+              <button
+                className="mt-5 btn btn-large btn-primary"
+                onClick={() => updateUser("Fear", 55, "SpeakingQuestions")}
+                style={{
+                  position: "fixed",
+                  bottom: "0",
+                  right: "0",
+                  zIndex: 9999,
+                }}
+              >
+                Update User
+              </button>
               <div
                 className="card w-75 h-75"
                 style={{ position: "relative", top: "-5rem", zIndex: "0" }}
@@ -103,14 +271,18 @@ function ProfilePage(props) {
                           Streak
                         </span>
                         <br></br>
-                        <span className="display-5">{streak}</span>
+                        <span className="display-5">
+                          {userDetails["streak"]}
+                        </span>
                       </div>
                       <div className="col-6">
                         <span className="fw-italic d-none d-md-block">
                           Questions Practiced
                         </span>
                         <br></br>
-                        <span className="display-5">{totalQuestionsPracticed}</span>
+                        <span className="display-5">
+                          {totalQuestionsPracticed}
+                        </span>
                       </div>
                       <div className="col-6">
                         <br></br>
@@ -118,7 +290,9 @@ function ProfilePage(props) {
                           Level
                         </span>
                         <br></br>
-                        <span className="display-5">{level}</span>
+                        <span className="display-5">
+                          {userDetails["level"]}
+                        </span>
                       </div>
                       <div className="col-6">
                         <br></br>
@@ -175,8 +349,8 @@ function ProfilePage(props) {
                   width: "500px",
                   display: "flex",
                   flexDirection: "column",
-                }} // Adjust the width as needed
-                className="custom-dialog" // Add a custom class for styling
+                }}
+                className="custom-dialog"
               >
                 <div className="confirmation-content flex flex-column align-items-center flex-grow-1"></div>
               </Dialog>
