@@ -17,11 +17,17 @@ function ProfilePage(props) {
 
   // ---------------------------------------------------------------
   const [userState, setUserState] = useState(0);
+  // consider changing location
   useEffect(() => {
-    const getUserData = async () => {
-      const user = await fetchAuthSession();
-      setUserState(user.tokens.idToken.payload);
-      props.handleUser(user);
+      const getUserData = async () => {
+        try {
+          const user = await fetchAuthSession();
+          setUserState(user.tokens.idToken.payload);
+          props.handleUser(user);
+        } catch(error) {
+          setUserState(0);
+          console.error("User signing out", error);
+      }
     };
     getUserData();
   }, [props]);

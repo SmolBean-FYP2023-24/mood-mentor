@@ -7,120 +7,20 @@ import "@aws-amplify/ui-react/styles.css";
 import chroma from "chroma-js";
 
 // import './profilePage.css';
-import { getProfilePicture } from "./profilePageUtils.js";
 import Chart from "chart.js/auto";
 import "./styles/dashboard.css";
 import "./styles/profilePage.css";
-import MenuChart from "./MenuChart.js";
 import ProfilePictureSection from "./ProfilePictureSection.js";
 import { dummyData } from "./dummyData.js";
 import img from "./images/colored/badge200qs.png";
 import img1 from "./images/greyed-out/badge200qs.png";
+import { getUserDataModel } from "../graphql/queries.js";
 
 import { evaluate, parse, sqrt, exp, pi } from "mathjs";
+import * as subscriptions from "../graphql/subscriptions";
+import { generateClient } from "aws-amplify/api";
 
-function MyChart() {
-  const chartRef = useRef(null);
 
-  useEffect(() => {
-    const canvas = chartRef.current;
-    const ctx = canvas.getContext("2d");
-    let myBarChart = null;
-
-    // Base colors
-    const baseColors = ["#50C4ED", "#387ADF", "#333A73"];
-
-    // Generate shades of colors based on the base colors
-    const colorScale = chroma.scale(baseColors).mode("lch").colors(10);
-    function createGlossyColor(color) {
-      const glossyColor = chroma(color).alpha(0.6).css();
-      return glossyColor;
-    }
-
-    const userIndex = 4; // Index of the user's percentile (e.g., 4 for 60%)
-    const backgroundColor = colorScale.map((color, index) =>
-      index === userIndex ? createGlossyColor(color) : baseColors[1]
-    );
-
-    const data = {
-      labels: ["20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"],
-      datasets: [
-        {
-          data: [4, 8, 15, 30, 40, 30, 15, 8, 4],
-          backgroundColor,
-        },
-      ],
-    };
-
-    const options = {
-      tooltips: {
-        enabled: false,
-      },
-      legend: {
-        display: false,
-      },
-      annotation: {
-        annotations: [
-          {
-            type: "line",
-            mode: "vertical",
-            scaleID: "x-axis-0",
-            value: "70%",
-            borderColor: "black",
-            label: {
-              content: "Your Score",
-              enabled: true,
-              position: "center",
-            },
-          },
-        ],
-      },
-      scales: {
-        yAxes: [
-          {
-            display: false,
-          },
-        ],
-        xAxes: [
-          {
-            barPercentage: 1.0,
-            categoryPercentage: 1.0,
-            gridLines: {
-              display: false,
-            },
-            scaleLabel: {
-              display: true,
-              labelString: "Average Score",
-            },
-          },
-        ],
-      },
-    };
-
-    if (canvas && canvas.id === "myChart") {
-      // Destroy existing chart instance if it exists
-      if (Chart.instances[0]) {
-        Chart.instances[0].destroy();
-      }
-
-      // Create new chart instance
-      myBarChart = new Chart(ctx, {
-        type: "bar",
-        data,
-        options,
-      });
-    }
-
-    return () => {
-      // Cleanup code to destroy the chart instance
-      if (myBarChart) {
-        myBarChart.destroy();
-      }
-    };
-  }, []);
-
-  return <canvas ref={chartRef} id="myChart" />;
-}
 
 function BadgeHolder({ badges }) {
   const [currentBadgeIndex, setCurrentBadgeIndex] = useState(0);
@@ -226,8 +126,8 @@ function Dashboard(props) {
         data: [10, 15, 8, 12, 20, 16, 25], // Number of questions practiced per week
         fill: true,
         // const baseColors = ["#50C4ED", "#387ADF", "#333A73"];
-        backgroundColor: '#A7D5F2',
-        borderColor: '#2D4B73',
+        backgroundColor: "#A7D5F2",
+        borderColor: "#2D4B73",
         borderWidth: 2,
         lineTension: 0.3, // Adjust the line tension to control the curve smoothness
       },

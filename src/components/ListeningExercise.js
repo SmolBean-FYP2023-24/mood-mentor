@@ -3,6 +3,7 @@ import "./styles/ListeningExercise.css";
 import "./styles/audio_player.css";
 import { dummyData } from "./dummyData";
 // eslint-disable-next-line
+import { withAuthenticator } from "@aws-amplify/ui-react";
 import { getUrl } from "aws-amplify/storage";
 import { pathLabels } from "./data/pathset";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
@@ -339,4 +340,4 @@ function ListeningExercise() {
   );
 }
 
-export default ListeningExercise;
+export default withAuthenticator(ListeningExercise);

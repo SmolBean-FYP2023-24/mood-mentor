@@ -9,6 +9,7 @@ import RecordRTC from "recordrtc";
 import { Buffer } from "buffer";
 import * as EBML from "ts-ebml";
 import { fetchAuthSession } from "aws-amplify/auth";
+import { withAuthenticator } from "@aws-amplify/ui-react";
 import { uploadData, getUrl } from "aws-amplify/storage";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Bar } from "react-chartjs-2";
@@ -16,17 +17,143 @@ import { Doughnut } from "react-chartjs-2";
 import toast, { Toaster } from "react-hot-toast";
 import { dummyData } from "./dummyData";
 import { useNavigate } from "react-router-dom";
+import { generateClient } from "aws-amplify/api";
+import * as mutations from "../graphql/mutations.js";
+import {getUserDataModel} from "../graphql/queries.js";
 
+  // ---------------------------------------------------------------
+
+  // Add Database Abilities
+
+  // ---------------------------------------------------------------
+
+const client = generateClient();
+
+
+function removeTypenameKey(obj) {
+  if (typeof obj !== "object" || obj === null) {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(removeTypenameKey);
+  }
+
+  const newObj = {};
+  for (const key in obj) {
+    if (key !== "__typename") {
+      newObj[key] = removeTypenameKey(obj[key]);
+    }
+  }
+  return newObj;
+  }
+
+function removeKeys(obj, keys) {
+  const newObj = { ...obj };
+  keys.forEach((key) => {
+    delete newObj[key];
+  });
+  return newObj;
+}
+
+
+const updateData = async (user) => {
+  try{
+   const keysToRemove = [
+    "__typename",
+    "_deleted",
+    "_lastChangedAt",
+    "createdAt",
+    "updatedAt"
+  ];
+
+  const cleanedUserData = removeKeys(user, keysToRemove);
+
+  const cleanedUser = {
+    data: {
+      getUserDataModel: removeTypenameKey(cleanedUserData),
+    },
+  };
+   console.log("cleaned user",cleanedUser);
+  await client.graphql({
+    query: mutations.updateUserDataModel,
+    variables: {
+      input: cleanedUser.data.getUserDataModel,
+     }
+  });
+  } // end of try 
+  catch(error)
+  {
+    console.error ("Error updating user",error);
+    return null;
+  }
+}
+
+
+const getUserData = async() => {
+  try {
+    const userauth=await fetchAuthSession();
+    const response = await client.graphql({
+      query: getUserDataModel,
+      variables: {
+        username: userauth.tokens.accessToken.payload.sub, // extracting based on username
+      },
+    });
+        
+    const userDataModel = response.data.getUserDataModel;
+    console.log('User data model:', userDataModel);
+    // console.lo
+    // ("this is the console log wiht user_Data",response.data)
+
+    return userDataModel;
+    // Process the user data model as needed
+  } catch (error) {
+    console.error('Error retrieving user data model:', error);
+    return null;
+  }
+}
+
+let datamodel;
+let emotionAccuracy;
+let emotionCorrect;
+let updateComplete;
+let updatePartial;
+
+// xxxxx
+// async () => {
+//   try {
+//     if (updateComplete) {
+//       if (emotionCorrect == 'surprise') {
+  
+//       } else {
+  
+//       }
+//     } else if (updatePartial) {
+//       if (emotionCorrect == 'surprise') {
+    
+//       } else {
+        
+//       }
+//     }
+//   } catch(error) {
+//     console.log("Error: ", error);
+//   }
+// }
+
+
+// ------------------------------------
+// Code for Expressing Exercise
+// ------------------------------------
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 window.Buffer = window.Buffer || Buffer;
 let started = false;
+
+// ------------------------------------
+// Recommendation System
+// ------------------------------------
 function getRandomSentence(emotionChoice = "") {
   var emotions = ["happy", "sad", "angry", "disgust", "fear"];
-  // var chosenEmotion =
-  //   emotionChoice !== ""
-  //     ? emotionChoice
-  //     : emotions[Math.floor(Math.random() * emotions.length)];
   var entries = dummyData.SpeakingAccuracy;
   var convertedEntries = {};
   for (var key in entries) {
@@ -50,6 +177,7 @@ function getRandomSentence(emotionChoice = "") {
 
   let chosenEmotion =
     lowestThreeEmotions[Math.floor(Math.random() * lowestThreeEmotions.length)];
+  console.log("Chosen emotion", chosenEmotion);
 
   var chosenSentence =
     sentences[chosenEmotion][
@@ -142,6 +270,7 @@ function ExpressingExercise() {
           setAttempt(1); // Next attempt will be attempt 1 for next question
           setDisallowNext(false);
           setScore(score + 1);
+          updateComplete = true;
         } else {
           // if the sentiment is not what's asked
           toast("Try Again", {
@@ -169,6 +298,7 @@ function ExpressingExercise() {
             });
             setDisallowNext(false);
             setPartial(score + 1);
+            updatePartial = true;
           } else if (accuracy === null) {
             // The sentiment did not match the last time but did this time
             toast("You get partials", {
@@ -177,6 +307,7 @@ function ExpressingExercise() {
             setAttempt(1);
             setCurrentQuestion(CurrentQuestion + 1);
             setPartial(score + 1);
+            updatePartial = true;
             resetTranscript();
           } else {
             // Couldn't improve accuracy
@@ -211,6 +342,10 @@ function ExpressingExercise() {
         },
       ],
     });
+    emotionAccuracy = y_scores[0];
+    emotionCorrect = x_labels[0];
+    console.log("Emotion accuracy at x label [0]", emotionCorrect);
+    console.log("Emotion accuracy at y score[0]", emotionAccuracy);
     // eslint-disable-next-line
   }, [results, showGraph]);
 
@@ -496,4 +631,4 @@ function ExpressingExercise() {
   );
 }
 
-export default ExpressingExercise;
+export default withAuthenticator(ExpressingExercise);

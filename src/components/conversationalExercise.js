@@ -9,6 +9,7 @@ import { Buffer } from "buffer";
 import * as EBML from "ts-ebml";
 // eslint-disable-next-line
 import { fetchAuthSession } from "aws-amplify/auth";
+import { withAuthenticator } from "@aws-amplify/ui-react";
 // eslint-disable-next-line
 import { uploadData, getUrl } from "aws-amplify/storage";
 import * as $ from "jquery";
@@ -538,4 +539,4 @@ const ConversationalExercise = () => {
   );
 };
 
-export default ConversationalExercise;
+export default withAuthenticator(ConversationalExercise);
