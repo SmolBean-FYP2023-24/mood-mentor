@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { fetchAuthSession } from "aws-amplify/auth";
+import { getCurrentUser, fetchAuthSession } from "aws-amplify/auth";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import { Line } from "react-chartjs-2";
 import { Bar } from "react-chartjs-2";
@@ -7,120 +7,122 @@ import "@aws-amplify/ui-react/styles.css";
 import chroma from "chroma-js";
 
 // import './profilePage.css';
-import { getProfilePicture } from "./profilePageUtils.js";
 import Chart from "chart.js/auto";
 import "./styles/dashboard.css";
 import "./styles/profilePage.css";
-import MenuChart from "./MenuChart.js";
 import ProfilePictureSection from "./ProfilePictureSection.js";
 import { dummyData } from "./dummyData.js";
+import { getUserDataModel } from "../graphql/queries.js";
 import img from "./images/colored/badge200qs.png";
+import * as subscriptions from "../graphql/subscriptions";
 import img1 from "./images/greyed-out/badge200qs.png";
+import { generateClient } from "aws-amplify/api";
+import BadgeList from "./badges.js";
+import { forEach } from "mathjs";
+import { initUserData } from "./data/initUserData.js";
 
-import { evaluate, parse, sqrt, exp, pi } from "mathjs";
+// function MyChart() {
+//   const chartRef = useRef(null);
 
-function MyChart() {
-  const chartRef = useRef(null);
+//   useEffect(() => {
+//     const canvas = chartRef.current;
+//     const ctx = canvas.getContext("2d");
+//     let myBarChart = null;
 
-  useEffect(() => {
-    const canvas = chartRef.current;
-    const ctx = canvas.getContext("2d");
-    let myBarChart = null;
+//     // Base colors
+//     const baseColors = ["#50C4ED", "#387ADF", "#333A73"];
 
-    // Base colors
-    const baseColors = ["#50C4ED", "#387ADF", "#333A73"];
+//     // Generate shades of colors based on the base colors
+//     const colorScale = chroma.scale(baseColors).mode("lch").colors(10);
+//     function createGlossyColor(color) {
+//       const glossyColor = chroma(color).alpha(0.6).css();
+//       return glossyColor;
+//     }
 
-    // Generate shades of colors based on the base colors
-    const colorScale = chroma.scale(baseColors).mode("lch").colors(10);
-    function createGlossyColor(color) {
-      const glossyColor = chroma(color).alpha(0.6).css();
-      return glossyColor;
-    }
+//     const userIndex = 4; // Index of the user's percentile (e.g., 4 for 60%)
+//     const backgroundColor = colorScale.map((color, index) =>
+//       index === userIndex ? createGlossyColor(color) : baseColors[1]
+//     );
 
-    const userIndex = 4; // Index of the user's percentile (e.g., 4 for 60%)
-    const backgroundColor = colorScale.map((color, index) =>
-      index === userIndex ? createGlossyColor(color) : baseColors[1]
-    );
+//     const data = {
+//       labels: ["20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"],
+//       datasets: [
+//         {
+//           data: [4, 8, 15, 30, 40, 30, 15, 8, 4],
+//           backgroundColor,
+//         },
+//       ],
+//     };
 
-    const data = {
-      labels: ["20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"],
-      datasets: [
-        {
-          data: [4, 8, 15, 30, 40, 30, 15, 8, 4],
-          backgroundColor,
-        },
-      ],
-    };
+//     const options = {
+//       tooltips: {
+//         enabled: false,
+//       },
+//       legend: {
+//         display: false,
+//       },
+//       annotation: {
+//         annotations: [
+//           {
+//             type: "line",
+//             mode: "vertical",
+//             scaleID: "x-axis-0",
+//             value: "70%",
+//             borderColor: "black",
+//             label: {
+//               content: "Your Score",
+//               enabled: true,
+//               position: "center",
+//             },
+//           },
+//         ],
+//       },
+//       scales: {
+//         yAxes: [
+//           {
+//             display: false,
+//           },
+//         ],
+//         xAxes: [
+//           {
+//             barPercentage: 1.0,
+//             categoryPercentage: 1.0,
+//             gridLines: {
+//               display: false,
+//             },
+//             scaleLabel: {
+//               display: true,
+//               labelString: "Average Score",
+//             },
+//           },
+//         ],
+//       },
+//     };
 
-    const options = {
-      tooltips: {
-        enabled: false,
-      },
-      legend: {
-        display: false,
-      },
-      annotation: {
-        annotations: [
-          {
-            type: "line",
-            mode: "vertical",
-            scaleID: "x-axis-0",
-            value: "70%",
-            borderColor: "black",
-            label: {
-              content: "Your Score",
-              enabled: true,
-              position: "center",
-            },
-          },
-        ],
-      },
-      scales: {
-        yAxes: [
-          {
-            display: false,
-          },
-        ],
-        xAxes: [
-          {
-            barPercentage: 1.0,
-            categoryPercentage: 1.0,
-            gridLines: {
-              display: false,
-            },
-            scaleLabel: {
-              display: true,
-              labelString: "Average Score",
-            },
-          },
-        ],
-      },
-    };
+//     if (canvas && canvas.id === "myChart") {
+//       // Destroy existing chart instance if it exists
+//       if (Chart.instances[0]) {
+//         Chart.instances[0].destroy();
+//       }
 
-    if (canvas && canvas.id === "myChart") {
-      // Destroy existing chart instance if it exists
-      if (Chart.instances[0]) {
-        Chart.instances[0].destroy();
-      }
+//       // Create new chart instance
+//       myBarChart = new Chart(ctx, {
+//         type: "bar",
+//         data,
+//         options,
+//       });
+//     }
 
-      // Create new chart instance
-      myBarChart = new Chart(ctx, {
-        type: "bar",
-        data,
-        options,
-      });
-    }
+//     return () => {
+//       // Cleanup code to destroy the chart instance
+//       if (myBarChart) {
+//         myBarChart.destroy();
+//       }
+//     };
+//   }, []);
 
-    return () => {
-      // Cleanup code to destroy the chart instance
-      if (myBarChart) {
-        myBarChart.destroy();
-      }
-    };
-  }, []);
-
-  return <canvas ref={chartRef} id="myChart" />;
-}
+//   return <canvas ref={chartRef} id="myChart" />;
+// }
 
 function BadgeHolder({ badges }) {
   const [currentBadgeIndex, setCurrentBadgeIndex] = useState(0);
@@ -152,10 +154,8 @@ function BadgeHolder({ badges }) {
   const currentBadge = Object.entries(badges)[currentBadgeIndex];
   const [badgeName, badgeValue] = currentBadge;
 
-  console.log(badgeName);
-  console.log(badgeValue);
-
-  // C:\Users\Lenovo S540 FSIN\Desktop\1_FYP_2023\FYP_Final\mood-mentor\src\components\images\greyed-out\badge200qs.png
+  // console.log(badgeName);
+  // console.log(badgeValue);
 
   return (
     <div className="badgeDash">
@@ -172,46 +172,101 @@ function BadgeHolder({ badges }) {
       </span>
     </div>
   );
-
-  // C:\Users\Lenovo S540 FSIN\Desktop\1_FYP_2023\FYP_Final\mood-mentor\src\components\images\greyed-out\badge50qs.png
 }
 
 // Dashboard function starts here
-function Dashboard(props) {
-  //User authentication
-  // const [userState, setUserState] = useState(0);
-  // useEffect(() => {
-  //   const getUserData = async () => {
-  //     const user = await fetchAuthSession();
-  //     setUserState(user.tokens.idToken.payload);
-  //     props.handleUser(user);
-  //   };
-  //   getUserData();
-  // }, [props]);
+function Dashboard() {
+  const client = generateClient();
+  let globalUser = "";
 
-  // Access the variables from the dummy data
-  const {
-    id,
-    username,
-    password,
-    streak,
-    level,
-    badges,
-    speakingQuestion,
-    listeningQuestion,
-    conversationQuestion,
-    hasOnboarded,
-    speakingAccuracy,
-    listeningAccuracy,
-    conversationAccuracy,
-  } = dummyData;
+  const [userState, setUserState] = useState({});
+  const [userDets, setUserDets] = useState(initUserData);
+  const effectRan = useRef(false);
+
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const user = await fetchAuthSession();
+        setUserState(user.tokens.idToken.payload);
+        globalUser = userState.sub;
+      } catch {
+        setUserState(0);
+      }
+    };
+    getUserData();
+  });
+
+  let onCreateSub;
+  function setUpSubscriptions() {
+    const variables = {
+      filter: {
+        username: { eq: globalUser }, // replace with User Sub using fetchAuthSession | userState
+      },
+    };
+    onCreateSub = client
+      .graphql({ query: subscriptions.onUpdateUserDataModel }, variables)
+      .subscribe({
+        next: ({ data }) => {
+          console.log(data);
+          setUserDets(data["onUpdateUserDataModel"]);
+        },
+        error: (error) => console.log(error),
+      });
+  }
+
+  useEffect(() => {
+    setUpSubscriptions();
+    return () => {
+      onCreateSub.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    const check = async () => {
+      if (effectRan.current === true) {
+        return;
+      } else {
+        effectRan.current = true;
+        let user1 = await client.graphql({
+          query: getUserDataModel,
+          variables: {
+            username: (await getCurrentUser()).userId, // replace with User Sub using fetchAuthSession | userState
+          },
+        });
+        setUserDets(user1["data"]["getUserDataModel"]);
+        generateBadges(user1["data"]["getUserDataModel"]["badges"]);
+        console.log(user1["data"]["getUserDataModel"]);
+      }
+    };
+    check();
+  });
+
+  // const {
+  //   id,
+  //   username,
+  //   password,
+  //   streak,
+  //   level,
+  //   badges,
+  //   speakingQuestion,
+  //   listeningQuestion,
+  //   conversationQuestion,
+  //   hasOnboarded,
+  //   speakingAccuracy,
+  //   listeningAccuracy,
+  //   conversationAccuracy,
+  // } = dummyData;
 
   // Function to create  menus
   const [selectedExercise, setSelectedExercise] = useState("Speaking");
 
-  const handleExerciseChange = (event) => {
-    setSelectedExercise(event.target.value);
-  };
+  // useEffect(() => {
+  //   handleExerciseChange();
+  // }, [selectedExercise]);
+
+  // const handleExerciseChange = (event) => {
+  //   setSelectedExercise(event.target.value);
+  // };
 
   // CHART2: LINE CHART FOR QUESTIONS PER WEEK
 
@@ -226,8 +281,8 @@ function Dashboard(props) {
         data: [10, 15, 8, 12, 20, 16, 25], // Number of questions practiced per week
         fill: true,
         // const baseColors = ["#50C4ED", "#387ADF", "#333A73"];
-        backgroundColor: '#A7D5F2',
-        borderColor: '#2D4B73',
+        backgroundColor: "#A7D5F2",
+        borderColor: "#2D4B73",
         borderWidth: 2,
         lineTension: 0.3, // Adjust the line tension to control the curve smoothness
       },
@@ -337,6 +392,27 @@ function Dashboard(props) {
     }
   };
 
+  function generateBadges(badges) {
+    console.log(badges);
+    let keysWithTrueValue = Object.keys(badges).filter(
+      (key) => badges[key] === true
+    );
+    console.log(keysWithTrueValue);
+    // document.getElementById("getBadges").classList.add("d-none");
+    var store = document.getElementById("newBadges");
+    Array.from(keysWithTrueValue).forEach((e) => {
+      var ele = createBadge(e);
+      store.appendChild(ele);
+    });
+  }
+
+  function createBadge(key) {
+    var badge = document.createElement("div");
+    badge.classList.add("badge", "m-2", "bg-primary");
+    badge.innerText = key; // Also, innerText is a property, not a method.
+    return badge;
+  }
+
   return (
     <div className="container-fluid-dashboard">
       {/* <h1 className="top-text">Dashboard</h1> */}
@@ -346,11 +422,10 @@ function Dashboard(props) {
           <div className="sidebar-dashboard">
             <ProfilePictureSection />
             <div className="text-user-dashboard">
-              Name: {username}
+              Name: {userState.given_name}
               <br />
-              Streak: {streak}
+              Streak: {userDets["streak"]}
               <br />
-              User ID: {id}
             </div>
 
             <a href="/lex">
@@ -383,7 +458,23 @@ function Dashboard(props) {
               >
                 Badges
               </div>
-              <BadgeHolder badges={badges} />
+              {/* <BadgeHolder badges={userDets["badges"]} /> */}
+              <div>
+                {/* <BadgeList
+                  badges={Object.keys(
+                    Object.keys(userDets["badges"]).filter(
+                      (key) => userDets["badges"][key] === true
+                    )
+                  )}
+                /> */}
+                {/* <button
+                  id="getBadges"
+                  onClick={() => generateBadges(userDets["badges"])}
+                >
+                  Get Badges
+                </button> */}
+                <div id="newBadges"></div>
+              </div>
             </div>
 
             <div className="qs-emotion-dashboard">
@@ -395,7 +486,7 @@ function Dashboard(props) {
                   <select
                     id="exercise-select"
                     value={selectedExercise}
-                    onChange={handleExerciseChange}
+                    // onChange={handleExerciseChange}
                   >
                     <option value="Speaking">Speaking</option>
                     <option value="Listening">Listening</option>
@@ -416,20 +507,22 @@ function Dashboard(props) {
               >
                 <Bar
                   data={{
-                    labels: [
-                      "Happy",
-                      "Sad",
-                      "Angry",
-                      "Disgust",
-                      "Surprise",
-                      "Fear",
-                    ],
+                    labels: Array.from(
+                      Object.keys(userDets[selectedExercise + "Questions"])
+                    )
+                      .slice(0, 6)
+                      .map((label) =>
+                        label === "Surprise" ? "Neutral" : label
+                      ),
+
                     datasets: [
                       {
                         label: `${selectedExercise} Questions`,
-                        data: Object.values(
-                          dummyData[selectedExercise + "Questions"]
-                        ),
+                        data: Array.from(
+                          Object.values(
+                            userDets[selectedExercise + "Questions"]
+                          )
+                        ).slice(0, 6),
                         backgroundColor: "rgba(54, 162, 235, 0.5)", // Color for the selected exercise Questions bars
                       },
                     ],

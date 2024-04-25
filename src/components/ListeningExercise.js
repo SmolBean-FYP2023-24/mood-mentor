@@ -78,6 +78,7 @@ export const playAudio = async (
       key: chosenAudio,
       options: { accessLevel: "guest" },
     }).then((res) => {
+      x.setAttribute("crossorigin", "anonymous");
       x.setAttribute("src", res.url.href);
       x.play();
       x.addEventListener("ended", function () {
@@ -278,9 +279,12 @@ function ListeningExercise() {
                   You scored {score} out of {q.length}
                 </h5>
               </div>
-              <button className="btn btn-clr-lex-dash btn-primary mt-5" onClick={() => navigate("/dashboard")}>
-              Go to dashboard
-            </button>
+              <button
+                className="btn btn-clr-lex-dash btn-primary mt-5"
+                onClick={() => navigate("/dashboard")}
+              >
+                Go to dashboard
+              </button>
             </div>
           </div>
         ) : (

@@ -3,8 +3,13 @@ import "./styles/loginForm.css";
 import { getCurrentUser, signIn, signOut } from "aws-amplify/auth";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { decideCreateNewEntry } from "./create_init_user";
+import { generateClient } from "aws-amplify/api";
+import { createUserDataModel } from "../graphql/mutations";
+import { initUserData } from "./data/initUserData";
 
 export default function LoginForm(props) {
+  const client = generateClient();
   let navigate = useNavigate();
 
   let [loginState, setLoginState] = useState({ stateID: 0, user: null });
@@ -35,6 +40,17 @@ export default function LoginForm(props) {
     if (user) {
       console.log(user);
       setLoginState({ stateID: 2, user: user }); // Successful Login
+      if ((await decideCreateNewEntry()) === true) {
+        let updatedInitUserData = initUserData;
+        updatedInitUserData.username = user.userId;
+        const output = await client.graphql({
+          query: createUserDataModel,
+          variables: {
+            input: updatedInitUserData,
+          },
+        });
+        console.log(output);
+      }
       props.handleUser(1);
     } else {
       setLoginState({ stateID: 3, user: null }); // Error Logging In
@@ -64,11 +80,11 @@ export default function LoginForm(props) {
     }
   }
 
-  async function viewProfile() {
-    if (await isLoggedIn()) {
-      navigate("/profile");
-    }
-  }
+  // async function viewProfile() {
+  //   if (await isLoggedIn()) {
+  //     navigate("/profile", );
+  //   }
+  // }
 
   async function mysignOut() {
     try {
@@ -118,7 +134,7 @@ export default function LoginForm(props) {
                   >
                     Sign Out
                   </button>
-                  <button
+                  {/* <button
                     type="button"
                     className={`${
                       loginState.stateID === 0
@@ -127,9 +143,9 @@ export default function LoginForm(props) {
                     }`}
                     onClick={viewProfile}
                     id="profileBtn"
-                  >
-                    Profile
-                  </button>
+                  > */}
+                  {/* Profile
+                  </button> */}
                 </div>
               </div>
               <div className={`${loginState.stateID === 2 ? "d-none" : ""}`}>
