@@ -18,8 +18,110 @@ import {
   updateUserDataModel,
   deleteUserDataModel,
 } from "../graphql/mutations";
+import {
+  getUserDataModel
+} from "../graphql/queries";
+
 
 const client = generateClient();
+
+
+function removeTypenameKey(obj) {
+  if (typeof obj !== "object" || obj === null) {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(removeTypenameKey);
+  }
+
+  const newObj = {};
+  for (const key in obj) {
+    if (key !== "__typename") {
+      newObj[key] = removeTypenameKey(obj[key]);
+    }
+  }
+  return newObj;
+  }
+
+
+
+
+
+
+function removeKeys(obj, keys) {
+  const newObj = { ...obj };
+  keys.forEach((key) => {
+    delete newObj[key];
+  });
+  return newObj;
+}
+
+
+const updateData = async (user) => {
+  try{
+    // console.log("this is in user",user.data)
+    const {getUserDataModel}=user;
+    console.log("this is get",getUserDataModel)
+
+   const keysToRemove = [
+    "__typename",
+    "_deleted",
+    "_lastChangedAt",
+    "createdAt",
+    "updatedAt",
+    "_version", // check if need to remove
+  ];
+
+  const cleanedUserData = removeKeys(getUserDataModel, keysToRemove);
+  // console.log(user)
+
+  const cleanedUser = {
+    data: {
+      getUserDataModel: removeTypenameKey(cleanedUserData),
+    },
+  };
+   console.log("cleaned user",cleanedUser);
+  await client.graphql({
+    query: updateUserDataModel,
+    variables: {
+      input: cleanedUser.data.user,
+      // condition: "e361b884-d24d-450e-9ac8-b757abcbf333"   
+     }
+  });
+  } // end of try 
+  catch(error)
+  {
+    console.error ("Error updating user",error);
+    return null;
+  }
+}
+
+
+const getUserData = async() => {
+  try {
+    const userauth=await fetchAuthSession();
+    const response = await client.graphql({
+      query: getUserDataModel,
+      variables: {
+        username: userauth.tokens.accessToken.payload.sub, // extracting based on username
+      },
+    });
+    const userDataModel = response.data.getUserDataModel;
+    console.log('User data model:', userDataModel);
+    return userDataModel;
+    // Process the user data model as needed
+  } catch (error) {
+    console.error('Error retrieving user data model:', error);
+    return null;
+  }
+}
+
+let datamodel;
+
+
+
+
 
 window.Buffer = window.Buffer || Buffer;
 
@@ -106,8 +208,40 @@ const ConversationalExercise = () => {
       if (!response.ok) {
         throw new Error("HTTP error " + response.status);
       }
+      datamodel=await getUserData();
       const result = await response.json();
       final_result = [result[0], result[5]["choices"][0]["message"]["content"]];
+      console.log("11111111111111111111111111")
+      if(userTurn %2 === 1)
+      {
+        console.log("2222222222222222222222")
+        const emotion_case=(final_result[0].label.charAt(0).toUpperCase() + final_result[0].label.slice(1));
+        console.log(datamodel)
+        datamodel.CoversationQuestions[emotion_case]+=1.0;
+
+        for (let emotion in datamodel.ConversationAccuracy) {
+          if(final_result[0].label==='neutral')
+          {
+            // case consistency for key-map
+            const emotion_cpy=(final_result[0].label.charAt(0).toUpperCase() + final_result[0].label.slice(1));
+            datamodel.ConversationAccuracy['Surprise'] = (datamodel.ConversationAccuracy['Surprise']*(datamodel.CoversationQuestions['Surprise']-1) + final_result[0].score*100 )/datamodel.CoversationQuestions['Surprise'];
+            console.log(datamodel.ConversationAccuracy['Surprise'])
+            console.log(emotion_cpy)
+            break;
+            //schema error: when it's neutral update the surprise variable since we don't have netural in the DB
+          }
+          if (emotion.toLowerCase() === final_result[0].label) {
+            const emotion_cpy=(emotion.charAt(0).toUpperCase() + emotion.slice(1));
+            datamodel.ConversationAccuracy[emotion_cpy] = (datamodel.ConversationAccuracy[emotion_cpy]*(datamodel.CoversationQuestions[emotion_cpy]-1) + final_result[0].score*100 )/datamodel.CoversationQuestions[emotion_cpy];
+            console.log(datamodel.ConversationAccuracy[emotion_cpy])
+            console.log(emotion_cpy)
+
+            break;
+          }
+        }
+      }
+     
+
       console.log(result);
     } catch (err) {
       console.log(err);
@@ -491,10 +625,27 @@ const ConversationalExercise = () => {
           </div>
           <div className="row d-flex justify-content-end align-items-endnp">
             <div className="p-0 my-1">
-              <button className="btn btn-danger w-100">
+            {/* <a href="/dashboard"> */}
+              <button 
+                onClick={async () => {
+                  try {
+                    await updateData(datamodel);
+                    // const data_user=await getUserData();
+                    console.log("Data updated successfully!");
+                  } catch (error) {
+                    console.error("Error updating data:", error);
+                  }
+                }}
+              className="btn btn-danger w-100">
                 <i className="fa fa-ban" aria-hidden="true"></i>
-                &nbsp;Exit
+
+                
+                    {/* <button className="profile-button">Conversational Exercise</button> */}
+                    &nbsp;Exit
+                 
+                
               </button>
+              {/* </a> */}
               <button
                 onClick={fetchQuestion}
                 className={`my-2 btn btn-large btn-secondary w-100 ${

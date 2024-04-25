@@ -5,9 +5,64 @@ import { dummyData } from "./dummyData";
 // eslint-disable-next-line
 import { getUrl } from "aws-amplify/storage";
 import { pathLabels } from "./data/pathset";
+import { fetchAuthSession } from "aws-amplify/auth";
+
+import {
+  createUserDataModel,
+  updateUserDataModel,
+  deleteUserDataModel,
+} from "../graphql/mutations";
+import {
+  getUserDataModel
+} from "../graphql/queries";
+import { generateClient } from "aws-amplify/api";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 ChartJS.register(ArcElement, Tooltip, Legend);
+
+const client = generateClient();
+
+// const updateData = async () => {
+//   await client.graphql({
+//     query: updateUserDataModel,
+//     variables: {
+//       input: userData,
+//     },
+//   });
+// }
+
+
+
+const getUserData = async(username) => {
+  try {
+    const response = await client.graphql({
+      query: getUserDataModel,
+      variables: {
+        username: username,
+      },
+    });
+    const userDataModel = response.data.getUserDataModel;
+    console.log('User data model:', userDataModel);
+    return userDataModel;
+    // Process the user data model as needed
+  } catch (error) {
+    console.error('Error retrieving user data model:', error);
+    return null;
+  }
+}
+
+
+
+//  // creating an async block
+//  let userData;
+//  (async()=>{
+
+//   const auth=await fetchAuthSession();
+//   userData=await getUserData(auth.tokens.accessToken.payload.sub);
+//   // userData has the complete row of the particular user's data
+//   // used to uupdate the individula fields
+
+// })();
 
 
 function shuffle(array) {
@@ -44,9 +99,21 @@ function getRandomAudio(emotionChoice) {
       .map(entry => entry[0]);
 
     let chosenEmotion = lowestThreeEmotions[Math.floor(Math.random() * lowestThreeEmotions.length)];
-
+      // Update the ListeningQuestions property (case-insensitive)
+      // for (let emotion in userData.ListeningQuestions) {
+      //   if(chosenEmotion==='neutral')
+      //   {
+      //     userData.ListeningQuestions['Surprise'] += 1.0;
+      //     break;
+      //     //schema error: when it's neutral update the surprise variable since we don't have netural in the DB
+      //   }
+      //   if (emotion.toLowerCase() === chosenEmotion) {
+      //     userData.ListeningQuestions[emotion] += 1.0;
+      //     break;
+      //   }
+      // }
     console.log(chosenEmotion);
-  var chosenAudio =
+    var chosenAudio =
     pathLabels[chosenEmotion][
       Math.floor(Math.random() * pathLabels[chosenEmotion].length)
     ];
@@ -112,6 +179,8 @@ function ListeningExercise() {
     console.log("setting correct answer now:", x);
     setUpdateAnswers(x);
   }
+
+  
 
 
   // Access the variables from the dummy data
@@ -193,7 +262,7 @@ function ListeningExercise() {
   ];
 
   async function handleAnswerButtonClick(answerOption) {
-    console.log(answerOption);
+    console.log("hiiiiiii",answerOption);
     var optionButtons = document.getElementsByClassName("optionButton");
     for (var i = 0; i < optionButtons.length; i++) {
       // Get the 'optionButtonText' of the current optionButton
@@ -223,7 +292,7 @@ function ListeningExercise() {
     } else {
       setShowScore(true);
     }
-    setUpdateAnswers(false);
+    setUpdateAnswers(false);  
   }
 
   var initData = {

@@ -3,6 +3,49 @@ import "./styles/loginForm.css";
 import { getCurrentUser, signIn, signOut } from "aws-amplify/auth";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import {userData} from './userdb_connection.js';
+import { fetchAuthSession } from "aws-amplify/auth";
+import {
+  createUserDataModel,
+  updateUserDataModel,
+  deleteUserDataModel,
+} from "../graphql/mutations";
+import {
+  getUserDataModel
+} from "../graphql/queries";
+import { generateClient } from "aws-amplify/api";
+import { fetch } from "@anthropic-ai/sdk/_shims/auto/types";
+
+const client = generateClient();
+
+const storeData = async () => {
+  await client.graphql({
+    query: createUserDataModel,
+    variables: {
+      input: userData,
+    },
+  });
+};
+
+
+const getUserData = async(username) => {
+  try {
+    const response = await client.graphql({
+      query: getUserDataModel,
+      variables: {
+        username: username,
+      },
+    });
+    const userDataModel = response.data.getUserDataModel;
+    console.log('User data model:', userDataModel);
+    return userDataModel;
+    // Process the user data model as needed
+  } catch (error) {
+    console.error('Error retrieving user data model:', error);
+    return null;
+  }
+}
+
 
 export default function LoginForm(props) {
   let navigate = useNavigate();
@@ -25,8 +68,19 @@ export default function LoginForm(props) {
   async function handleLoginState(username, password) {
     if (loginState.stateID === 0) {
       setLoginState({ stateID: 1, user: null }); // show the loading screen
+
       try {
         await signIn({ username, password });
+        const auth=await fetchAuthSession();
+        const userData_fetched=await getUserData(auth.tokens.accessToken.payload.sub);
+        
+        if(userData_fetched === null) // if datamodel is null means has not record in the DB so create one in that case
+        {
+      
+        userData.username=auth.tokens.accessToken.payload.sub; // username is not in our control for now
+        await storeData(userData); // need to check if the DB responds to this 
+           
+        }
       } catch (e) {
         console.log("error signing in", e);
       }
@@ -35,7 +89,7 @@ export default function LoginForm(props) {
     if (user) {
       console.log(user);
       setLoginState({ stateID: 2, user: user }); // Successful Login
-      props.handleUser(1);
+       props.handleUser(1);
     } else {
       setLoginState({ stateID: 3, user: null }); // Error Logging In
     }
@@ -46,7 +100,7 @@ export default function LoginForm(props) {
       const checkUser = async () => {
         let user = await isLoggedIn();
         if (user) {
-          setLoginState({ stateID: 2, user: user });
+          setLoginState({ stateID: 2, user: user });         
           props.handleUser(1);
         } else {
           props.handleUser(0);

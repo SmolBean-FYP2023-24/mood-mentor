@@ -419,7 +419,7 @@ function Dashboard( props ) {
                         >
                           <option value="Speaking">Speaking</option>
                           <option value="Listening">Listening</option>
-                          <option value="Conversation">Conversation</option>
+                          {/* <option value="Conversation">Conversation</option> */}
                         </select>
                       {/* <div className="qs-emotion-dashboard-heading">
                         Questions per emotion</div> */}
@@ -498,7 +498,7 @@ function Dashboard( props ) {
                     >
                     <option value="Listening">Listening</option>
                     <option value="Speaking">Speaking</option>
-                    <option value="Conversation">Conversation</option>
+                    {/* <option value="Conversation">Conversation</option> */}
                   </select>
             </div>
             {/* end of dropdown container */}

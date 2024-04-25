@@ -17,6 +17,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { dummyData } from "./dummyData";
 import { useNavigate } from "react-router-dom";
 
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 window.Buffer = window.Buffer || Buffer;
