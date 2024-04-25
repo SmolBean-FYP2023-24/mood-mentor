@@ -234,30 +234,17 @@ function Dashboard() {
           },
         });
         setUserDets(user1["data"]["getUserDataModel"]);
-        generateBadges(user1["data"]["getUserDataModel"]["badges"]);
+        generateBadges(
+          user1["data"]["getUserDataModel"]["badges"],
+          user1["data"]["getUserDataModel"]["SpeakingQuestions"],
+          user1["data"]["getUserDataModel"]["ListeningQuestions"]
+        );
         console.log(user1["data"]["getUserDataModel"]);
       }
     };
     check();
   });
 
-  // const {
-  //   id,
-  //   username,
-  //   password,
-  //   streak,
-  //   level,
-  //   badges,
-  //   speakingQuestion,
-  //   listeningQuestion,
-  //   conversationQuestion,
-  //   hasOnboarded,
-  //   speakingAccuracy,
-  //   listeningAccuracy,
-  //   conversationAccuracy,
-  // } = dummyData;
-
-  // Function to create  menus
   const [selectedExercise, setSelectedExercise] = useState("Speaking");
 
   // useEffect(() => {
@@ -319,8 +306,6 @@ function Dashboard() {
       },
     },
   };
-
-  // Below is the code for the accuracy charts
 
   const [selectedExercise_acc, setSelectedExercise_acc] = useState("Speaking");
   const [accuracies, setAccuracies] = useState([]);
@@ -392,123 +377,147 @@ function Dashboard() {
     }
   };
 
-  function generateBadges(badges) {
+  function generateBadges(badges, speaking, listening) {
+    delete speaking["__typename"];
+    delete listening["__typename"];
     console.log(badges);
     let keysWithTrueValue = Object.keys(badges).filter(
       (key) => badges[key] === true
     );
     console.log(keysWithTrueValue);
-    // document.getElementById("getBadges").classList.add("d-none");
     var store = document.getElementById("newBadges");
+    document.getElementById("numBadge").innerText =
+      Array.from(keysWithTrueValue).length;
     Array.from(keysWithTrueValue).forEach((e) => {
       var ele = createBadge(e);
       store.appendChild(ele);
     });
+
+    let totalSum = 0.0;
+    for (let key in speaking) {
+      totalSum += speaking[key];
+    }
+    for (let key in listening) {
+      totalSum += listening[key];
+    }
+    document.getElementById("numQ").innerText = totalSum;
   }
 
   function createBadge(key) {
-    var badge = document.createElement("div");
+    var badge = document.createElement("h3");
     badge.classList.add("badge", "m-2", "bg-primary");
     badge.innerText = key; // Also, innerText is a property, not a method.
     return badge;
   }
 
   return (
-    <div className="container-fluid-dashboard">
-      {/* <h1 className="top-text">Dashboard</h1> */}
-
-      <div className="row-1-dashboard">
-        <div className="col-lg-2 col-md-4">
-          <div className="sidebar-dashboard">
+    <div className="container-fluid h-100 w-100 p-0">
+      <div className="row w-100 p-0 m-0">
+        <div className="col-md-3 p-0 m-0">
+          <div className="sidebar-dashboard bg-light border-dark border-right border-0 d-flex flex-column">
             <ProfilePictureSection />
-            <div className="text-user-dashboard">
-              Name: {userState.given_name}
-              <br />
-              Streak: {userDets["streak"]}
+            <div className="text-user-dashboard my-4 text-center">
+              {userState.given_name + " " + userState.family_name}
               <br />
             </div>
 
             <a href="/lex">
-              <button className="profile-button">Listening Exercise</button>
+              <button className="profile-button my-2">
+                Listening Exercise
+              </button>
             </a>
             <a href="/eex">
-              <button className="profile-button">Speaking Exercise</button>
+              <button className="profile-button my-2">Speaking Exercise</button>
             </a>
             <a href="/cex">
-              <button className="profile-button">
+              <button className="profile-button my-2">
                 Conversational Exercise
               </button>
             </a>
           </div>
-          {/* end of sidebar-dashboard */}
         </div>
-        {/* end of col-lg-3 col-md-4 */}
-
-        <div className="col-lg-10 col-md-8">
-          <div className="row-2-dashboard">
-            <div className="badge-holder-dashboard">
-              <div
-                className="subheading"
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginTop: "2vh",
-                }}
-              >
-                Badges
-              </div>
-              {/* <BadgeHolder badges={userDets["badges"]} /> */}
-              <div>
-                {/* <BadgeList
-                  badges={Object.keys(
-                    Object.keys(userDets["badges"]).filter(
-                      (key) => userDets["badges"][key] === true
-                    )
-                  )}
-                /> */}
-                {/* <button
-                  id="getBadges"
-                  onClick={() => generateBadges(userDets["badges"])}
-                >
-                  Get Badges
-                </button> */}
-                <div id="newBadges"></div>
-              </div>
-            </div>
-
-            <div className="qs-emotion-dashboard">
-              <div className="qs-emotion-dashboard-row1">
-                <div className="accuracy-table-heading">
-                  <div className="subheading">Questions Practiced </div>
-                  {/* <div className="exercise-dropdown-emotion-qs"> */}
-
-                  <select
-                    id="exercise-select"
-                    value={selectedExercise}
-                    // onChange={handleExerciseChange}
-                  >
-                    <option value="Speaking">Speaking</option>
-                    <option value="Listening">Listening</option>
-                    <option value="Coversation">Conversation</option>
-                  </select>
-                  {/* <div className="qs-emotion-dashboard-heading">
-                        Questions per emotion</div> */}
+        <div className="col-md-9 text-center">
+          <div className="row p-0 m-0 w-100">
+            <div className="col-md-6 py-3 text-center">
+              <div className="container" style={{ height: "30vh" }}>
+                <div className="badge-holder-dashboard card h-100 py-1">
+                  <div className="subheading py-3">Badges</div>
+                  <div>
+                    <div id="newBadges"></div>
+                  </div>
                 </div>
               </div>
-              {/* end of excercise-dropdown */}
-
-              {/* </div> */}
-              {/* end of qs-emotion-dashboard-row1 */}
-
-              <div
-                className="qs-emotion-dashboard-inner"
-                style={{ width: "800px" }}
-              >
+            </div>
+            <div className="col-md-6 py-3 text-center">
+              <div className="container" style={{ height: "30vh" }}>
+                <div className="badge-holder-dashboard card h-100 py-1">
+                  <div className="subheading py-3">Statistics</div>
+                  <div className="py-3">
+                    <div className="row p-0 m-0 d-flex justify-content-center align-items-center">
+                      <div className="stat col-3">
+                        <span
+                          style={{
+                            fontWeight: "bolder",
+                            fontSize: "medium",
+                          }}
+                        >
+                          Level
+                        </span>
+                        <br></br>
+                        {userDets["level"]}
+                      </div>
+                      <div className="stat col-3">
+                        <span
+                          style={{
+                            fontWeight: "bolder",
+                            fontSize: "medium",
+                          }}
+                        >
+                          Streak
+                        </span>
+                        <br></br>
+                        {userDets["streak"]}
+                      </div>
+                      <div className="stat col-3">
+                        <span
+                          style={{
+                            fontWeight: "bolder",
+                            fontSize: "medium",
+                          }}
+                        >
+                          #Badges
+                        </span>
+                        <br></br>
+                        <div id="numBadge"></div>
+                      </div>
+                      <div className="stat col-3">
+                        <span
+                          style={{
+                            fontWeight: "bolder",
+                            fontSize: "medium",
+                          }}
+                        >
+                          #Questions
+                        </span>
+                        <br></br>
+                        <div id="numQ"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row px-4 m-0 w-100" style={{ height: "45vh" }}>
+            <div className="col-md-6 p-3 text-center">
+              <div className="subheading py-3">
+                Listening Questions per Emotion
+              </div>
+              <div className="container" style={{ height: "45vh" }}>
                 <Bar
                   data={{
                     labels: Array.from(
-                      Object.keys(userDets[selectedExercise + "Questions"])
+                      Object.keys(userDets["ListeningQuestions"])
                     )
                       .slice(0, 6)
                       .map((label) =>
@@ -517,11 +526,9 @@ function Dashboard() {
 
                     datasets: [
                       {
-                        label: `${selectedExercise} Questions`,
+                        label: `Listening Questions`,
                         data: Array.from(
-                          Object.values(
-                            userDets[selectedExercise + "Questions"]
-                          )
+                          Object.values(userDets["ListeningQuestions"])
                         ).slice(0, 6),
                         backgroundColor: "rgba(54, 162, 235, 0.5)", // Color for the selected exercise Questions bars
                       },
@@ -546,70 +553,189 @@ function Dashboard() {
                   }}
                 />
               </div>
-              {/* qs-emotion-dashboard-inner */}
             </div>
-            {/* end of qs-emotion-dashboard-row1 */}
-          </div>
-          {/* end of row-2-dashboard */}
+            <div className="col-md-6 p-3 text-center">
+              <div className="subheading py-3">
+                Speaking Questions per Emotion
+              </div>
+              <div className="container" style={{ height: "45vh" }}>
+                <Bar
+                  data={{
+                    labels: Array.from(
+                      Object.keys(userDets["SpeakingQuestions"])
+                    )
+                      .slice(0, 6)
+                      .map((label) =>
+                        label === "Surprise" ? "Neutral" : label
+                      ),
 
-          <div className="custom-row-2">
-            {/* <MenuChart /> */}
-            <div className="acc-graph-dashboard">
-              {/* <canvas id="accuracy-chart"></canvas> */}
-              <Line
-                data={data_qs_per_week}
-                options={{
-                  ...options,
-                  responsive: true,
-                  maintainAspectRatio: false,
-                }}
-              />
-            </div>
-            {/* end of acc-graph-dashboard */}
-            <div className="acc-stats-dashboard">
-              {/* <h2>Accuracy Statistics</h2> */}
-              <div className="accuracy-table-heading">
-                <div className="subheading">Accuracies </div>
-                <div
-                  className="exercise-dropdown-container-acc"
-                  style={{ marginTop: "2vh" }}
-                >
-                  {/* <label htmlFor="exercise-select">Select Exercise:</label> */}
-                  <select
-                    id="exercise-select-acc"
-                    value={selectedExercise_acc}
-                    onChange={handleExerciseChange_acc}
-                  >
-                    <option value="Listening">Listening</option>
-                    <option value="Speaking">Speaking</option>
-                    <option value="Conversation">Conversation</option>
-                  </select>
-                </div>
-                {/* end of dropdown container */}
+                    datasets: [
+                      {
+                        label: `Listening Questions`,
+                        data: Array.from(
+                          Object.values(userDets["SpeakingQuestions"])
+                        ).slice(0, 6),
+                        backgroundColor: "rgba(54, 162, 235, 0.5)", // Color for the selected exercise Questions bars
+                      },
+                    ],
+                  }}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        ticks: {
+                          precision: 0, // Display integers for y-axis ticks
+                        },
+                      },
+                    },
+                    plugins: {
+                      legend: {
+                        display: false, // Disable the legend
+                      },
+                    },
+                  }}
+                />
               </div>
-              <div className="emotion-accuracies">
-                {/* <h3>Emotion Accuracies</h3> */}
-                {accuracies.map((accuracy, index) => (
-                  <div className="emotion-row" key={index}>
-                    <div className="combined-div-acc">
-                      <div className="emotion-label">
-                        {emotion_labels[index]}:
-                      </div>
-                      <div className="emotion-value">
-                        {(accuracy * 100).toFixed(2)}%
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {/* end of emotion accuracies */}
             </div>
-            {/* end of acct-stats-dashboard */}
           </div>
-          {/* custom-row-2 */}
         </div>
       </div>
     </div>
+    //     <div className="col-lg-9 col-md-8 p-0 m-0">
+    //       <div className="row">
+    //         {/* <div className="col-md-3">
+    //           <div className="badge-holder-dashboard">
+    //             <div
+    //               className="subheading"
+    //               style={{
+    //                 display: "flex",
+    //                 justifyContent: "center",
+    //                 alignItems: "center",
+    //               }}
+    //             >
+    //               Badges
+    //             </div>
+    //             <div>
+    //               <div id="newBadges"></div>
+    //             </div>
+    //           </div>
+    //         </div> */}
+    //         <div className="qs-emotion-dashboard">
+    //           <div className="qs-emotion-dashboard-row1">
+    //             <div className="accuracy-table-heading">
+    //               <div className="subheading">Questions Practiced </div>
+
+    //               <select
+    //                 id="exercise-select"
+    //                 value={selectedExercise}
+    //                 // onChange={handleExerciseChange}
+    //               >
+    //                 <option value="Speaking">Speaking</option>
+    //                 <option value="Listening">Listening</option>
+    //                 <option value="Coversation">Conversation</option>
+    //               </select>
+    //             </div>
+    //           </div>
+
+    //           <div
+    //             className="qs-emotion-dashboard-inner"
+    //             style={{ width: "800px" }}
+    //           >
+    //             <Bar
+    //               data={{
+    //                 labels: Array.from(
+    //                   Object.keys(userDets[selectedExercise + "Questions"])
+    //                 )
+    //                   .slice(0, 6)
+    //                   .map((label) =>
+    //                     label === "Surprise" ? "Neutral" : label
+    //                   ),
+
+    //                 datasets: [
+    //                   {
+    //                     label: `${selectedExercise} Questions`,
+    //                     data: Array.from(
+    //                       Object.values(
+    //                         userDets[selectedExercise + "Questions"]
+    //                       )
+    //                     ).slice(0, 6),
+    //                     backgroundColor: "rgba(54, 162, 235, 0.5)", // Color for the selected exercise Questions bars
+    //                   },
+    //                 ],
+    //               }}
+    //               options={{
+    //                 responsive: true,
+    //                 maintainAspectRatio: false,
+    //                 scales: {
+    //                   y: {
+    //                     beginAtZero: true,
+    //                     ticks: {
+    //                       precision: 0, // Display integers for y-axis ticks
+    //                     },
+    //                   },
+    //                 },
+    //                 plugins: {
+    //                   legend: {
+    //                     display: false, // Disable the legend
+    //                   },
+    //                 },
+    //               }}
+    //             />
+    //           </div>
+    //         </div>
+    //       </div>
+
+    //       <div className="custom-row-2">
+    //         {/* <MenuChart /> */}
+    //         <div className="acc-graph-dashboard">
+    //           {/* <canvas id="accuracy-chart"></canvas> */}
+    //           <Line
+    //             data={data_qs_per_week}
+    //             options={{
+    //               ...options,
+    //               responsive: true,
+    //               maintainAspectRatio: false,
+    //             }}
+    //           />
+    //         </div>
+    //         {/* end of acc-graph-dashboard */}
+    //         <div className="acc-stats-dashboard">
+    //           {/* <h2>Accuracy Statistics</h2> */}
+    //           <div className="accuracy-table-heading">
+    //             <div className="subheading">Accuracies </div>
+    //             <div className="exercise-dropdown-container-acc">
+    //               <select
+    //                 id="exercise-select-acc"
+    //                 value={selectedExercise_acc}
+    //                 onChange={handleExerciseChange_acc}
+    //               >
+    //                 <option value="Listening">Listening</option>
+    //                 <option value="Speaking">Speaking</option>
+    //                 <option value="Conversation">Conversation</option>
+    //               </select>
+    //             </div>
+    //           </div>
+    //           <div className="emotion-accuracies">
+    //             {accuracies.map((accuracy, index) => (
+    //               <div className="emotion-row" key={index}>
+    //                 <div className="combined-div-acc">
+    //                   <div className="emotion-label">
+    //                     {emotion_labels[index]}:
+    //                   </div>
+    //                   <div className="emotion-value">
+    //                     {(accuracy * 100).toFixed(2)}%
+    //                   </div>
+    //                 </div>
+    //               </div>
+    //             ))}
+    //           </div>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
   );
 }
 

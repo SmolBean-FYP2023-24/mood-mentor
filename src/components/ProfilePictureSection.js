@@ -35,8 +35,8 @@ function ProfilePictureSection() {
           height: "25vh",
           borderRadius: "50%",
           objectFit: "cover",
-          marginLeft: "4vh",
-          marginTop:"2vh",
+          // marginLeft: "4vh",
+          // marginTop:"2vh",
         }}
         onClick={handleProfilePictureClick}
         src={selectedProfilePicture || "default-profile-picture-url"}

@@ -1,6 +1,3 @@
-
-
-
 .row-dashboard {
   display: flex;
   height: 100%;
@@ -8,192 +5,183 @@
 }
 
 
-.row-1-dashboard{
+/* .row-1-dashboard {
   display: flex;
-}
+} */
 
 
 .profile-box-dashboard {
   /* border: 2px solid black; */
   padding: 20px;
   margin-top: 30px;
-  margin-right: 10px; /* Adjust margin-right instead of margin-left */
+  margin-right: 10px;
+  /* Adjust margin-right instead of margin-left */
   border-radius: 50px;
-  width: 75%; /* Adjust width to occupy 75% */
+  width: 75%;
+  /* Adjust width to occupy 75% */
   height: 50vh;
   position: relative;
   box-sizing: border-box;
   flex: 5;
-  margin-left: 20px; /* Add a left margin to create a gap */
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Add box-shadow effect */
+  margin-left: 20px;
+  /* Add a left margin to create a gap */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  /* Add box-shadow effect */
 }
 
 .normal-box-dashboard {
-  flex:5;
+  flex: 5;
   padding: 20px;
   margin-top: 30px;
   border-radius: 20px;
-  width: 50%; /* Adjust width */
+  width: 50%;
+  /* Adjust width */
   height: 50vh;
   margin-left: auto;
-  margin-right: 10px; /* Center the box horizontally */
+  margin-right: 10px;
+  /* Center the box horizontally */
   border-radius: 50px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   margin-bottom: 20px;
   display: flex;
-  flex-direction: column; /* Arrange children vertically */
-  align-items: center; /* Center children horizontally */
+  flex-direction: column;
+  /* Arrange children vertically */
+  align-items: center;
+  /* Center children horizontally */
 }
 
 @media screen and (max-width: 768px) {
   .normal-box-dashboard {
-    width: 95%; /* Adjust width for smaller screens */
-    max-width: none; /* Remove maximum width */
+    width: 95%;
+    /* Adjust width for smaller screens */
+    max-width: none;
+    /* Remove maximum width */
   }
 }
-  
-  .profile-image {
-    position: absolute; /* Position the image absolutely */
-    bottom: -10px; /* Adjust the distance from the bottom as desired */
-    left: -15px; /* Adjust the distance from the left as desired */
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-left: 20px;
-    /*margin-bottom: 5px;
-    margin-bottom: 10px; */
-  }
+
 
 
 .profile-footer {
-    position: absolute;
-    bottom: 20px; /* Adjust the distance from the bottom as desired */
-    left: 20px; /* Adjust the distance from the left as desired */
-    display: flex;
-    justify-content: space-around;
-    width: calc(100% - 40px); /* Take into account left and right padding */
-  }
+  position: absolute;
+  bottom: 20px;
+  /* Adjust the distance from the bottom as desired */
+  left: 20px;
+  /* Adjust the distance from the left as desired */
+  display: flex;
+  justify-content: space-around;
+  width: calc(100% - 40px);
+  /* Take into account left and right padding */
+}
 
-  .button-container {
-    display: flex;
-    flex-direction: column;
-    gap: 5px; /* Adjust the gap between buttons as desired */
-    margin-left: auto;
-  }
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  /* Adjust the gap between buttons as desired */
+  margin-left: auto;
+}
 
-  .custom-row{
+.custom-row {
 
-    display: flex;
-    height: 100%;
-    margin-bottom: 5vh;
-    justify-content: center;
-  
-    }
+  display: flex;
+  height: 100%;
+  margin-bottom: 5vh;
+  justify-content: center;
+
+}
 
 
-    * {
-      -webkit-box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      box-sizing: border-box;
-  }
-  
-  .profile-button {
-    font-size: 3vh;
-    font-family: cursive;
-    width: 30vh;
-    /* font-size: 16px; */
-    font-weight: 600;
-    color: #fff;
-    cursor: pointer;
-    margin: 10px;
-    height: 10vh;
-    text-align:center;
-    border: none;
-    background-size: 300% 100%;
-    margin-left: 20pxa;
-    border-radius: 50px;
-    moz-transition: all .4s ease-in-out;
-    -o-transition: all .4s ease-in-out;
-    -webkit-transition: all .4s ease-in-out;
-    transition: all .4s ease-in-out;
-    background-image: linear-gradient(to right, #355D8C, #5384B2, #3B5F87, #7BA4C9);
-    /* background-image: linear-gradient(to right, #667eea, #764ba2, #6B8DD6, #8E37D7); */
-    box-shadow: 0 4px 15px 0 rgba(79, 119, 168, 0.75);
-    
-  }
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.profile-button {
+  font-size: 1em;
+  width: 30vh;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  min-height: 8vh;
+  text-align: center;
+  border: none;
+  border-radius: 20px;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  background-color: #355D8C;
+}
+
+.stat {
+  font-size: larger;
+}
 
 
 .profile-button:hover {
-    background-position: 100% 0;
-    moz-transition: all .4s ease-in-out;
-    -o-transition: all .4s ease-in-out;
-    -webkit-transition: all .4s ease-in-out;
-    transition: all .4s ease-in-out;
+  background-position: 100% 0;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
 }
 
 .profile-button:focus {
-    outline: none;
+  outline: none;
 }
 
 
-/* .btn-hover.color-3 {
-  background-image: linear-gradient(to right, #667eea, #764ba2, #6B8DD6, #8E37D7);
-  box-shadow: 0 4px 15px 0 rgba(116, 79, 168, 0.75);
-} */
-
-
 /* We should not have this here */
-  .profile-button:hover {
-    background-color: #464646;
-  }
-  
-  .profile-button:last-child {
-    margin-right: 0;
-  }
+.profile-button:hover {
+  background-color: #464646;
+}
 
-  .custom-row-1{
+.profile-button:last-child {
+  margin-right: 0;
+}
 
-    display: flex;
-    height: 100%;
-    margin-bottom: 5vh;
-    margin-bottom: 10px;
-  
-    }
+.custom-row-1 {
 
-  .chart-box-normal{
-    flex:5;
-    height: 200px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-    border-radius: 50px;
-    height: 300px;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }  
+  display: flex;
+  height: 100%;
+  margin-bottom: 5vh;
+  margin-bottom: 10px;
 
-  .chart-box-practice-qs{
-    flex:5;
-    height: 80%;
-    width:10%;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-    border-radius: 50px;
-    height: 300px;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    
-  }
+}
 
-  .chart-container {
-    width: 90%; /* Make the inner container fill the available width */
-    height: 100%; /* Make the inner container fill the available height */
-    /* Add any other desired styles for the inner container */
-    margin-left: 7vh;
-    margin-top: 2vh;
-  }
+.chart-box-normal {
+  flex: 5;
+  height: 200px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  border-radius: 50px;
+  height: 300px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.chart-box-practice-qs {
+  flex: 5;
+  height: 80%;
+  width: 10%;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  border-radius: 50px;
+  height: 300px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+}
+
+.chart-container {
+  width: 90%;
+  /* Make the inner container fill the available width */
+  height: 100%;
+  /* Make the inner container fill the available height */
+  /* Add any other desired styles for the inner container */
+  margin-left: 7vh;
+  margin-top: 2vh;
+}
 
 /* the below css is for the charts */
 /* .col-md-9.offset-md-3 {
@@ -215,47 +203,36 @@
 
 
 
-  .sidebar-dashboard{
-    height: 105%;
-    width: 100%;
-    background-color: #A7D5F2;
-    /* background-color:#99B4BF; */
-    justify-content: center;
-    align-items: center;
-  }
- 
-  .container-fluid-dashboard{
-    font-family: cursive;
-    background-color: #A7D5F2;
-    height: 105%;
-    /* background: #99B4BF; */
-    /* width: 100%; */
-  }
-
-
-  
-  
-.row-2-dashboard{
-  display: flex;
-  margin-top: 1vh;
-  /* width: 100%; */
-  height: 50%;
+.sidebar-dashboard {
+  height: calc(100vh - 56px);
+  /* background-color: #A7D5F2; */
+  /* background-color: #eeeeee; */
+  justify-content: center;
+  align-items: center;
 }
 
-.badge-holder-dashboard{
-  flex:2;
-  background-color: white;
-  margin-right: 2vh;
-  margin-left: 2vh;
-  border-radius: 1vh;
-  border-color: black;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Add box-shadow effect */
-  /* width: 10%; */
+.container-fluid-dashboard {
+  height: 100vh;
+  /* background-color: #A7D5F2; */
+}
+
+
+
+
+/* .row-2-dashboard {
+  display: flex;
+  margin-top: 1vh;
+  width: 100%;
+  height: 50%;
+} */
+
+.badge-holder-dashboard {
+  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.5);
 }
 
 .badgeDash {
-  height: 200px;
-  margin-top: 10%;
+  /* height: 200px; */
+  /* margin-top: 10%; */
   /* width: 100%; */
   display: flex;
   align-items: center;
@@ -263,14 +240,17 @@
 }
 
 .badgeDash img {
-  width: auto; /* Increase the width as needed */
-  height: 100%; /* Increase the height as needed */
+  width: auto;
+  /* Increase the width as needed */
+  height: 100%;
+  /* Increase the height as needed */
 }
 
 
 
 .arrow {
-  font-size: 2rem; /* Increase or decrease the size as needed */
+  font-size: 2rem;
+  /* Increase or decrease the size as needed */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -282,15 +262,17 @@
 
 .left-arrow {
   background-color: black;
-  margin-right: 0.5rem; /* Adjust the margin as needed */
+  margin-right: 0.5rem;
+  /* Adjust the margin as needed */
 }
 
 .right-arrow {
-  margin-left: 0.5rem; /* Adjust the margin as needed */
+  margin-left: 0.5rem;
+  /* Adjust the margin as needed */
 }
 
 
-.qs-emotion-dashboard{
+.qs-emotion-dashboard {
   /* display: flex; */
   flex: 5;
   background-color: white;
@@ -299,48 +281,44 @@
   justify-content: center;
   /* margin-left: 2vh; */
   border-color: black;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Add box-shadow effect */
-  margin-right: 2vh;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  /* Add box-shadow effect */
+  /* margin-right: 2vh; */
 }
 
-.qs-emotion-dashboard-row1{
- 
+/* .qs-emotion-dashboard-row1 {
+
   margin-top: 1vh;
-}
+} */
 
 
 
-.exercise-dropdown-emotion-qs{
-  /* flex: 5; */
+/* .exercise-dropdown-emotion-qs {
+  flex: 5;
   margin-right: 30vh;
   width: 20%;
   height: 20%;
 
-}
+} */
 
 #exercise-select {
   /* Your styles for the exercise select element */
-  width: 50%;
-  height: 15%;
+  /* width: 50%; */
+  /* height: 15%; */
   font-family: cursive;
   font-size: 2.5vh;
   border-color: black;
-  margin-top: 1vh;
-  margin-left: 1vh;
-  margin-right: 1vh;
+  /* margin-top: 1vh; */
+  /* margin-left: 1vh; */
+  /* margin-right: 1vh; */
 
   /* margin-left: 10vh; */
 }
 
-.text-user-dashboard{
+.text-user-dashboard {
   font-family: 'Crimson Pro', 'Literata', sans-serif;
-  margin-top: 2vh;
-  margin-left: 5vh;
-  margin-bottom: 3%;
-  justify-content: center;
-  font-size: 3vh;
-  width: 100%;
-  font-weight: 640;
+  font-size: 1.5em;
+  font-weight: bold;
   color: #2D4B73;
 }
 
@@ -348,13 +326,13 @@
 
 
 
-.qs-emotion-dashboard-inner{
+/* .qs-emotion-dashboard-inner {
 
   height: 60%;
   margin-left: 1vh;
   width: 100%;
   justify-content: center;
-}
+} */
 
 
 .custom-row-2 {
@@ -362,68 +340,69 @@
   margin-top: 2vh;
 }
 
-.acc-graph-dashboard{
-  flex:4;
+.acc-graph-dashboard {
+  /* flex: 4; */
   background-color: white;
-  margin-right: 2vh;
-  margin-left: 2vh;
+  /* margin-right: 2vh; */
+  /* margin-left: 2vh; */
   /* height: 10%; */
-  height:44.5vh;
+  /* height: 44.5vh; */
   justify-content: center;
   align-items: center;
-  width: 100%;
+  /* width: 100%; */
   /* width: 45vh; */
   border-radius: 1vh;
   border-color: black;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Add box-shadow effect */
-  
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  /* Add box-shadow effect */
+
 }
 
-.acc-graph-dashboard img{
-  height:10%;
-}
+/* .acc-graph-dashboard img {
+  height: 10%;
+} */
 
-.acc-stats-dashboard{
-  flex:2;
+.acc-stats-dashboard {
+  /* flex: 2; */
   background-color: white;
-  border-radius: 1vh;
-  margin-right: 2vh;
+  /* border-radius: 1vh; */
+  /* margin-right: 2vh; */
   font-family: cursive;
   border-color: black;
   align-items: center;
   justify-content: center;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Add box-shadow effect */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  /* Add box-shadow effect */
 }
 
-.accuracy-table-heading{
-  margin-top: 2%;
-  margin-bottom: 3%;
+.accuracy-table-heading {
+  /* margin-top: 2%; */
+  /* margin-bottom: 3%; */
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-#exercise-select-acc{
-  width: 22vh;
-  height: 7vh;
+#exercise-select-acc {
+  /* width: 22vh; */
+  /* height: 7vh; */
   font-family: cursive;
   font-size: 2vh;
   border-color: black;
-  margin-right: 2vh;
-  margin-top: 2%;
+  /* margin-right: 2vh; */
+  /* margin-top: 2%; */
 }
 
-.combined-div-acc{
-  margin-left: 2vh;
+.combined-div-acc {
+  /* margin-left: 2vh; */
   justify-content: center;
 }
 
 .subheading {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  font-size: 5vh;
+  font-size: 1.5rem;
   color: #2D4B73;
-  margin-left: 4%; 
-  font-weight: 640;
+  font-weight: bold;
 }
 
 .emotion-accuracies {
@@ -439,9 +418,10 @@
 .combined-div-acc {
   display: flex;
   justify-content: space-between;
-  width: 200px; /* Adjust the width as needed */
+  /* width: 200px; */
+  /* Adjust the width as needed */
   align-items: center;
-  margin-left: 20%;
+  /* margin-left: 20%; */
 }
 
 .emotion-label {
