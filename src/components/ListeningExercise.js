@@ -79,6 +79,7 @@ export const playAudio = async (
       options: { accessLevel: "guest" },
     }).then((res) => {
       x.setAttribute("crossorigin", "anonymous");
+      console.log(res.url.href);
       x.setAttribute("src", res.url.href);
       x.play();
       x.addEventListener("ended", function () {
