@@ -728,12 +728,12 @@ function ExpressingExercise() {
                 </div>
               </div>
             </div>
-            <button
+            {/* <button
               className="btn btn-primary mt-5"
               onClick={() => navigate("/dashboard")}
             >
               Go to dashboard
-            </button>
+            </button> */}
           </div>
         )}
       </div>

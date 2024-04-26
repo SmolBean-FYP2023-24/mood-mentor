@@ -28,43 +28,43 @@ import { initUserData } from "./data/initUserData.js";
 //     }
 //   };
 
-  // useEffect(() => {
-  //   const handleKeyDown = (event) => {
-  //     if (event.key === "ArrowLeft") {
-  //       navigateBadge("prev");
-  //     } else if (event.key === "ArrowRight") {
-  //       navigateBadge("next");
-  //     }
-  //   };
+// useEffect(() => {
+//   const handleKeyDown = (event) => {
+//     if (event.key === "ArrowLeft") {
+//       navigateBadge("prev");
+//     } else if (event.key === "ArrowRight") {
+//       navigateBadge("next");
+//     }
+//   };
 
-  //   document.addEventListener("keydown", handleKeyDown);
+//   document.addEventListener("keydown", handleKeyDown);
 
-  //   return () => {
-  //     document.removeEventListener("keydown", handleKeyDown);
-  //   };
-  // }, []);
+//   return () => {
+//     document.removeEventListener("keydown", handleKeyDown);
+//   };
+// }, []);
 
-  // const currentBadge = Object.entries(badges)[currentBadgeIndex];
-  // const [badgeName, badgeValue] = currentBadge;
+// const currentBadge = Object.entries(badges)[currentBadgeIndex];
+// const [badgeName, badgeValue] = currentBadge;
 
-  // console.log(badgeName);
-  // console.log(badgeValue);
+// console.log(badgeName);
+// console.log(badgeValue);
 
-  // return (
-  //   <div className="badgeDash">
-  //     <span className="arrow left-arrow" onClick={() => navigateBadge("prev")}>
-  //       &larr;
-  //     </span>
-  //     {badgeValue ? (
-  //       <img src={img} alt={badgeName} />
-  //     ) : (
-  //       <img src={img1} alt={badgeName} />
-  //     )}
-  //     <span className="arrow right-arrow" onClick={() => navigateBadge("next")}>
-  //       &rarr;
-  //     </span>
-  //   </div>
-  // );
+// return (
+//   <div className="badgeDash">
+//     <span className="arrow left-arrow" onClick={() => navigateBadge("prev")}>
+//       &larr;
+//     </span>
+//     {badgeValue ? (
+//       <img src={img} alt={badgeName} />
+//     ) : (
+//       <img src={img1} alt={badgeName} />
+//     )}
+//     <span className="arrow right-arrow" onClick={() => navigateBadge("next")}>
+//       &rarr;
+//     </span>
+//   </div>
+// );
 // }
 
 // Dashboard function starts here
@@ -295,7 +295,6 @@ function Dashboard() {
     badge.innerText = key; // Also, innerText is a property, not a method.
     return badge;
   }
-  console.log("testinggg", userDets);
   useEffect(() => {
     setUpSubscriptions();
     return () => {
