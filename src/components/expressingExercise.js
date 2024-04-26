@@ -9,6 +9,7 @@ import RecordRTC from "recordrtc";
 import { Buffer } from "buffer";
 import * as EBML from "ts-ebml";
 import { fetchAuthSession } from "aws-amplify/auth";
+import { withAuthenticator } from "@aws-amplify/ui-react";
 import { uploadData, getUrl } from "aws-amplify/storage";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Bar } from "react-chartjs-2";
@@ -16,17 +17,122 @@ import { Doughnut } from "react-chartjs-2";
 import toast, { Toaster } from "react-hot-toast";
 import { dummyData } from "./dummyData";
 import { useNavigate } from "react-router-dom";
+import { generateClient } from "aws-amplify/api";
+import * as mutations from "../graphql/mutations.js";
+import {getUserDataModel} from "../graphql/queries.js";
 
+  // ---------------------------------------------------------------
+
+  // Add Database Abilities
+
+  // ---------------------------------------------------------------
+
+const client = generateClient();
+
+
+function removeTypenameKey(obj) {
+  if (typeof obj !== "object" || obj === null) {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(removeTypenameKey);
+  }
+
+  const newObj = {};
+  for (const key in obj) {
+    if (key !== "__typename") {
+      newObj[key] = removeTypenameKey(obj[key]);
+    }
+  }
+  return newObj;
+  }
+
+function removeKeys(obj, keys) {
+  const newObj = { ...obj };
+  keys.forEach((key) => {
+    delete newObj[key];
+  });
+  return newObj;
+}
+
+
+const updateData = async (user) => {
+  try{
+   const keysToRemove = [
+    "__typename",
+    "_deleted",
+    "_lastChangedAt",
+    "createdAt",
+    "updatedAt"
+  ];
+
+  const cleanedUserData = removeKeys(user, keysToRemove);
+
+  const cleanedUser = {
+    data: {
+      getUserDataModel: removeTypenameKey(cleanedUserData),
+    },
+  };
+   console.log("cleaned user",cleanedUser);
+  await client.graphql({
+    query: mutations.updateUserDataModel,
+    variables: {
+      input: cleanedUser.data.getUserDataModel,
+     }
+  });
+  } // end of try 
+  catch(error)
+  {
+    console.error ("Error updating user",error);
+    return null;
+  }
+}
+
+
+const getUserData = async() => {
+  try {
+    const userauth=await fetchAuthSession();
+    const response = await client.graphql({
+      query: getUserDataModel,
+      variables: {
+        username: userauth.tokens.accessToken.payload.sub, // extracting based on username
+      },
+    });
+        
+    const userDataModel = response.data.getUserDataModel;
+    console.log('User data model:', userDataModel);
+    // console.lo
+    // ("this is the console log wiht user_Data",response.data)
+
+    return userDataModel;
+    // Process the user data model as needed
+  } catch (error) {
+    console.error('Error retrieving user data model:', error);
+    return null;
+  }
+}
+
+let datamodel;
+let emotionAccuracy;
+let emotionCorrect;
+let updateComplete;
+let updatePartial;
+
+
+// ------------------------------------
+// Code for Expressing Exercise
+// ------------------------------------
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 window.Buffer = window.Buffer || Buffer;
 let started = false;
+
+// ------------------------------------
+// Recommendation System
+// ------------------------------------
 function getRandomSentence(emotionChoice = "") {
   var emotions = ["happy", "sad", "angry", "disgust", "fear"];
-  // var chosenEmotion =
-  //   emotionChoice !== ""
-  //     ? emotionChoice
-  //     : emotions[Math.floor(Math.random() * emotions.length)];
   var entries = dummyData.SpeakingAccuracy;
   var convertedEntries = {};
   for (var key in entries) {
@@ -50,6 +156,10 @@ function getRandomSentence(emotionChoice = "") {
 
   let chosenEmotion =
     lowestThreeEmotions[Math.floor(Math.random() * lowestThreeEmotions.length)];
+  console.log("Chosen emotion", chosenEmotion);
+  emotionCorrect = chosenEmotion;
+  
+  // updating chosen emotion to compare accuracy and push to databasw
 
   var chosenSentence =
     sentences[chosenEmotion][
@@ -142,6 +252,7 @@ function ExpressingExercise() {
           setAttempt(1); // Next attempt will be attempt 1 for next question
           setDisallowNext(false);
           setScore(score + 1);
+          updateComplete = true;
         } else {
           // if the sentiment is not what's asked
           toast("Try Again", {
@@ -169,6 +280,7 @@ function ExpressingExercise() {
             });
             setDisallowNext(false);
             setPartial(score + 1);
+            updatePartial = true;
           } else if (accuracy === null) {
             // The sentiment did not match the last time but did this time
             toast("You get partials", {
@@ -177,6 +289,7 @@ function ExpressingExercise() {
             setAttempt(1);
             setCurrentQuestion(CurrentQuestion + 1);
             setPartial(score + 1);
+            updatePartial = true;
             resetTranscript();
           } else {
             // Couldn't improve accuracy
@@ -211,6 +324,8 @@ function ExpressingExercise() {
         },
       ],
     });
+
+    // console.log("Emotion accuracy at x label [0]", emotionCorrect);
     // eslint-disable-next-line
   }, [results, showGraph]);
 
@@ -371,8 +486,115 @@ function ExpressingExercise() {
       .then((result) => {
         setResults(result);
         setShowGraph(true);
-        console.log(result);
       });
+
+      // Updating DB from here
+
+      datamodel = await getUserData();
+      let final_result = results;
+
+      console.log("datamodel before updates", datamodel);
+
+      // console.log("final result:-----", final_result);
+      
+      if(updateComplete) {
+        const emotionUpdateCnt=(emotionCorrect.charAt(0).toUpperCase() + emotionCorrect.slice(1));
+        final_result.forEach((result) => {
+          if (result.label === emotionCorrect) {
+            emotionAccuracy = result.score;
+          }
+        });
+
+        for (let emotion in datamodel.SpeakingAccuracy) {
+          if(emotionCorrect==='neutral')
+          {
+            datamodel.SpeakingQuestions['Surprise']+=1.0;
+            const den = datamodel.SpeakingQuestions['Surprise'];
+            console.log("dennnn", den);
+
+            // case consistency for key-map
+            const emotion_cpy=(emotionCorrect.charAt(0).toUpperCase() + emotionCorrect.slice(1));
+            datamodel.SpeakingAccuracy['Surprise'] = (datamodel.SpeakingAccuracy['Surprise']*(datamodel.SpeakingQuestions['Surprise']-1) + emotionAccuracy*100 )/den;
+            console.log(datamodel.SpeakingAccuracy['Surprise'])
+            console.log(emotion_cpy)
+            break;
+            //schema error: when it's neutral update the surprise variable since we don't have netural in the DB
+          }
+          if (emotion.toLowerCase() === emotionCorrect) {
+            const emotionUpdateCnt=(emotionCorrect.charAt(0).toUpperCase() + emotionCorrect.slice(1));
+            datamodel.SpeakingQuestions[emotionUpdateCnt]+=1.0;
+            
+            const emotion_cpy=(emotion.charAt(0).toUpperCase() + emotion.slice(1));
+            const den = datamodel.SpeakingQuestions[emotion_cpy];
+            console.log("dennnn", den);
+
+            datamodel.SpeakingAccuracy[emotion_cpy] = (datamodel.SpeakingAccuracy[emotion_cpy]*(datamodel.SpeakingQuestions[emotion_cpy]-1) + emotionAccuracy*100 )/den;
+            console.log(datamodel.SpeakingAccuracy[emotion_cpy]);
+            console.log(emotion_cpy);
+
+            break;
+          }
+        }
+
+        try {
+          await updateData(datamodel);
+          // const data_user=await getUserData();
+          console.log("Data updated successfully!");
+        } catch (error) {
+          console.error("Error updating data:", error);
+        }
+        console.log("datamodel updates in complete", datamodel);
+        
+      } else if (updatePartial) {
+        final_result.forEach((result) => {
+          if (result.label === emotionCorrect) {
+            emotionAccuracy = result.score;
+          }
+        });
+
+        for (let emotion in datamodel.SpeakingAccuracy) {
+          if(emotionCorrect==='neutral')
+          {
+            datamodel.SpeakingQuestions['Surprise']+=1.0;
+            const den = datamodel.SpeakingQuestions['Surprise'];
+            console.log("dennnn", den);
+
+            // case consistency for key-map
+            const emotion_cpy=(emotionCorrect.charAt(0).toUpperCase() + emotionCorrect.slice(1));
+            datamodel.SpeakingAccuracy['Surprise'] = (datamodel.SpeakingAccuracy['Surprise']*(datamodel.SpeakingQuestions['Surprise']-1) + emotionAccuracy*50 )/den;
+            console.log(datamodel.SpeakingAccuracy['Surprise'])
+            console.log(emotion_cpy)
+            break;
+            //schema error: when it's neutral update the surprise variable since we don't have netural in the DB
+          }
+          if (emotion.toLowerCase() === emotionCorrect) {
+            const emotionUpdateCnt=(emotionCorrect.charAt(0).toUpperCase() + emotionCorrect.slice(1));
+            datamodel.SpeakingQuestions[emotionUpdateCnt]+=1.0;
+            
+            const emotion_cpy=(emotion.charAt(0).toUpperCase() + emotion.slice(1));
+            const den = datamodel.SpeakingQuestions[emotion_cpy];
+            console.log("dennnn", den);
+
+            datamodel.SpeakingAccuracy[emotion_cpy] = (datamodel.SpeakingAccuracy[emotion_cpy]*(datamodel.SpeakingQuestions[emotion_cpy]-1) + emotionAccuracy*50 )/den;
+            console.log(datamodel.SpeakingAccuracy[emotion_cpy])
+            console.log(emotion_cpy)
+
+            break;
+          }
+        }
+
+        try {
+          await updateData(datamodel);
+          // const data_user=await getUserData();
+          console.log("Data updated successfully!");
+        } catch (error) {
+          console.error("Error updating data:", error);
+        }
+        console.log("datamodel updates in partial", datamodel);
+
+      }
+
+      // Ending DB upate here
   }
 
   const graphData = {
@@ -496,4 +718,4 @@ function ExpressingExercise() {
   );
 }
 
-export default ExpressingExercise;
+export default withAuthenticator(ExpressingExercise);

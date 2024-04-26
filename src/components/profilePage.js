@@ -22,6 +22,7 @@ function ProfilePage(props) {
 
   // ---------------------------------------------------------------
   const [userState, setUserState] = useState(0);
+  // consider changing location
   useEffect(() => {
     const getUserData = async () => {
       try {
@@ -270,7 +271,7 @@ function ProfilePage(props) {
                 alt=""
               />
               <button
-                className="mt-5 btn btn-large btn-primary"
+                className="mt-5 btn btn-large btn-primary hide"
                 onClick={() => updateUser("Happy", 5, "SpeakingQuestions")}
                 style={{
                   position: "fixed",
