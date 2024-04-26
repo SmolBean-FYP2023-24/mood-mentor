@@ -1,117 +1,145 @@
 import React, { useEffect, useRef, useState } from "react";
-import { fetchAuthSession } from "aws-amplify/auth";
+import { getCurrentUser, fetchAuthSession } from "aws-amplify/auth";
 import { withAuthenticator } from "@aws-amplify/ui-react";
-import { Line } from "react-chartjs-2";
 import { Bar } from "react-chartjs-2";
 import "@aws-amplify/ui-react/styles.css";
-import chroma from "chroma-js";
-
-// import './profilePage.css';
 import Chart from "chart.js/auto";
 import "./styles/dashboard.css";
 import "./styles/profilePage.css";
 import ProfilePictureSection from "./ProfilePictureSection.js";
 import { dummyData } from "./dummyData.js";
-import img from "./images/colored/badge200qs.png";
-import img1 from "./images/greyed-out/badge200qs.png";
 import { getUserDataModel } from "../graphql/queries.js";
-
-import { evaluate, parse, sqrt, exp, pi } from "mathjs";
+import img from "./images/colored/badge200qs.png";
 import * as subscriptions from "../graphql/subscriptions";
+import img1 from "./images/greyed-out/badge200qs.png";
 import { generateClient } from "aws-amplify/api";
+import BadgeList from "./badges.js";
+import { forEach } from "mathjs";
+import { initUserData } from "./data/initUserData.js";
 
+// function BadgeHolder({ badges }) {
+//   const [currentBadgeIndex, setCurrentBadgeIndex] = useState(0);
 
+//   const navigateBadge = (direction) => {
+//     if (direction === "prev") {
+//       setCurrentBadgeIndex((prevIndex) => prevIndex - 1);
+//     } else if (direction === "next") {
+//       setCurrentBadgeIndex((prevIndex) => prevIndex + 1);
+//     }
+//   };
 
-function BadgeHolder({ badges }) {
-  const [currentBadgeIndex, setCurrentBadgeIndex] = useState(0);
+  // useEffect(() => {
+  //   const handleKeyDown = (event) => {
+  //     if (event.key === "ArrowLeft") {
+  //       navigateBadge("prev");
+  //     } else if (event.key === "ArrowRight") {
+  //       navigateBadge("next");
+  //     }
+  //   };
 
-  const navigateBadge = (direction) => {
-    if (direction === "prev") {
-      setCurrentBadgeIndex((prevIndex) => prevIndex - 1);
-    } else if (direction === "next") {
-      setCurrentBadgeIndex((prevIndex) => prevIndex + 1);
-    }
-  };
+  //   document.addEventListener("keydown", handleKeyDown);
 
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "ArrowLeft") {
-        navigateBadge("prev");
-      } else if (event.key === "ArrowRight") {
-        navigateBadge("next");
-      }
-    };
+  //   return () => {
+  //     document.removeEventListener("keydown", handleKeyDown);
+  //   };
+  // }, []);
 
-    document.addEventListener("keydown", handleKeyDown);
+  // const currentBadge = Object.entries(badges)[currentBadgeIndex];
+  // const [badgeName, badgeValue] = currentBadge;
 
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
+  // console.log(badgeName);
+  // console.log(badgeValue);
 
-  const currentBadge = Object.entries(badges)[currentBadgeIndex];
-  const [badgeName, badgeValue] = currentBadge;
-
-  console.log(badgeName);
-  console.log(badgeValue);
-
-  // C:\Users\Lenovo S540 FSIN\Desktop\1_FYP_2023\FYP_Final\mood-mentor\src\components\images\greyed-out\badge200qs.png
-
-  return (
-    <div className="badgeDash">
-      <span className="arrow left-arrow" onClick={() => navigateBadge("prev")}>
-        &larr;
-      </span>
-      {badgeValue ? (
-        <img src={img} alt={badgeName} />
-      ) : (
-        <img src={img1} alt={badgeName} />
-      )}
-      <span className="arrow right-arrow" onClick={() => navigateBadge("next")}>
-        &rarr;
-      </span>
-    </div>
-  );
-
-  // C:\Users\Lenovo S540 FSIN\Desktop\1_FYP_2023\FYP_Final\mood-mentor\src\components\images\greyed-out\badge50qs.png
-}
+  // return (
+  //   <div className="badgeDash">
+  //     <span className="arrow left-arrow" onClick={() => navigateBadge("prev")}>
+  //       &larr;
+  //     </span>
+  //     {badgeValue ? (
+  //       <img src={img} alt={badgeName} />
+  //     ) : (
+  //       <img src={img1} alt={badgeName} />
+  //     )}
+  //     <span className="arrow right-arrow" onClick={() => navigateBadge("next")}>
+  //       &rarr;
+  //     </span>
+  //   </div>
+  // );
+// }
 
 // Dashboard function starts here
-function Dashboard(props) {
-  //User authentication
-  // const [userState, setUserState] = useState(0);
-  // useEffect(() => {
-  //   const getUserData = async () => {
-  //     const user = await fetchAuthSession();
-  //     setUserState(user.tokens.idToken.payload);
-  //     props.handleUser(user);
-  //   };
-  //   getUserData();
-  // }, [props]);
+function Dashboard() {
+  const client = generateClient();
+  let globalUser = "";
 
-  // Access the variables from the dummy data
-  const {
-    id,
-    username,
-    password,
-    streak,
-    level,
-    badges,
-    speakingQuestion,
-    listeningQuestion,
-    conversationQuestion,
-    hasOnboarded,
-    speakingAccuracy,
-    listeningAccuracy,
-    conversationAccuracy,
-  } = dummyData;
+  const [userState, setUserState] = useState({});
+  const [userDets, setUserDets] = useState(initUserData);
+  const effectRan = useRef(false);
 
-  // Function to create  menus
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const user = await fetchAuthSession();
+        setUserState(user.tokens.idToken.payload);
+        globalUser = userState.sub;
+      } catch {
+        setUserState(0);
+      }
+    };
+    getUserData();
+  });
+
+  let onCreateSub;
+  function setUpSubscriptions() {
+    const variables = {
+      filter: {
+        username: { eq: globalUser }, // replace with User Sub using fetchAuthSession | userState
+      },
+    };
+    onCreateSub = client
+      .graphql({ query: subscriptions.onUpdateUserDataModel }, variables)
+      .subscribe({
+        next: ({ data }) => {
+          console.log(data);
+          setUserDets(data["onUpdateUserDataModel"]);
+        },
+        error: (error) => console.log(error),
+      });
+  }
+
+  useEffect(() => {
+    const check = async () => {
+      if (effectRan.current === true) {
+        return;
+      } else {
+        effectRan.current = true;
+        let user1 = await client.graphql({
+          query: getUserDataModel,
+          variables: {
+            username: (await getCurrentUser()).userId, // replace with User Sub using fetchAuthSession | userState
+          },
+        });
+        setUserDets(user1["data"]["getUserDataModel"]);
+        generateBadges(
+          user1["data"]["getUserDataModel"]["badges"],
+          user1["data"]["getUserDataModel"]["SpeakingQuestions"],
+          user1["data"]["getUserDataModel"]["ListeningQuestions"]
+        );
+        console.log(user1["data"]["getUserDataModel"]);
+      }
+    };
+    check();
+  });
+
   const [selectedExercise, setSelectedExercise] = useState("Speaking");
 
-  const handleExerciseChange = (event) => {
-    setSelectedExercise(event.target.value);
-  };
+  // useEffect(() => {
+  //   handleExerciseChange();
+  // }, [selectedExercise]);
+
+  // const handleExerciseChange = (event) => {
+  //   setSelectedExercise(event.target.value);
+  // };
 
   // CHART2: LINE CHART FOR QUESTIONS PER WEEK
 
@@ -164,8 +192,6 @@ function Dashboard(props) {
       },
     },
   };
-
-  // Below is the code for the accuracy charts
 
   const [selectedExercise_acc, setSelectedExercise_acc] = useState("Speaking");
   const [accuracies, setAccuracies] = useState([]);
@@ -237,99 +263,165 @@ function Dashboard(props) {
     }
   };
 
-  return (
-    <div className="container-fluid-dashboard">
-      {/* <h1 className="top-text">Dashboard</h1> */}
+  function generateBadges(badges, speaking, listening) {
+    delete speaking["__typename"];
+    delete listening["__typename"];
+    console.log(badges);
+    let keysWithTrueValue = Object.keys(badges).filter(
+      (key) => badges[key] === true
+    );
+    console.log(keysWithTrueValue);
+    var store = document.getElementById("newBadges");
+    document.getElementById("numBadge").innerText =
+      Array.from(keysWithTrueValue).length;
+    Array.from(keysWithTrueValue).forEach((e) => {
+      var ele = createBadge(e);
+      store.appendChild(ele);
+    });
 
-      <div className="row-1-dashboard">
-        <div className="col-lg-2 col-md-4">
-          <div className="sidebar-dashboard">
+    let totalSum = 0.0;
+    for (let key in speaking) {
+      totalSum += speaking[key];
+    }
+    for (let key in listening) {
+      totalSum += listening[key];
+    }
+    document.getElementById("numQ").innerText = totalSum;
+  }
+
+  function createBadge(key) {
+    var badge = document.createElement("h3");
+    badge.classList.add("badge", "m-2", "bg-primary");
+    badge.innerText = key; // Also, innerText is a property, not a method.
+    return badge;
+  }
+  console.log("testinggg", userDets);
+  useEffect(() => {
+    setUpSubscriptions();
+    return () => {
+      onCreateSub.unsubscribe();
+    };
+  }, []);
+  return (
+    <div className="container-fluid h-100 w-100 p-0">
+      <div className="row w-100 p-0 m-0">
+        <div className="col-md-3 p-0 m-0">
+          <div className="sidebar-dashboard bg-light border-dark border-right border-0 d-flex flex-column">
             <ProfilePictureSection />
-            <div className="text-user-dashboard">
-              Name: {username}
+            <div className="text-user-dashboard my-4 text-center">
+              {userState.given_name + " " + userState.family_name}
               <br />
-              Streak: {streak}
-              <br />
-              User ID: {id}
             </div>
 
             <a href="/lex">
-              <button className="profile-button">Listening Exercise</button>
+              <button className="profile-button my-2">
+                Listening Exercise
+              </button>
             </a>
             <a href="/eex">
-              <button className="profile-button">Speaking Exercise</button>
+              <button className="profile-button my-2">Speaking Exercise</button>
             </a>
             <a href="/cex">
-              <button className="profile-button">
+              <button className="profile-button my-2">
                 Conversational Exercise
               </button>
             </a>
           </div>
-          {/* end of sidebar-dashboard */}
         </div>
-        {/* end of col-lg-3 col-md-4 */}
-
-        <div className="col-lg-10 col-md-8">
-          <div className="row-2-dashboard">
-            <div className="badge-holder-dashboard">
-              <div
-                className="subheading"
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginTop: "2vh",
-                }}
-              >
-                Badges
-              </div>
-              <BadgeHolder badges={badges} />
-            </div>
-
-            <div className="qs-emotion-dashboard">
-              <div className="qs-emotion-dashboard-row1">
-                <div className="accuracy-table-heading">
-                  <div className="subheading">Questions Practiced </div>
-                  {/* <div className="exercise-dropdown-emotion-qs"> */}
-
-                  <select
-                    id="exercise-select"
-                    value={selectedExercise}
-                    onChange={handleExerciseChange}
-                  >
-                    <option value="Speaking">Speaking</option>
-                    <option value="Listening">Listening</option>
-                    <option value="Coversation">Conversation</option>
-                  </select>
-                  {/* <div className="qs-emotion-dashboard-heading">
-                        Questions per emotion</div> */}
+        <div className="col-md-9 text-center">
+          <div className="row p-0 m-0 w-100">
+            <div className="col-md-6 py-3 text-center">
+              <div className="container" style={{ height: "30vh" }}>
+                <div className="badge-holder-dashboard card h-100 py-1">
+                  <div className="subheading py-3">Badges</div>
+                  <div>
+                    <div id="newBadges"></div>
+                  </div>
                 </div>
               </div>
-              {/* end of excercise-dropdown */}
-
-              {/* </div> */}
-              {/* end of qs-emotion-dashboard-row1 */}
-
-              <div
-                className="qs-emotion-dashboard-inner"
-                style={{ width: "800px" }}
-              >
+            </div>
+            <div className="col-md-6 py-3 text-center">
+              <div className="container" style={{ height: "30vh" }}>
+                <div className="badge-holder-dashboard card h-100 py-1">
+                  <div className="subheading py-3">Statistics</div>
+                  <div className="py-3">
+                    <div className="row p-0 m-0 d-flex justify-content-center align-items-center">
+                      <div className="stat col-3">
+                        <span
+                          style={{
+                            fontWeight: "bolder",
+                            fontSize: "medium",
+                          }}
+                        >
+                          Level
+                        </span>
+                        <br></br>
+                        {userDets["level"]}
+                      </div>
+                      <div className="stat col-3">
+                        <span
+                          style={{
+                            fontWeight: "bolder",
+                            fontSize: "medium",
+                          }}
+                        >
+                          Streak
+                        </span>
+                        <br></br>
+                        {userDets["streak"]}
+                      </div>
+                      <div className="stat col-3">
+                        <span
+                          style={{
+                            fontWeight: "bolder",
+                            fontSize: "medium",
+                          }}
+                        >
+                          #Badges
+                        </span>
+                        <br></br>
+                        <div id="numBadge"></div>
+                      </div>
+                      <div className="stat col-3">
+                        <span
+                          style={{
+                            fontWeight: "bolder",
+                            fontSize: "medium",
+                          }}
+                        >
+                          #Questions
+                        </span>
+                        <br></br>
+                        <div id="numQ"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row px-4 m-0 w-100" style={{ height: "45vh" }}>
+            <div className="col-md-6 p-3 text-center">
+              <div className="subheading py-3">
+                Listening Questions per Emotion
+              </div>
+              <div className="container" style={{ height: "45vh" }}>
                 <Bar
                   data={{
-                    labels: [
-                      "Happy",
-                      "Sad",
-                      "Angry",
-                      "Disgust",
-                      "Surprise",
-                      "Fear",
-                    ],
+                    labels: Array.from(
+                      Object.keys(userDets["ListeningQuestions"])
+                    )
+                      .slice(0, 6)
+                      .map((label) =>
+                        label === "Surprise" ? "Neutral" : label
+                      ),
+
                     datasets: [
                       {
-                        label: `${selectedExercise} Questions`,
-                        data: Object.values(
-                          dummyData[selectedExercise + "Questions"]
-                        ),
+                        label: `Listening Questions`,
+                        data: Array.from(
+                          Object.values(userDets["ListeningQuestions"])
+                        ).slice(0, 6),
                         backgroundColor: "rgba(54, 162, 235, 0.5)", // Color for the selected exercise Questions bars
                       },
                     ],
@@ -353,67 +445,53 @@ function Dashboard(props) {
                   }}
                 />
               </div>
-              {/* qs-emotion-dashboard-inner */}
             </div>
-            {/* end of qs-emotion-dashboard-row1 */}
-          </div>
-          {/* end of row-2-dashboard */}
+            <div className="col-md-6 p-3 text-center">
+              <div className="subheading py-3">
+                Speaking Questions per Emotion
+              </div>
+              <div className="container" style={{ height: "45vh" }}>
+                <Bar
+                  data={{
+                    labels: Array.from(
+                      Object.keys(userDets["SpeakingQuestions"])
+                    )
+                      .slice(0, 6)
+                      .map((label) =>
+                        label === "Surprise" ? "Neutral" : label
+                      ),
 
-          <div className="custom-row-2">
-            {/* <MenuChart /> */}
-            <div className="acc-graph-dashboard">
-              {/* <canvas id="accuracy-chart"></canvas> */}
-              <Line
-                data={data_qs_per_week}
-                options={{
-                  ...options,
-                  responsive: true,
-                  maintainAspectRatio: false,
-                }}
-              />
-            </div>
-            {/* end of acc-graph-dashboard */}
-            <div className="acc-stats-dashboard">
-              {/* <h2>Accuracy Statistics</h2> */}
-              <div className="accuracy-table-heading">
-                <div className="subheading">Accuracies </div>
-                <div
-                  className="exercise-dropdown-container-acc"
-                  style={{ marginTop: "2vh" }}
-                >
-                  {/* <label htmlFor="exercise-select">Select Exercise:</label> */}
-                  <select
-                    id="exercise-select-acc"
-                    value={selectedExercise_acc}
-                    onChange={handleExerciseChange_acc}
-                  >
-                    <option value="Listening">Listening</option>
-                    <option value="Speaking">Speaking</option>
-                    <option value="Conversation">Conversation</option>
-                  </select>
-                </div>
-                {/* end of dropdown container */}
+                    datasets: [
+                      {
+                        label: `Listening Questions`,
+                        data: Array.from(
+                          Object.values(userDets["SpeakingQuestions"])
+                        ).slice(0, 6),
+                        backgroundColor: "rgba(54, 162, 235, 0.5)", // Color for the selected exercise Questions bars
+                      },
+                    ],
+                  }}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        ticks: {
+                          precision: 0, // Display integers for y-axis ticks
+                        },
+                      },
+                    },
+                    plugins: {
+                      legend: {
+                        display: false, // Disable the legend
+                      },
+                    },
+                  }}
+                />
               </div>
-              <div className="emotion-accuracies">
-                {/* <h3>Emotion Accuracies</h3> */}
-                {accuracies.map((accuracy, index) => (
-                  <div className="emotion-row" key={index}>
-                    <div className="combined-div-acc">
-                      <div className="emotion-label">
-                        {emotion_labels[index]}:
-                      </div>
-                      <div className="emotion-value">
-                        {(accuracy * 100).toFixed(2)}%
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {/* end of emotion accuracies */}
             </div>
-            {/* end of acct-stats-dashboard */}
           </div>
-          {/* custom-row-2 */}
         </div>
       </div>
     </div>

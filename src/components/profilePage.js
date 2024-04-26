@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Dialog } from "primereact/dialog";
-import { fetchAuthSession, signOut } from "aws-amplify/auth";
+import { fetchAuthSession, getCurrentUser, signOut } from "aws-amplify/auth";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import "./styles/profilePage.css";
@@ -9,8 +9,13 @@ import { generateClient } from "aws-amplify/api";
 import * as subscriptions from "../graphql/subscriptions";
 import * as mutations from "../graphql/mutations.js";
 import * as queries from "../graphql/queries.js";
+import { decideCreateNewEntry } from "./create_init_user.js";
+import { initUserData } from "./data/initUserData.js";
 
 function ProfilePage(props) {
+  const client = generateClient();
+  let globalUser = "";
+
   // ---------------------------------------------------------------
 
   // Handle User Login State
@@ -19,14 +24,15 @@ function ProfilePage(props) {
   const [userState, setUserState] = useState(0);
   // consider changing location
   useEffect(() => {
-      const getUserData = async () => {
-        try {
-          const user = await fetchAuthSession();
-          setUserState(user.tokens.idToken.payload);
-          props.handleUser(user);
-        } catch(error) {
-          setUserState(0);
-          console.error("User signing out", error);
+    const getUserData = async () => {
+      try {
+        const user = await fetchAuthSession();
+        setUserState(user.tokens.idToken.payload);
+        globalUser = user.tokens.idToken.payload.sub;
+        props.handleUser(user);
+      } catch {
+        setUserState(0);
+        props.handleUser(0);
       }
     };
     getUserData();
@@ -42,9 +48,27 @@ function ProfilePage(props) {
   const [trueBadges, setTrueBadges] = useState([]);
   const [totalQuestionsPracticed, setTotalQuestionsPracticed] = useState([]);
   const effectRan = useRef(false);
-  const client = generateClient();
 
   useEffect(() => {
+    const check = async () => {
+      if ((await decideCreateNewEntry()) === true) {
+        let updatedInitUserData = initUserData;
+        let cu = await getCurrentUser();
+        updatedInitUserData.username = cu.userId;
+        const output = await client.graphql({
+          query: mutations.createUserDataModel,
+          variables: {
+            input: updatedInitUserData,
+          },
+        });
+        console.log(output);
+      } else {
+        console.log("User Data Already Exists");
+      }
+    };
+    if (effectRan.current === false) {
+      check();
+    }
     const updateIt = async () => {
       if (effectRan.current === true) {
         return;
@@ -53,7 +77,7 @@ function ProfilePage(props) {
       let user1 = await client.graphql({
         query: queries.getUserDataModel,
         variables: {
-          username: "owner", // replace with User Sub using fetchAuthSession | userState
+          username: (await getCurrentUser()).userId, // replace with User Sub using fetchAuthSession | userState
         },
       });
       setUserDetails(user1["data"]["getUserDataModel"]);
@@ -81,7 +105,7 @@ function ProfilePage(props) {
   function setUpSubscriptions() {
     const variables = {
       filter: {
-        username: { eq: "owner" }, // replace with User Sub using fetchAuthSession | userState
+        username: { eq: globalUser }, // replace with User Sub using fetchAuthSession | userState
       },
     };
     onCreateSub = client
@@ -107,7 +131,7 @@ function ProfilePage(props) {
       const oldUser = await client.graphql({
         query: queries.getUserDataModel,
         variables: {
-          username: "owner", // replace with User Sub using fetchAuthSession | userState
+          username: (await getCurrentUser()).userId, // replace with User Sub using fetchAuthSession | userState
         },
       });
 
@@ -247,8 +271,8 @@ function ProfilePage(props) {
                 alt=""
               />
               <button
-                className="mt-5 btn btn-large btn-primary"
-                onClick={() => updateUser("Fear", 55, "SpeakingQuestions")}
+                className="mt-5 btn btn-large btn-primary hide"
+                onClick={() => updateUser("Happy", 5, "SpeakingQuestions")}
                 style={{
                   position: "fixed",
                   bottom: "0",

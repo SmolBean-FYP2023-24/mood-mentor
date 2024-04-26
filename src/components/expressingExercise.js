@@ -119,27 +119,6 @@ let emotionCorrect;
 let updateComplete;
 let updatePartial;
 
-// xxxxx
-// async () => {
-//   try {
-//     if (updateComplete) {
-//       if (emotionCorrect == 'surprise') {
-  
-//       } else {
-  
-//       }
-//     } else if (updatePartial) {
-//       if (emotionCorrect == 'surprise') {
-    
-//       } else {
-        
-//       }
-//     }
-//   } catch(error) {
-//     console.log("Error: ", error);
-//   }
-// }
-
 
 // ------------------------------------
 // Code for Expressing Exercise
@@ -178,6 +157,9 @@ function getRandomSentence(emotionChoice = "") {
   let chosenEmotion =
     lowestThreeEmotions[Math.floor(Math.random() * lowestThreeEmotions.length)];
   console.log("Chosen emotion", chosenEmotion);
+  emotionCorrect = chosenEmotion;
+  
+  // updating chosen emotion to compare accuracy and push to databasw
 
   var chosenSentence =
     sentences[chosenEmotion][
@@ -342,10 +324,8 @@ function ExpressingExercise() {
         },
       ],
     });
-    emotionAccuracy = y_scores[0];
-    emotionCorrect = x_labels[0];
-    console.log("Emotion accuracy at x label [0]", emotionCorrect);
-    console.log("Emotion accuracy at y score[0]", emotionAccuracy);
+
+    // console.log("Emotion accuracy at x label [0]", emotionCorrect);
     // eslint-disable-next-line
   }, [results, showGraph]);
 
@@ -506,8 +486,115 @@ function ExpressingExercise() {
       .then((result) => {
         setResults(result);
         setShowGraph(true);
-        console.log(result);
       });
+
+      // Updating DB from here
+
+      datamodel = await getUserData();
+      let final_result = results;
+
+      console.log("datamodel before updates", datamodel);
+
+      // console.log("final result:-----", final_result);
+      
+      if(updateComplete) {
+        const emotionUpdateCnt=(emotionCorrect.charAt(0).toUpperCase() + emotionCorrect.slice(1));
+        final_result.forEach((result) => {
+          if (result.label === emotionCorrect) {
+            emotionAccuracy = result.score;
+          }
+        });
+
+        for (let emotion in datamodel.SpeakingAccuracy) {
+          if(emotionCorrect==='neutral')
+          {
+            datamodel.SpeakingQuestions['Surprise']+=1.0;
+            const den = datamodel.SpeakingQuestions['Surprise'];
+            console.log("dennnn", den);
+
+            // case consistency for key-map
+            const emotion_cpy=(emotionCorrect.charAt(0).toUpperCase() + emotionCorrect.slice(1));
+            datamodel.SpeakingAccuracy['Surprise'] = (datamodel.SpeakingAccuracy['Surprise']*(datamodel.SpeakingQuestions['Surprise']-1) + emotionAccuracy*100 )/den;
+            console.log(datamodel.SpeakingAccuracy['Surprise'])
+            console.log(emotion_cpy)
+            break;
+            //schema error: when it's neutral update the surprise variable since we don't have netural in the DB
+          }
+          if (emotion.toLowerCase() === emotionCorrect) {
+            const emotionUpdateCnt=(emotionCorrect.charAt(0).toUpperCase() + emotionCorrect.slice(1));
+            datamodel.SpeakingQuestions[emotionUpdateCnt]+=1.0;
+            
+            const emotion_cpy=(emotion.charAt(0).toUpperCase() + emotion.slice(1));
+            const den = datamodel.SpeakingQuestions[emotion_cpy];
+            console.log("dennnn", den);
+
+            datamodel.SpeakingAccuracy[emotion_cpy] = (datamodel.SpeakingAccuracy[emotion_cpy]*(datamodel.SpeakingQuestions[emotion_cpy]-1) + emotionAccuracy*100 )/den;
+            console.log(datamodel.SpeakingAccuracy[emotion_cpy]);
+            console.log(emotion_cpy);
+
+            break;
+          }
+        }
+
+        try {
+          await updateData(datamodel);
+          // const data_user=await getUserData();
+          console.log("Data updated successfully!");
+        } catch (error) {
+          console.error("Error updating data:", error);
+        }
+        console.log("datamodel updates in complete", datamodel);
+        
+      } else if (updatePartial) {
+        final_result.forEach((result) => {
+          if (result.label === emotionCorrect) {
+            emotionAccuracy = result.score;
+          }
+        });
+
+        for (let emotion in datamodel.SpeakingAccuracy) {
+          if(emotionCorrect==='neutral')
+          {
+            datamodel.SpeakingQuestions['Surprise']+=1.0;
+            const den = datamodel.SpeakingQuestions['Surprise'];
+            console.log("dennnn", den);
+
+            // case consistency for key-map
+            const emotion_cpy=(emotionCorrect.charAt(0).toUpperCase() + emotionCorrect.slice(1));
+            datamodel.SpeakingAccuracy['Surprise'] = (datamodel.SpeakingAccuracy['Surprise']*(datamodel.SpeakingQuestions['Surprise']-1) + emotionAccuracy*50 )/den;
+            console.log(datamodel.SpeakingAccuracy['Surprise'])
+            console.log(emotion_cpy)
+            break;
+            //schema error: when it's neutral update the surprise variable since we don't have netural in the DB
+          }
+          if (emotion.toLowerCase() === emotionCorrect) {
+            const emotionUpdateCnt=(emotionCorrect.charAt(0).toUpperCase() + emotionCorrect.slice(1));
+            datamodel.SpeakingQuestions[emotionUpdateCnt]+=1.0;
+            
+            const emotion_cpy=(emotion.charAt(0).toUpperCase() + emotion.slice(1));
+            const den = datamodel.SpeakingQuestions[emotion_cpy];
+            console.log("dennnn", den);
+
+            datamodel.SpeakingAccuracy[emotion_cpy] = (datamodel.SpeakingAccuracy[emotion_cpy]*(datamodel.SpeakingQuestions[emotion_cpy]-1) + emotionAccuracy*50 )/den;
+            console.log(datamodel.SpeakingAccuracy[emotion_cpy])
+            console.log(emotion_cpy)
+
+            break;
+          }
+        }
+
+        try {
+          await updateData(datamodel);
+          // const data_user=await getUserData();
+          console.log("Data updated successfully!");
+        } catch (error) {
+          console.error("Error updating data:", error);
+        }
+        console.log("datamodel updates in partial", datamodel);
+
+      }
+
+      // Ending DB upate here
   }
 
   const graphData = {

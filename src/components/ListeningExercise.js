@@ -3,13 +3,127 @@ import "./styles/ListeningExercise.css";
 import "./styles/audio_player.css";
 import { dummyData } from "./dummyData";
 // eslint-disable-next-line
-import { withAuthenticator } from "@aws-amplify/ui-react";
 import { getUrl } from "aws-amplify/storage";
 import { pathLabels } from "./data/pathset";
+import { fetchAuthSession } from "aws-amplify/auth";
+
+import {
+  createUserDataModel,
+  updateUserDataModel,
+  deleteUserDataModel,
+} from "../graphql/mutations";
+import {
+  getUserDataModel
+} from "../graphql/queries";
+import { generateClient } from "aws-amplify/api";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
-import { useNavigate } from "react-router-dom";
 ChartJS.register(ArcElement, Tooltip, Legend);
+
+const client = generateClient();
+
+
+function removeTypenameKey(obj) {
+  if (typeof obj !== "object" || obj === null) {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(removeTypenameKey);
+  }
+
+  const newObj = {};
+  for (const key in obj) {
+    if (key !== "__typename") {
+      newObj[key] = removeTypenameKey(obj[key]);
+    }
+  }
+  return newObj;
+  }
+
+
+
+
+
+
+function removeKeys(obj, keys) {
+  const newObj = { ...obj };
+  keys.forEach((key) => {
+    delete newObj[key];
+  });
+  return newObj;
+}
+
+
+const updateData = async (user) => {
+  try{
+    // console.log("this is in user",user.data)
+    // const {getUserDataModel}=user;
+    // console.log("this is get",getUserDataModel)
+
+   const keysToRemove = [
+    "__typename",
+    "_deleted",
+    "_lastChangedAt",
+    "createdAt",
+    "updatedAt",
+    // "_version", // check if need to remove
+  ];
+
+  const cleanedUserData = removeKeys(user, keysToRemove);
+  // console.log(user)
+
+  const cleanedUser = {
+    data: {
+      getUserDataModel: removeTypenameKey(cleanedUserData),
+    },
+  };
+   console.log("cleaned user",cleanedUser);
+  await client.graphql({
+    query: updateUserDataModel,
+    variables: {
+      input: cleanedUser.data.getUserDataModel,
+      // condition: "e361b884-d24d-450e-9ac8-b757abcbf333"   
+     }
+  });
+  } // end of try 
+  catch(error)
+  {
+    console.error ("Error updating user",error);
+    return null;
+  }
+}
+
+
+const getUserData = async() => {
+  try {
+    const userauth=await fetchAuthSession();
+    const response = await client.graphql({
+      query: getUserDataModel,
+      variables: {
+        username: userauth.tokens.accessToken.payload.sub, // extracting based on username
+      },
+    });
+        
+    const userDataModel = response.data.getUserDataModel;
+    console.log('User data model:', userDataModel);
+    // console.lo
+    // ("this is the console log wiht user_Data",response.data)
+
+    return userDataModel;
+    // Process the user data model as needed
+  } catch (error) {
+    console.error('Error retrieving user data model:', error);
+    return null;
+  }
+}
+
+let datamodel;
+
+
+
+
+
 
 function shuffle(array) {
   let currentIndex = array.length,
@@ -31,36 +145,64 @@ function shuffle(array) {
   return array;
 }
 
-function getRandomAudio(emotionChoice) {
-  console.log(emotionChoice);
-  var emotions = ["happy", "sad", "angry", "disgust", "neutral", "fear"];
-  // var chosenEmotion =
-  //   emotionChoice !== ""
-  //     ? emotionChoice
-  //     : emotions[Math.floor(Math.random() * emotions.length)];
-  var entries = dummyData.ListeningAccuracy;
-  var convertedEntries = {};
-  for (var key in entries) {
-    var lowercaseKey = key.toLowerCase();
-    var value = entries[key];
-    convertedEntries[lowercaseKey] = value;
+// removing emotion choice from the parameter
+function getRandomAudio() {
+  return new Promise(async (resolve, reject) => {
+    try {
+      // console.log(emotionChoice);
+      var emotions = ["angry", "disgust", "fear", "happy", "neutral", "sad"];
+      let chosenEmotion;
+
+      datamodel = await getUserData();
+      let lowestThreeEmotions = Object.entries(datamodel.ListeningAccuracy)
+        .sort((a, b) => a[1] - b[1])
+        .slice(0, 3)
+        .map(entry => entry[0]);
+
+      chosenEmotion = lowestThreeEmotions[Math.floor(Math.random() * lowestThreeEmotions.length)];
+      const emotion_case = chosenEmotion.charAt(0).toUpperCase() + chosenEmotion.slice(1);
+      if (emotion_case === 'Neutral') {
+        datamodel.ListeningQuestions['Surprise'] += 1.0;
+      } else {
+        datamodel.ListeningQuestions[emotion_case] += 1.0;
+      }
+
+      try {
+        await updateData(datamodel);
+        console.log("Data updated successfully!");
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
+
+      chosenEmotion = chosenEmotion.charAt(0).toLowerCase() + chosenEmotion.slice(1);
+
+      var chosenAudio =
+        pathLabels[chosenEmotion][
+          Math.floor(Math.random() * pathLabels[chosenEmotion].length)
+        ];
+
+      // console.log("emotionnnnn", chosenEmotion);
+      // console.log("audioooooo", chosenAudio);
+
+      resolve([chosenAudio, chosenEmotion]);
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+const random_function_audio = async() => {
+
+  try {
+    var results = await getRandomAudio();
+    // console.log("hiiiiiiiiiiiiiiiiii", results);
+    var chosenAudio = results[0];
+    // setCorrectAnswer(results[1]);
+    return results;
+  } catch (error) {
+    console.error("Error:", error);
   }
-  let lowestThreeEmotions = Object.entries(convertedEntries)
-    .sort((a, b) => a[1] - b[1])
-    .slice(0, 3)
-    .map((entry) => entry[0]);
-
-  let chosenEmotion =
-    lowestThreeEmotions[Math.floor(Math.random() * lowestThreeEmotions.length)];
-
-  console.log(chosenEmotion);
-  var chosenAudio =
-    pathLabels[chosenEmotion.toLowerCase()][
-      Math.floor(Math.random() * pathLabels[chosenEmotion.toLowerCase()].length)
-    ];
-  // chosenAudio =
-  // "https://cdn.pixabay.com/download/audio/2021/09/08/audio_30fd70d538.mp3?filename=censor-beep-1sec-8112.mp3";
-  return [chosenAudio, chosenEmotion];
+ 
 }
 
 export const playAudio = async (
@@ -70,10 +212,9 @@ export const playAudio = async (
 ) => {
   var x = document.getElementById("audioPlayer");
   if (x.getAttribute("src") === null) {
-    var results = getRandomAudio(targetEmotion);
-    console.log(results);
+    var results=await random_function_audio();
     var chosenAudio = results[0];
-    setCorrectAnswer(results[1]);
+    setCorrectAnswer(results[1]); 
     // IMPORTANT: Commented to reduce costs, do not remove
     await getUrl({
       key: chosenAudio,
@@ -116,11 +257,13 @@ function ListeningExercise() {
   const [showScore, setShowScore] = useState(false);
   const [score, setScore] = useState(0);
   const [playingState, setPlayingState] = useState(0);
-  const navigate = useNavigate();
   function setCorrectAnswer(x) {
     console.log("setting correct answer now:", x);
     setUpdateAnswers(x);
   }
+
+  
+
 
   // Access the variables from the dummy data
   // const {
@@ -201,7 +344,9 @@ function ListeningExercise() {
   ];
 
   async function handleAnswerButtonClick(answerOption) {
-    console.log(answerOption);
+    // console.log("hiiiiiii",answerOption);
+
+    
     var optionButtons = document.getElementsByClassName("optionButton");
     for (var i = 0; i < optionButtons.length; i++) {
       // Get the 'optionButtonText' of the current optionButton
@@ -211,6 +356,10 @@ function ListeningExercise() {
 
       // Check if the 'optionButtonText' equals 'aaaa'
       if (optionButtonText === updateAnswers) {
+          // console.log("hiiiiiii",answerOption);
+          // console.log("hiiiiiii",updateAnswers);
+
+
         // If it does, remove the 'bg-dark' class and add the 'correct' class
         optionButtons[i].classList.remove("btn-clr-lex");
         optionButtons[i].classList.add("correct");
@@ -222,16 +371,52 @@ function ListeningExercise() {
 
     await new Promise((r) => setTimeout(r, 1000));
 
-    if (answerOption === updateAnswers) {
+    if (answerOption === updateAnswers) { // this is when the answer is corrrect so update to the DB for that particular emotion
       setScore(score + 1);
-    }
+      datamodel=await getUserData();
+
+
+       const binary_correct=answerOption === updateAnswers;
+      // DB update code
+
+      for (let emotion in datamodel.ListeningAccuracy) {
+        if(answerOption ==='neutral')
+        {
+          // case consistency for key-map
+          const emotion_cpy=(answerOption.charAt(0).toUpperCase() + answerOption.slice(1));
+          datamodel.ListeningAccuracy['Surprise'] = (datamodel.ListeningAccuracy['Surprise']*(datamodel.ListeningQuestions['Surprise']-1) + (binary_correct*100) )/datamodel.ListeningQuestions['Surprise'];
+          console.log(datamodel.ListeningAccuracy['Surprise'])
+          console.log(emotion_cpy)
+          break;
+          //schema error: when it's neutral update the surprise variable since we don't have netural in the DB
+        }
+        if (emotion.toLowerCase() === answerOption) {
+          const emotion_cpy=(emotion.charAt(0).toUpperCase() + emotion.slice(1));
+          datamodel.ListeningAccuracy[emotion_cpy] = (datamodel.ListeningAccuracy[emotion_cpy]*(datamodel.ListeningQuestions[emotion_cpy]-1) + (binary_correct*100) )/datamodel.ListeningQuestions[emotion_cpy];
+          console.log(datamodel.ListeningAccuracy[emotion_cpy])
+          console.log(emotion_cpy)
+
+          break;
+        }
+      }
+
+      // need to check 
+        try {
+          await updateData(datamodel);
+          // const data_user=await getUserData();
+          console.log("Data updated successfully!");
+        } catch (error) {
+          console.error("Error updating data:", error);
+        }
+
+    } // end of if block
     const nextQuestion = CurrentQuestion + 1;
     if (nextQuestion < q.length) {
       setCurrentQuestion(nextQuestion);
     } else {
       setShowScore(true);
     }
-    setUpdateAnswers(false);
+    setUpdateAnswers(false);  
   }
 
   var initData = {
@@ -279,9 +464,13 @@ function ListeningExercise() {
                   You scored {score} out of {q.length}
                 </h5>
               </div>
-              <button className="btn btn-clr-lex-dash btn-primary mt-5" onClick={() => navigate("/dashboard")}>
-              Go to dashboard
-            </button>
+              < a href="/dashboard">
+              <button
+                className="btn btn-clr-lex-dash btn-primary mt-5"
+              >
+                Go to dashboard
+              </button>
+              </a>
             </div>
           </div>
         ) : (
@@ -340,4 +529,4 @@ function ListeningExercise() {
   );
 }
 
-export default withAuthenticator(ListeningExercise);
+export default ListeningExercise;

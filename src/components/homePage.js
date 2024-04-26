@@ -10,6 +10,7 @@ function Home(props) {
   async function isLoggedIn() {
     try {
       const user = await getCurrentUser();
+      console.log(user);
       return user;
     } catch (e) {
       console.log(e);

@@ -35,6 +35,7 @@ export default function App() {
       <div className="myspacer">
         <Routes>
           <Route path="/" element={<Login handleUser={handleUser} />} />
+          <Route path="/home" element={<Home handleUser={handleUser} />} />
           <Route path="/auth/" element={<Login handleUser={handleUser} />} />
           <Route
             path="/profile/"
