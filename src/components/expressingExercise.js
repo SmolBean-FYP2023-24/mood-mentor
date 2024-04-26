@@ -119,8 +119,9 @@ function ExpressingExercise() {
       ["sad", "angry", "fear", "disgust", "happy", "neutral"],
       x_labels
     );
-    x_labels.push(missingEmotion);
-    y_scores.push(0.00000000000000001);
+    console.log(missingEmotion[0]);
+    x_labels.push(missingEmotion[0]);
+    y_scores.push(0);
     var s = getSentiment(x_labels[0]);
     if (attempt === 1) {
       // First attempt at the question
@@ -140,7 +141,9 @@ function ExpressingExercise() {
             icon: "👏",
           });
           setAttempt(1); // Next attempt will be attempt 1 for next question
-          setDisallowNext(false);
+          // setDisallowNext(false);
+          setCurrentQuestion(CurrentQuestion + 1);
+          resetTranscript();
           setScore(score + 1);
         } else {
           // if the sentiment is not what's asked
@@ -167,8 +170,10 @@ function ExpressingExercise() {
             toast(`Good Job! You improved!`, {
               icon: "👏",
             });
-            setDisallowNext(false);
-            setPartial(score + 1);
+            // setDisallowNext(false);
+            setCurrentQuestion(CurrentQuestion + 1);
+            resetTranscript();
+            setPartial(partial + 1);
           } else if (accuracy === null) {
             // The sentiment did not match the last time but did this time
             toast("You get partials", {
@@ -176,7 +181,8 @@ function ExpressingExercise() {
             });
             setAttempt(1);
             setCurrentQuestion(CurrentQuestion + 1);
-            setPartial(score + 1);
+            resetTranscript();
+            setPartial(partial + 1);
             resetTranscript();
           } else {
             // Couldn't improve accuracy
@@ -379,7 +385,7 @@ function ExpressingExercise() {
     labels: ["Correct", "Partial", "Incorrect"],
     datasets: [
       {
-        data: [score, partial, 5 - score + partial],
+        data: [score, partial, 5 - (score + partial)],
         backgroundColor: ["green", "blue", "red"],
       },
     ],
@@ -435,21 +441,24 @@ function ExpressingExercise() {
               </button>
             </div>
             <button
-              className="btn btn-large btn-dark"
+              className="btn btn-large btn-dark d-none"
               onClick={() => {
                 console.log("next ques");
                 setCurrentQuestion(CurrentQuestion + 1);
                 resetTranscript();
                 setDisallowNext(true);
               }}
-              disabled={disallowNext}
+              // disabled={disallowNext}
               id="nextQuesBtn"
             >
               Next
             </button>
             <div>
               {showGraph ? <Bar data={chartData}></Bar> : <span></span>}
-              Comparing against accuracy {accuracy !== null ? accuracy : "null"}
+              <p className="d-none">
+                Comparing against accuracy{" "}
+                {accuracy !== null ? accuracy : "null"}
+              </p>
             </div>
           </>
         ) : (

@@ -271,7 +271,16 @@ function ProfilePage(props) {
               />
               <button
                 className="mt-5 btn btn-large btn-primary"
-                onClick={() => updateUser("Happy", 5, "SpeakingQuestions")}
+                onClick={() => {
+                  // updateUser("Angry", 20, "ListeningQuestions");
+                  // updateUser("Happy", 50, "ListeningQuestions");
+                  // updateUser("Sad", 30, "ListeningQuestions");
+                  // updateUser("Fear", 10, "ListeningQuestions");
+                  // updateUser("Surprise", 25, "ListeningQuestions");
+                  // updateUser("Disgust", 50, "SpeakingQuestions");
+                  // updateUser("Sad", 20, "SpeakingQuestions");
+                  // updateUser("Surprise", 10, "SpeakingQuestions");
+                }}
                 style={{
                   position: "fixed",
                   bottom: "0",
