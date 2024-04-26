@@ -145,11 +145,11 @@ function OnboardingLE() {
   }, [CurrentQuestion]);
 
   let q = [
-    // "What emotion can you identify in this audio?",
-    // "What emotion can you identify in this audio?",
-    // "What emotion can you identify in this audio?",
-    // "What emotion can you identify in this audio?",
-    // "What emotion can you identify in this audio?",
+    "What emotion can you identify in this audio?",
+    "What emotion can you identify in this audio?",
+    "What emotion can you identify in this audio?",
+    "What emotion can you identify in this audio?",
+    "What emotion can you identify in this audio?",
   ];
 
   async function handleAnswerButtonClick(answerOption) {

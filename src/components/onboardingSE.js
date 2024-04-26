@@ -19,7 +19,7 @@ import { dummyData } from "./dummyData";
 window.Buffer = window.Buffer || Buffer;
 let started = false;
 function getRandomSentence(emotionChoice = "") {
-  let lowestThreeEmotions = Object.entries(dummyData.listeningAccuracy)
+  let lowestThreeEmotions = Object.entries(dummyData.ListeningAccuracy)
   .sort((a, b) => a[1] - b[1])
   .slice(0, 3)
   .map(entry => entry[0]);
@@ -338,11 +338,11 @@ function OnboardingEE() {
   const pages =  [...Array(5)];
 
   let q = [
-    // "Speak the sentence in a",
-    // "Speak the sentence in a",
-    // "Speak the sentence in a",
-    // "Speak the sentence in a",
-    // "Speak the sentence in a",
+    "Speak the sentence in a",
+    "Speak the sentence in a",
+    "Speak the sentence in a",
+    "Speak the sentence in a",
+    "Speak the sentence in a",
   ];
   // setFilledCircles(4);
 
