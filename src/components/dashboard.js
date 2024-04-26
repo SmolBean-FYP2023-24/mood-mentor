@@ -1,12 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { getCurrentUser, fetchAuthSession } from "aws-amplify/auth";
 import { withAuthenticator } from "@aws-amplify/ui-react";
-import { Line } from "react-chartjs-2";
 import { Bar } from "react-chartjs-2";
 import "@aws-amplify/ui-react/styles.css";
-import chroma from "chroma-js";
-
-// import './profilePage.css';
 import Chart from "chart.js/auto";
 import "./styles/dashboard.css";
 import "./styles/profilePage.css";
@@ -21,158 +17,55 @@ import BadgeList from "./badges.js";
 import { forEach } from "mathjs";
 import { initUserData } from "./data/initUserData.js";
 
-// function MyChart() {
-//   const chartRef = useRef(null);
+// function BadgeHolder({ badges }) {
+//   const [currentBadgeIndex, setCurrentBadgeIndex] = useState(0);
 
-//   useEffect(() => {
-//     const canvas = chartRef.current;
-//     const ctx = canvas.getContext("2d");
-//     let myBarChart = null;
-
-//     // Base colors
-//     const baseColors = ["#50C4ED", "#387ADF", "#333A73"];
-
-//     // Generate shades of colors based on the base colors
-//     const colorScale = chroma.scale(baseColors).mode("lch").colors(10);
-//     function createGlossyColor(color) {
-//       const glossyColor = chroma(color).alpha(0.6).css();
-//       return glossyColor;
+//   const navigateBadge = (direction) => {
+//     if (direction === "prev") {
+//       setCurrentBadgeIndex((prevIndex) => prevIndex - 1);
+//     } else if (direction === "next") {
+//       setCurrentBadgeIndex((prevIndex) => prevIndex + 1);
 //     }
+//   };
 
-//     const userIndex = 4; // Index of the user's percentile (e.g., 4 for 60%)
-//     const backgroundColor = colorScale.map((color, index) =>
-//       index === userIndex ? createGlossyColor(color) : baseColors[1]
-//     );
+  // useEffect(() => {
+  //   const handleKeyDown = (event) => {
+  //     if (event.key === "ArrowLeft") {
+  //       navigateBadge("prev");
+  //     } else if (event.key === "ArrowRight") {
+  //       navigateBadge("next");
+  //     }
+  //   };
 
-//     const data = {
-//       labels: ["20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"],
-//       datasets: [
-//         {
-//           data: [4, 8, 15, 30, 40, 30, 15, 8, 4],
-//           backgroundColor,
-//         },
-//       ],
-//     };
+  //   document.addEventListener("keydown", handleKeyDown);
 
-//     const options = {
-//       tooltips: {
-//         enabled: false,
-//       },
-//       legend: {
-//         display: false,
-//       },
-//       annotation: {
-//         annotations: [
-//           {
-//             type: "line",
-//             mode: "vertical",
-//             scaleID: "x-axis-0",
-//             value: "70%",
-//             borderColor: "black",
-//             label: {
-//               content: "Your Score",
-//               enabled: true,
-//               position: "center",
-//             },
-//           },
-//         ],
-//       },
-//       scales: {
-//         yAxes: [
-//           {
-//             display: false,
-//           },
-//         ],
-//         xAxes: [
-//           {
-//             barPercentage: 1.0,
-//             categoryPercentage: 1.0,
-//             gridLines: {
-//               display: false,
-//             },
-//             scaleLabel: {
-//               display: true,
-//               labelString: "Average Score",
-//             },
-//           },
-//         ],
-//       },
-//     };
+  //   return () => {
+  //     document.removeEventListener("keydown", handleKeyDown);
+  //   };
+  // }, []);
 
-//     if (canvas && canvas.id === "myChart") {
-//       // Destroy existing chart instance if it exists
-//       if (Chart.instances[0]) {
-//         Chart.instances[0].destroy();
-//       }
-
-//       // Create new chart instance
-//       myBarChart = new Chart(ctx, {
-//         type: "bar",
-//         data,
-//         options,
-//       });
-//     }
-
-//     return () => {
-//       // Cleanup code to destroy the chart instance
-//       if (myBarChart) {
-//         myBarChart.destroy();
-//       }
-//     };
-//   }, []);
-
-//   return <canvas ref={chartRef} id="myChart" />;
-// }
-
-function BadgeHolder({ badges }) {
-  const [currentBadgeIndex, setCurrentBadgeIndex] = useState(0);
-
-  const navigateBadge = (direction) => {
-    if (direction === "prev") {
-      setCurrentBadgeIndex((prevIndex) => prevIndex - 1);
-    } else if (direction === "next") {
-      setCurrentBadgeIndex((prevIndex) => prevIndex + 1);
-    }
-  };
-
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "ArrowLeft") {
-        navigateBadge("prev");
-      } else if (event.key === "ArrowRight") {
-        navigateBadge("next");
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
-
-  const currentBadge = Object.entries(badges)[currentBadgeIndex];
-  const [badgeName, badgeValue] = currentBadge;
+  // const currentBadge = Object.entries(badges)[currentBadgeIndex];
+  // const [badgeName, badgeValue] = currentBadge;
 
   // console.log(badgeName);
   // console.log(badgeValue);
 
-  return (
-    <div className="badgeDash">
-      <span className="arrow left-arrow" onClick={() => navigateBadge("prev")}>
-        &larr;
-      </span>
-      {badgeValue ? (
-        <img src={img} alt={badgeName} />
-      ) : (
-        <img src={img1} alt={badgeName} />
-      )}
-      <span className="arrow right-arrow" onClick={() => navigateBadge("next")}>
-        &rarr;
-      </span>
-    </div>
-  );
-}
+  // return (
+  //   <div className="badgeDash">
+  //     <span className="arrow left-arrow" onClick={() => navigateBadge("prev")}>
+  //       &larr;
+  //     </span>
+  //     {badgeValue ? (
+  //       <img src={img} alt={badgeName} />
+  //     ) : (
+  //       <img src={img1} alt={badgeName} />
+  //     )}
+  //     <span className="arrow right-arrow" onClick={() => navigateBadge("next")}>
+  //       &rarr;
+  //     </span>
+  //   </div>
+  // );
+// }
 
 // Dashboard function starts here
 function Dashboard() {
@@ -213,13 +106,6 @@ function Dashboard() {
         error: (error) => console.log(error),
       });
   }
-
-  useEffect(() => {
-    setUpSubscriptions();
-    return () => {
-      onCreateSub.unsubscribe();
-    };
-  }, []);
 
   useEffect(() => {
     const check = async () => {
@@ -409,7 +295,13 @@ function Dashboard() {
     badge.innerText = key; // Also, innerText is a property, not a method.
     return badge;
   }
-
+  console.log("testinggg", userDets);
+  useEffect(() => {
+    setUpSubscriptions();
+    return () => {
+      onCreateSub.unsubscribe();
+    };
+  }, []);
   return (
     <div className="container-fluid h-100 w-100 p-0">
       <div className="row w-100 p-0 m-0">
@@ -603,139 +495,6 @@ function Dashboard() {
         </div>
       </div>
     </div>
-    //     <div className="col-lg-9 col-md-8 p-0 m-0">
-    //       <div className="row">
-    //         {/* <div className="col-md-3">
-    //           <div className="badge-holder-dashboard">
-    //             <div
-    //               className="subheading"
-    //               style={{
-    //                 display: "flex",
-    //                 justifyContent: "center",
-    //                 alignItems: "center",
-    //               }}
-    //             >
-    //               Badges
-    //             </div>
-    //             <div>
-    //               <div id="newBadges"></div>
-    //             </div>
-    //           </div>
-    //         </div> */}
-    //         <div className="qs-emotion-dashboard">
-    //           <div className="qs-emotion-dashboard-row1">
-    //             <div className="accuracy-table-heading">
-    //               <div className="subheading">Questions Practiced </div>
-
-    //               <select
-    //                 id="exercise-select"
-    //                 value={selectedExercise}
-    //                 // onChange={handleExerciseChange}
-    //               >
-    //                 <option value="Speaking">Speaking</option>
-    //                 <option value="Listening">Listening</option>
-    //                 <option value="Coversation">Conversation</option>
-    //               </select>
-    //             </div>
-    //           </div>
-
-    //           <div
-    //             className="qs-emotion-dashboard-inner"
-    //             style={{ width: "800px" }}
-    //           >
-    //             <Bar
-    //               data={{
-    //                 labels: Array.from(
-    //                   Object.keys(userDets[selectedExercise + "Questions"])
-    //                 )
-    //                   .slice(0, 6)
-    //                   .map((label) =>
-    //                     label === "Surprise" ? "Neutral" : label
-    //                   ),
-
-    //                 datasets: [
-    //                   {
-    //                     label: `${selectedExercise} Questions`,
-    //                     data: Array.from(
-    //                       Object.values(
-    //                         userDets[selectedExercise + "Questions"]
-    //                       )
-    //                     ).slice(0, 6),
-    //                     backgroundColor: "rgba(54, 162, 235, 0.5)", // Color for the selected exercise Questions bars
-    //                   },
-    //                 ],
-    //               }}
-    //               options={{
-    //                 responsive: true,
-    //                 maintainAspectRatio: false,
-    //                 scales: {
-    //                   y: {
-    //                     beginAtZero: true,
-    //                     ticks: {
-    //                       precision: 0, // Display integers for y-axis ticks
-    //                     },
-    //                   },
-    //                 },
-    //                 plugins: {
-    //                   legend: {
-    //                     display: false, // Disable the legend
-    //                   },
-    //                 },
-    //               }}
-    //             />
-    //           </div>
-    //         </div>
-    //       </div>
-
-    //       <div className="custom-row-2">
-    //         {/* <MenuChart /> */}
-    //         <div className="acc-graph-dashboard">
-    //           {/* <canvas id="accuracy-chart"></canvas> */}
-    //           <Line
-    //             data={data_qs_per_week}
-    //             options={{
-    //               ...options,
-    //               responsive: true,
-    //               maintainAspectRatio: false,
-    //             }}
-    //           />
-    //         </div>
-    //         {/* end of acc-graph-dashboard */}
-    //         <div className="acc-stats-dashboard">
-    //           {/* <h2>Accuracy Statistics</h2> */}
-    //           <div className="accuracy-table-heading">
-    //             <div className="subheading">Accuracies </div>
-    //             <div className="exercise-dropdown-container-acc">
-    //               <select
-    //                 id="exercise-select-acc"
-    //                 value={selectedExercise_acc}
-    //                 onChange={handleExerciseChange_acc}
-    //               >
-    //                 <option value="Listening">Listening</option>
-    //                 <option value="Speaking">Speaking</option>
-    //                 <option value="Conversation">Conversation</option>
-    //               </select>
-    //             </div>
-    //           </div>
-    //           <div className="emotion-accuracies">
-    //             {accuracies.map((accuracy, index) => (
-    //               <div className="emotion-row" key={index}>
-    //                 <div className="combined-div-acc">
-    //                   <div className="emotion-label">
-    //                     {emotion_labels[index]}:
-    //                   </div>
-    //                   <div className="emotion-value">
-    //                     {(accuracy * 100).toFixed(2)}%
-    //                   </div>
-    //                 </div>
-    //               </div>
-    //             ))}
-    //           </div>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
   );
 }
 

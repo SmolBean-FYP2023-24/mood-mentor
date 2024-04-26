@@ -1,6 +1,6 @@
 export const initUserData = {
   username: "",
-  streak: 0,
+  streak: 1,
   level: 1,
   badges: {
     BadgeQuestion50: false,

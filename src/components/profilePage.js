@@ -22,6 +22,7 @@ function ProfilePage(props) {
 
   // ---------------------------------------------------------------
   const [userState, setUserState] = useState(0);
+  // consider changing location
   useEffect(() => {
     const getUserData = async () => {
       try {
