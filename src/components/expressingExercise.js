@@ -280,6 +280,7 @@ function ExpressingExercise() {
             setCurrentQuestion(CurrentQuestion + 1);
             resetTranscript();
             setPartial(partial + 1);
+            updatePartial = true;
           } else if (accuracy === null) {
             // The sentiment did not match the last time but did this time
             toast("You get partials", {
@@ -289,6 +290,7 @@ function ExpressingExercise() {
             setCurrentQuestion(CurrentQuestion + 1);
             resetTranscript();
             setPartial(partial + 1);
+            updatePartial = true;
             resetTranscript();
           } else {
             // Couldn't improve accuracy
